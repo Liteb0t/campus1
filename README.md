@@ -10,11 +10,11 @@
 
   ------
 
-Most important is TRACKING HOURS  
-  Studetns with visa can only work up to 20h/week
-  But they can only work 15h/week
-  Hours entered into a tracker
-  Email sent when the student is aproved, says number of hours
+Most important is TRACKING HOURS  \
+  Studetns with visa can only work up to 20h/week\
+  But they can only work 15h/week\
+  Hours entered into a tracker\
+  Email sent when the student is aproved, says number of hours\
   Want to make it easy for the student, manager, and uni while keeping GDPR rules
   Should be able to see only the students details you need, cant just see everyones
   Employers see only the hours
