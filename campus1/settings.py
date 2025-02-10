@@ -87,16 +87,23 @@ ssh_tunnel = SSHTunnelForwarder(
 ssh_tunnel.start()
 
 DATABASES = {
-    'shhtunnel_db': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'HOST': 'localhost',
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '127.0.0.1',
         'PORT': ssh_tunnel.local_bind_port,
-        'NAME': 'fuze.page',
-        'USER': 'dbooser',
+        'NAME': 'campoos',
+        'USER': 'root',
+        'PASSWORD': 'str0ngpassword',
+    },
+    'shhtunnel_db': {
+        'ENGINE': 'django.db.backends.mysql',
+        'HOST': '127.0.0.1',
+        'PORT': ssh_tunnel.local_bind_port,
+        'NAME': 'campoos',
+        'USER': 'root',
         'PASSWORD': 'str0ngpassword',
     },
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
