@@ -74,11 +74,27 @@ WSGI_APPLICATION = 'campus1.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+from sshtunnel import SSHTunnelForwarder
+
+# Connect to a server using the ssh keys. See the sshtunnel documentation for using password authentication
+ssh_tunnel = SSHTunnelForwarder(
+    '195.201.102.136',
+    ssh_private_key='dbooserkey',
+    ssh_private_key_password='',
+    ssh_username='dbooser',
+    remote_bind_address=('localhost', 3306),
+)
+ssh_tunnel.start()
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'shhtunnel_db': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'HOST': 'localhost',
+        'PORT': ssh_tunnel.local_bind_port,
+        'NAME': 'fuze.page',
+        'USER': 'dbooser',
+        'PASSWORD': 'str0ngpassword',
+    },
 }
 
 
