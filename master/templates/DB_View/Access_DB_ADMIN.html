@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Access Timesheet</title>
+</head>
+<body>
+<p>Select a table to oversee:</p>
+
+<!-- Table selector -->
+
+<form id = TableSelect>
+    <input type="radio" id="StudentClicker" name="Selector" value="Student" onclick="SelectStudent()">
+    <label for="Student">View Student Timesheet</label><br>
+    <input type="radio" id="JobClicker" name="Selector" value="Job" onclick="SelectJob()">
+    <label for="Job">View Stored Jobs</label><br>
+    <input type="radio" id="LineManager" name="Selector" value="LineManager" onclick="SelectLM()">
+    <label for="LineManager">View Line Managers</label><br>
+    <input type="radio" id="Submission" name="Selector" value="Submission" onclick="SelectSub()">
+    <label for="Submission">View Submissions</label><br>
+</form>
+
+<script>
+    function SelectStudent()
+    {
+        document.getElementById("Student").style["display"] = "block"
+        document.getElementById("Job").style["display"] = "none"
+        document.getElementById("LM").style["display"] = "none"
+        document.getElementById("Sub").style["display"] = "none"
+    }
+
+    function SelectJob()
+    {
+        document.getElementById("Job").style["display"] = "block"
+        document.getElementById("Student").style["display"] = "none"
+        document.getElementById("LM").style["display"] = "none"
+        document.getElementById("Sub").style["display"] = "none"
+    }
+
+    function SelectLM()
+    {
+        document.getElementById("LM").style["display"] = "block"
+        document.getElementById("Student").style["display"] = "none"
+        document.getElementById("Job").style["display"] = "none"
+        document.getElementById("Sub").style["display"] = "none"
+    }
+
+    function SelectSub()
+    {
+        document.getElementById("Sub").style["display"] = "block"
+        document.getElementById("Student").style["display"] = "none"
+        document.getElementById("LM").style["display"] = "none"
+        document.getElementById("Job").style["display"] = "none"
+    }
+</script>
+
+
+<!-- Table Layout: Job -->
+<table id="Job" style="display: none">
+  <tr>
+    <th>Job ID:</th>
+    <th>Job Name:</th>
+    <th>Cost Code:</th>
+    <th>Pay Rate:</th>
+</table>
+
+<!-- Table Layout: Student -->
+<table id="Student" style="display: none">
+  <tr>
+    <th>Student ID:</th>
+    <th>Student Payroll:</th>
+    <th>Surname:</th>
+    <th>Username:</th>
+    <th>Password:</th>
+</table>
+
+<!-- Table Layout: Line Manager -->
+<table id="LM" style="display: none">
+  <tr>
+    <th>Line Manager ID:</th>
+    <th>Name:</th>
+    <th>Username:</th>
+    <th>Password:</th>
+</table>
+
+<!-- Table Layout: Submissions -->
+<table id="Sub" style="display: none">
+  <tr>
+    <th>Student Number:</th>
+    <th>Job ID:</th>
+    <th>Line Manager :</th>
+    <th>Hours:</th>
+    <th>Date Worked</th>
+    <th>Date Submitted</th>
+</table>
+
+</body>
+</html>
