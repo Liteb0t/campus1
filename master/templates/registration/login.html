@@ -17,12 +17,14 @@
 
 {% csrf_token %}
 <div class = "Box">
-    <form method="post" action="{% url 'login' %}" class="Placeholders">
+    <form method="post" action="{% url 'login' %}">
         <table>
             <tr>
                 <td>
-                    {{ form.username.label_tag }}
-                    {{ form.username }}
+                    <div class="LoginForm">
+                        {{ form.username.label_tag }}
+                        {{ form.username }}
+                    </div>
                 </td>
             </tr>
             <tr>

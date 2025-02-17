@@ -1,6 +1,6 @@
 from django import forms
 
 
-class Placeholders(forms.Form):
-    username = forms.CharField(max_length=12, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
-    password = forms.CharField(max_length=12, widget=forms.TextInput(attrs={'placeholder': 'Password'}))
+class LoginForm(forms.Form):
+    username = forms.CharField(label='username',widget=forms.TextInput(attrs={'placeholder': 'username'}))
+    password = forms.CharField(label='password',widget=forms.PasswordInput(attrs={'placeholder': 'password'}))
