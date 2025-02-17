@@ -7,5 +7,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("templatetest", views.templatetest, name="templatetest"),
     path("secure", views.secure, name="secure"),
-    path("Access_DB_Admin", views.Access_DB_ADMIN, name="Access_DB_ADMIN")
+    path("access_db_admin", views.access_db_admin, name="access_db_admin"),
+    path("data", views.data, name='data'),
     ]

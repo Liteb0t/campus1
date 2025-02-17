@@ -62,6 +62,15 @@
     <th>Job Name:</th>
     <th>Cost Code:</th>
     <th>Pay Rate:</th>
+  </tr>
+  {% for item in Jobs %}
+  <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.Job_Name }}</td>
+      <td>{{ item.Cost_Code }}</td>
+      <td>{{ item.Pay_Rate }}</td>
+  </tr>
+  {% endfor %}
 </table>
 
 <!-- Table Layout: Student -->
@@ -72,6 +81,17 @@
     <th>Surname:</th>
     <th>Username:</th>
     <th>Password:</th>
+  </tr>
+    {% for item in Students %}
+  <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.Student_Payroll }}</td>
+      <td>{{ item.Surname }}</td>
+      <td>{{ item.First_Name }}</td>
+      <td>{{ item.Username }}</td>
+      <td>{{ item.Password }}</td>
+  </tr>
+  {% endfor %}
 </table>
 
 <!-- Table Layout: Line Manager -->
@@ -81,6 +101,16 @@
     <th>Name:</th>
     <th>Username:</th>
     <th>Password:</th>
+        {% for item in LineManager %}
+  </tr>
+  <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.Email }}</td>
+      <td>{{ item.Name }}</td>
+      <td>{{ item.Username }}</td>
+      <td>{{ item.Password }}</td>
+  </tr>
+  {% endfor %}
 </table>
 
 <!-- Table Layout: Submissions -->
@@ -92,6 +122,18 @@
     <th>Hours:</th>
     <th>Date Worked</th>
     <th>Date Submitted</th>
+  </tr>
+    {% for item in Submissions %}
+  <tr>
+      <td>{{ item.id }}</td>
+      <td>{{ item.Hours }}</td>
+      <td>{{ item.Date_Worked }}</td>
+      <td>{{ item.Date_Submitted }}</td>
+      <td>{{ item.Job_ID_id }}</td>
+      <td>{{ item.Line_Manager_ID_id }}</td>
+      <td>{{ item.Student_ID_id }}</td>
+  </tr>
+    {% endfor %}
 </table>
 
 </body>
