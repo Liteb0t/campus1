@@ -6,5 +6,6 @@ urlpatterns = [
     # path("accounts/logged_out", views.logged_out, name="logged_out"),
     path("", views.index, name="index"),
     path("templatetest", views.templatetest, name="templatetest"),
-    path("secure", views.secure, name="secure")
-]
+    path("secure", views.secure, name="secure"),
+    path("Access_DB_Admin", views.Access_DB_ADMIN, name="Access_DB_ADMIN")
+    ]

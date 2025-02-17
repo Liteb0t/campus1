@@ -14,3 +14,6 @@ def logged_out(request):
 @login_required
 def secure(request):
     return render(request, "secure.html")
+
+def Access_DB_ADMIN(request):
+    return render(request, "DB_View/Access_DB_ADMIN.html")
