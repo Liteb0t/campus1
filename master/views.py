@@ -21,3 +21,11 @@ def secure(request):
 
 def profile(request):
     return render(request, "profile.html")
+
+def access_db_admin(request):
+    Jobs = Job.objects.all()
+    Students = Student.objects.all()
+    Submissions = Submission.objects.all()
+    LineManagers = LineManager.objects.all()
+    return render(request, "DB_View/access_db_admin.html", {"Jobs": Jobs,"Student": Students,"Submission": Submissions,"LineManager": LineManagers})
+

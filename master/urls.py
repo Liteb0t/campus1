@@ -7,5 +7,6 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("homepage", views.homepage, name="homepage"),
     path("secure", views.secure, name="secure"),
-    path("profile", views.profile, name="profile")
+    path("profile", views.profile, name="profile"),
+    path("access_db_admin", views.access_db_admin, name="access_db_admin"),
 ]
