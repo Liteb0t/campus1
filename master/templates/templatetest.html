@@ -6,9 +6,9 @@
 </head>
 <body>
 Yooooooo template test
-<form action="{% url 'login' %}" method="post">
+<form action="{% url 'logout' %}" method="post">
     {% csrf_token %}
-    <button type="submit">Login</button>
+    <button type="submit">Log out</button>
 </form>
 </body>
 </html>
