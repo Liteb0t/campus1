@@ -15,16 +15,14 @@
     {% endif %}
 {% endif %}
 
-{% csrf_token %}
 <div class = "Box">
     <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
         <table>
             <tr>
                 <td>
-                    <div class="LoginForm">
-                        {{ form.username.label_tag }}
-                        {{ form.username }}
-                    </div>
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
                 </td>
             </tr>
             <tr>
