@@ -1,7 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from django.forms.widgets import PasswordInput, TextInput
 
-class CustomAuthForm(AuthenticationForm):
-    username = forms.CharField(widget=TextInput(attrs={'class':'validate', 'placeholder': 'Email'}))
-    password = forms.CharField(widget=PasswordInput(attrs={'placeholder': 'Password'}))
+
+class Placeholders(forms.Form):
+    username = forms.CharField(max_length=12, widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    password = forms.CharField(max_length=12, widget=forms.TextInput(attrs={'placeholder': 'Password'}))
