@@ -13,21 +13,6 @@
     margin: 38vh auto auto auto;
 }
 
-.LoginErrorBox{
-    height: 10%;
-    min-width: 10vw;
-    max-width: 10vw;
-    padding: 10px;
-    position: relative;
-    text-align: center;
-    opacity: 0.75;
-    background: #F2F2F2;
-    border-radius: 1px;
-    border: 1px solid #797979;
-    word-wrap: break-word;
-    margin: 38vh auto auto auto;
-}
-
 body {
     background-color: #621b40;
 }
