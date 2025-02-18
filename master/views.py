@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from master.models import Job, Student, LineManager, Submission
 from django.template import loader
-
+@login_required
 def homepage(request):
     return render(request, "homepage.html")
 
