@@ -62,7 +62,7 @@ body {
     overflow: hidden;
 }
 
-.Navbar a{
+.Navlink{
     float: left;
     color: #f2f2f2;
     text-align: center;
@@ -71,8 +71,17 @@ body {
     font-size: 17px;
 }
 
-.Navbar a:hover{
+.Navlink:hover{
     background-color: #ddd;
     color: black;
     cursor: pointer;
+}
+
+button{
+    border: none;
+    outline: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    background-color: transparent;
 }
