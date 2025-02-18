@@ -5,8 +5,19 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'DefaultStyles.css' %}" />
+
 </head>
 <body>
+<header>
+    <nav>
+        <div class="Navbar">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <a type="submit">Logout</a>
+            </form>
+        </div>
+    </nav>
+</header>
 {% block content %}
 {% endblock %}
 </body>
