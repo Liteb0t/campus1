@@ -26,6 +26,6 @@ def access_db_admin(request):
     return render(request, "db_view/access_db_admin.html", {"Jobs": Jobs,"Students": Students, "Submissions": Submissions,"LineManagers": LineManagers})
 
 def access_db_student(request):
-    Submissions = Submission.objects.all()
+    Submissions = Submission.objects.filter(hours=16)
     return render(request, "db_view/access_db_student.html", {"Submissions" : Submissions})
 
