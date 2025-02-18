@@ -10,54 +10,54 @@
 <!-- Table selector -->
 
 <form id = TableSelect>
-    <input type="radio" id="StudentClicker" name="Selector" value="Student" onclick="SelectStudent()">
-    <label for="Student">View Student Timesheet</label><br>
-    <input type="radio" id="JobClicker" name="Selector" value="Job" onclick="SelectJob()">
-    <label for="Job">View Stored Jobs</label><br>
-    <input type="radio" id="LineManager" name="Selector" value="LineManager" onclick="SelectLM()">
-    <label for="LineManager">View Line Managers</label><br>
-    <input type="radio" id="Submission" name="Selector" value="Submission" onclick="SelectSub()">
-    <label for="Submission">View Submissions</label><br>
+    <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
+    <label for="StudentClicker">View Student Timesheet</label><br>
+    <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
+    <label for="JobClicker">View Stored Jobs</label><br>
+    <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
+    <label for="LineManagerClicker">View Line Managers</label><br>
+    <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
+    <label for="SubmissionClicker">View Submissions</label><br>
 </form>
 
 <script>
     function SelectStudent()
     {
-        document.getElementById("Student").style["display"] = "block"
-        document.getElementById("Job").style["display"] = "none"
-        document.getElementById("LM").style["display"] = "none"
-        document.getElementById("Sub").style["display"] = "none"
+        document.getElementById("Students").style["display"] = "block"
+        document.getElementById("Jobs").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
     }
 
     function SelectJob()
     {
-        document.getElementById("Job").style["display"] = "block"
-        document.getElementById("Student").style["display"] = "none"
-        document.getElementById("LM").style["display"] = "none"
-        document.getElementById("Sub").style["display"] = "none"
+        document.getElementById("Jobs").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
     }
 
     function SelectLM()
     {
-        document.getElementById("LM").style["display"] = "block"
-        document.getElementById("Student").style["display"] = "none"
-        document.getElementById("Job").style["display"] = "none"
-        document.getElementById("Sub").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("Jobs").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
     }
 
     function SelectSub()
     {
-        document.getElementById("Sub").style["display"] = "block"
-        document.getElementById("Student").style["display"] = "none"
-        document.getElementById("LM").style["display"] = "none"
-        document.getElementById("Job").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Jobs").style["display"] = "none"
     }
 </script>
 
 
 <!-- Table Layout: Job -->
 <div class = "TableBox">
-    <table id="Job" style="display: none">
+    <table id="Jobs" style="display: none">
         <tr>
             <th>Job ID:</th>
             <th>Job Name:</th>
@@ -77,7 +77,7 @@
 
 <!-- Table Layout: Student -->
 <div class = "TableBox">
-    <table id="Student" style="display: none">
+    <table id="Students" style="display: none">
         <tr>
             <th>Student ID:</th>
             <th>Student Payroll:</th>
@@ -86,7 +86,7 @@
             <th>Username:</th>
             <th>Password:</th>
         </tr>
-        {% for item in Student %}
+        {% for item in Students %}
         <tr>
             <td>{{ item.id }}</td>
             <td>{{ item.Student_Payroll }}</td>
@@ -101,14 +101,14 @@
 
 <!-- Table Layout: Line Manager -->
 <div class = "TableBox">
-    <table id="LM" style="display: none">
+    <table id="LineManagers" style="display: none">
         <tr>
             <th>Line Manager ID:</th>
             <th>Email:</th>
             <th>Name:</th>
             <th>Username:</th>
             <th>Password:</th>
-      {% for item in LineManager %}
+      {% for item in LineManagers %}
         </tr>
         <tr>
             <td>{{ item.id }}</td>
@@ -123,7 +123,7 @@
 
 <!-- Table Layout: Submissions -->
 <div class = "TableBox">
-    <table id="Sub" style="display: none">
+    <table id="Submissions" style="display: none">
         <tr>
             <th>Submission ID:</th>
             <th>Hours:</th>
@@ -133,7 +133,7 @@
             <th>Date Worked</th>
             <th>Date Submitted</th>
         </tr>
-        {% for item in Submission %}
+        {% for item in Submissions %}
         <tr>
             <td>{{ item.Student_ID_id }}</td>
             <td>{{ item.Hours }}</td>

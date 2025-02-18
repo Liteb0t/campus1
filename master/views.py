@@ -22,5 +22,9 @@ def access_db_admin(request):
     Students = Student.objects.all()
     Submissions = Submission.objects.all()
     LineManagers = LineManager.objects.all()
-    return render(request, "DB_View/access_db_admin.html", {"Jobs": Jobs,"Student": Students,"Submission": Submissions,"LineManager": LineManagers})
+    return render(request, "db_view/access_db_admin.html", {"Jobs": Jobs,"Students": Students,"Submissions": Submissions,"LineManagers": LineManagers})
+
+def access_db_student(request):
+    Submissions = Submission.objects.all()
+    return render(request, "db_view/access_db_student.html", {"Submissions" : Submissions})
 
