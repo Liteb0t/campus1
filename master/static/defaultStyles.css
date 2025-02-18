@@ -2,7 +2,6 @@
     display: flex;
     justify-content: left;
     flex-flow: row wrap;
-    margin-right: 20%;
 }
 
 table{
