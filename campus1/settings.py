@@ -147,3 +147,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # LOGOUT_REDIRECT_URL = 'accounts/logged_out'
+
+AUTH_USER_MODEL = 'master.Student'

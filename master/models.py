@@ -13,17 +13,20 @@ class LineManager(models.Model):
     Username = models.CharField(max_length=255)
     Password = models.CharField(max_length=255)
 
-class Student(models.Model):
-    Student_Payroll = models.IntegerField()
-    Surname = models.CharField(max_length=255)
-    First_Name = models.CharField(max_length=255)
-    Username = models.CharField(max_length=255)
-    Password = models.CharField(max_length=255)
+# class Student(models.Model):
+#     Student_Payroll = models.IntegerField()
+#     Surname = models.CharField(max_length=255)
+#     First_Name = models.CharField(max_length=255)
+#     Username = models.CharField(max_length=255)
+#     Password = models.CharField(max_length=255)
+
+class Student(AbstractUser):
+    On_Visa = models.BooleanField(default=False)
 
 class Submission(models.Model):
-    Student_ID = models.ForeignKey(Student, on_delete=models.CASCADE)
-    Job_ID = models.ForeignKey(Job, on_delete=models.CASCADE)
-    Line_Manager_ID = models.ForeignKey(LineManager, on_delete=models.CASCADE)
+    Student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    Job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    Line_Manager = models.ForeignKey(LineManager, on_delete=models.CASCADE)
     Hours = models.IntegerField()
     Date_Worked = models.DateField()
     Date_Submitted = models.DateField()
