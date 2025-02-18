@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from master.models import Job, Student, LineManager, Submission
+from master.models import Job, LineManager, Submission, Student
 from django.template import loader
+
 @login_required
 def homepage(request):
     return render(request, "homepage.html")
@@ -22,7 +23,7 @@ def access_db_admin(request):
     Students = Student.objects.all()
     Submissions = Submission.objects.all()
     LineManagers = LineManager.objects.all()
-    return render(request, "db_view/access_db_admin.html", {"Jobs": Jobs,"Students": Students,"Submissions": Submissions,"LineManagers": LineManagers})
+    return render(request, "db_view/access_db_admin.html", {"Jobs": Jobs,"Students": Students, "Submissions": Submissions,"LineManagers": LineManagers})
 
 def access_db_student(request):
     Submissions = Submission.objects.all()

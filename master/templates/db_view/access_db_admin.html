@@ -71,9 +71,9 @@
                 {% for item in Jobs %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.Job_Name }}</td>
-                    <td>{{ item.Cost_Code }}</td>
-                    <td>{{ item.Pay_Rate }}</td>
+                    <td>{{ item.job_name }}</td>
+                    <td>{{ item.cost_code }}</td>
+                    <td>{{ item.pay_rate }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -84,20 +84,18 @@
             <table id="Students" style="display: none">
                 <tr>
                     <th>Student ID:</th>
-                    <th>Student Payroll:</th>
-                    <th>Firstname:</th>
-                    <th>Surname:</th>
                     <th>Username:</th>
-                    <th>Password:</th>
+                    <th>First name:</th>
+                    <th>Last name:</th>
+                    <th>On visa?</th>
                 </tr>
                 {% for item in Students %}
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.Student_Payroll }}</td>
-                    <td>{{ item.Surname }}</td>
-                    <td>{{ item.First_Name }}</td>
-                    <td>{{ item.Username }}</td>
-                    <td>{{ item.Password }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.first_name }}</td>
+                    <td>{{ item.last_name }}</td>
+                    <td>{{ item.on_visa }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -116,10 +114,10 @@
                 </tr>
                 <tr>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.Email }}</td>
-                    <td>{{ item.Name }}</td>
-                    <td>{{ item.Username }}</td>
-                    <td>{{ item.Password }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.password }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -139,13 +137,13 @@
                 </tr>
                 {% for item in Submissions %}
                 <tr>
-                    <td>{{ item.Student_ID_id }}</td>
-                    <td>{{ item.Hours }}</td>
+                    <td>{{ item.student_id_id }}</td>
+                    <td>{{ item.hours }}</td>
                     <td>{{ item.id }}</td>
-                    <td>{{ item.Job_ID_id }}</td>
-                    <td>{{ item.Line_Manager_ID_id }}</td>
-                    <td>{{ item.Date_Worked }}</td>
-                    <td>{{ item.Date_Submitted }}</td>
+                    <td>{{ item.job_id_id }}</td>
+                    <td>{{ item.line_manager_id_id }}</td>
+                    <td>{{ item.date_worked }}</td>
+                    <td>{{ item.date_submitted }}</td>
                 </tr>
                 {% endfor %}
             </table>
