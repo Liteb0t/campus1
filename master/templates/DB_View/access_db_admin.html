@@ -5,20 +5,7 @@
 
 {% block content %}
 <body>
-<p>Select a table to oversee:</p>
-
 <!-- Table selector -->
-
-<form id = TableSelect>
-    <input type="radio" id="StudentClicker" name="Selector" value="Student" onclick="SelectStudent()">
-    <label for="Student">View Student Timesheet</label><br>
-    <input type="radio" id="JobClicker" name="Selector" value="Job" onclick="SelectJob()">
-    <label for="Job">View Stored Jobs</label><br>
-    <input type="radio" id="LineManager" name="Selector" value="LineManager" onclick="SelectLM()">
-    <label for="LineManager">View Line Managers</label><br>
-    <input type="radio" id="Submission" name="Selector" value="Submission" onclick="SelectSub()">
-    <label for="Submission">View Submissions</label><br>
-</form>
 
 <script>
     function SelectStudent()
@@ -54,97 +41,115 @@
     }
 </script>
 
+<div class = "Row">
+    <div class = "Col left">
+        <div class = "SideBox">
+            <p>Select a table to oversee:</p>
+            <form id = TableSelect>
+                <input type="radio" id="StudentClicker" name="Selector" value="Student" onclick="SelectStudent()">
+                <label for="Student">View Student Timesheet</label><br>
+                <input type="radio" id="JobClicker" name="Selector" value="Job" onclick="SelectJob()">
+                <label for="Job">View Stored Jobs</label><br>
+                <input type="radio" id="LineManager" name="Selector" value="LineManager" onclick="SelectLM()">
+                <label for="LineManager">View Line Managers</label><br>
+                <input type="radio" id="Submission" name="Selector" value="Submission" onclick="SelectSub()">
+                <label for="Submission">View Submissions</label><br>
+            </form>
+        </div>
+    </div>
+    <!-- Table Layout: Job -->
+    <div class = "Col right">
+        <div class = "TableBox">
+            <table id="Job" style="display: none">
+                <tr>
+                    <th>Job ID:</th>
+                    <th>Job Name:</th>
+                    <th>Cost Code:</th>
+                    <th>Pay Rate:</th>
+                </tr>
+                {% for item in Jobs %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.Job_Name }}</td>
+                    <td>{{ item.Cost_Code }}</td>
+                    <td>{{ item.Pay_Rate }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-<!-- Table Layout: Job -->
-<div class = "TableBox">
-    <table id="Job" style="display: none">
-        <tr>
-            <th>Job ID:</th>
-            <th>Job Name:</th>
-            <th>Cost Code:</th>
-            <th>Pay Rate:</th>
-        </tr>
-        {% for item in Jobs %}
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.Job_Name }}</td>
-            <td>{{ item.Cost_Code }}</td>
-            <td>{{ item.Pay_Rate }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+            <!-- Table Layout: Student -->
+        <div class = "TableBox">
+            <table id="Student" style="display: none">
+                <tr>
+                    <th>Student ID:</th>
+                    <th>Student Payroll:</th>
+                    <th>Firstname:</th>
+                    <th>Surname:</th>
+                    <th>Username:</th>
+                    <th>Password:</th>
+                </tr>
+                {% for item in Student %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.Student_Payroll }}</td>
+                    <td>{{ item.Surname }}</td>
+                    <td>{{ item.First_Name }}</td>
+                    <td>{{ item.Username }}</td>
+                    <td>{{ item.Password }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-<!-- Table Layout: Student -->
-<div class = "TableBox">
-    <table id="Student" style="display: none">
-        <tr>
-            <th>Student ID:</th>
-            <th>Student Payroll:</th>
-            <th>Firstname:</th>
-            <th>Surname:</th>
-            <th>Username:</th>
-            <th>Password:</th>
-        </tr>
-        {% for item in Student %}
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.Student_Payroll }}</td>
-            <td>{{ item.Surname }}</td>
-            <td>{{ item.First_Name }}</td>
-            <td>{{ item.Username }}</td>
-            <td>{{ item.Password }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
+            <!-- Table Layout: Line Manager -->
+        <div class = "TableBox">
+            <table id="LM" style="display: none">
+                <tr>
+                    <th>Line Manager ID:</th>
+                    <th>Email:</th>
+                    <th>Name:</th>
+                    <th>Username:</th>
+                    <th>Password:</th>
+                </tr>
+                {% for item in LineManager %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.Email }}</td>
+                    <td>{{ item.Name }}</td>
+                    <td>{{ item.Username }}</td>
+                    <td>{{ item.Password }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
 
-<!-- Table Layout: Line Manager -->
-<div class = "TableBox">
-    <table id="LM" style="display: none">
-        <tr>
-            <th>Line Manager ID:</th>
-            <th>Email:</th>
-            <th>Name:</th>
-            <th>Username:</th>
-            <th>Password:</th>
-      {% for item in LineManager %}
-        </tr>
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.Email }}</td>
-            <td>{{ item.Name }}</td>
-            <td>{{ item.Username }}</td>
-            <td>{{ item.Password }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-
-<!-- Table Layout: Submissions -->
-<div class = "TableBox">
-    <table id="Sub" style="display: none">
-        <tr>
-            <th>Submission ID:</th>
-            <th>Hours:</th>
-            <th>Student Number:</th>
-            <th>Job ID:</th>
-            <th>Line Manager ID:</th>
-            <th>Date Worked</th>
-            <th>Date Submitted</th>
-        </tr>
-        {% for item in Submission %}
-        <tr>
-            <td>{{ item.Student_ID_id }}</td>
-            <td>{{ item.Hours }}</td>
-            <td>{{ item.id }}</td>
-            <td>{{ item.Job_ID_id }}</td>
-            <td>{{ item.Line_Manager_ID_id }}</td>
-            <td>{{ item.Date_Worked }}</td>
-            <td>{{ item.Date_Submitted }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        <!-- Table Layout: Submissions -->
+        <div class = "TableBox">
+            <table id="Sub" style="display: none">
+                <tr>
+                    <th>Submission ID:</th>
+                    <th>Hours:</th>
+                    <th>Student Number:</th>
+                    <th>Job ID:</th>
+                    <th>Line Manager ID:</th>
+                    <th>Date Worked</th>
+                    <th>Date Submitted</th>
+                </tr>
+                {% for item in Submission %}
+                <tr>
+                    <td>{{ item.Student_ID_id }}</td>
+                    <td>{{ item.Hours }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.Job_ID_id }}</td>
+                    <td>{{ item.Line_Manager_ID_id }}</td>
+                    <td>{{ item.Date_Worked }}</td>
+                    <td>{{ item.Date_Submitted }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 {% endblock %}

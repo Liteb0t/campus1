@@ -1,6 +1,8 @@
 .TableBox {
     display: flex;
-    justify-content: center;
+    justify-content: left;
+    flex-flow: row wrap;
+    margin-right: 20%;
 }
 
 table{
@@ -15,9 +17,39 @@ table{
 th, td{
     text-align: center;
     border: 0.5px solid #333;
+    background-color: #ddd;
 }
 
 th{
     background-color: #ddd;
     color: black;
+}
+
+body {
+    background-color: #621b40;
+}
+
+.SideBox{
+    height: 55em;
+    min-width: 15em;
+    max-width: 15em;
+    background-color: #ddd;
+    opacity: 0.75;
+}
+
+.Row {
+  display: flex;
+}
+
+.Col {
+  float: left;
+  padding: 10px;
+}
+
+.left {
+  width: 10%;
+}
+
+.right {
+  width: 90%;
 }
