@@ -44,20 +44,22 @@
 
 <!-- Table Layout: Job -->
 <div class = "Row">
-    <div class = "Col right">
-        <p>Select a table to oversee:</p>
-        <form id = TableSelect>
-            <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
-            <label for="StudentClicker">View Student Timesheet</label><br>
-            <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
-            <label for="JobClicker">View Stored Jobs</label><br>
-            <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
-            <label for="LineManagerClicker">View Line Managers</label><br>
-            <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
-            <label for="SubmissionClicker">View Submissions</label><br>
-        </form>
-    </div>
     <div class = "Col left">
+        <div class = "SideBox">
+            <p>Select a table to oversee:</p>
+            <form id = TableSelect>
+                <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
+                <label for="StudentClicker">View Student Timesheet</label><br>
+                <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
+                <label for="JobClicker">View Stored Jobs</label><br>
+                <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
+                <label for="LineManagerClicker">View Line Managers</label><br>
+                <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
+                <label for="SubmissionClicker">View Submissions</label><br>
+            </form>
+        </div>
+    </div>
+    <div class = "Col right">
         <div class = "TableBox">
             <table id="Jobs" style="display: none">
                 <tr>
