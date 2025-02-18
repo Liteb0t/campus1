@@ -7,5 +7,7 @@ urlpatterns = [
     path("", views.homepage, name="homepage"),
     path("secure", views.secure, name="secure"),
     path("profile", views.profile, name="profile"),
-    path("access_db_admin", views.access_db_admin, name="access_db_admin"),
+ path("access_db_admin", views.access_db_admin, name="access_db_admin"),
+    path("access_db_student", views.access_db_student, name= "access_db_student"),
+
 ]

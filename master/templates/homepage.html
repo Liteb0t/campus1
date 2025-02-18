@@ -5,7 +5,17 @@
     <title>Homepage</title>
 </head>
 <body>
-HOME BABY
-
+{% if user.is_authenticated %}
+Hi {{user.username}}!
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>
+{% else %}
+    <form action ="{% url 'login' %}" method = "post">
+    {% csrf_token %}
+    <button type="submit">Login<</button>
+        </form>
+{% endif %}
 </body>
 </html>

@@ -1,0 +1,150 @@
+{% extends "_base.html" %}
+{% block title %}
+ View bullshittery
+{% endblock %}
+
+{% block content %}
+<body>
+<p>Select a table to oversee:</p>
+
+<!-- Table selector -->
+
+<form id = TableSelect>
+    <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
+    <label for="StudentClicker">View Student Timesheet</label><br>
+    <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
+    <label for="JobClicker">View Stored Jobs</label><br>
+    <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
+    <label for="LineManagerClicker">View Line Managers</label><br>
+    <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
+    <label for="SubmissionClicker">View Submissions</label><br>
+</form>
+
+<script>
+    function SelectStudent()
+    {
+        document.getElementById("Students").style["display"] = "block"
+        document.getElementById("Jobs").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
+    }
+
+    function SelectJob()
+    {
+        document.getElementById("Jobs").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
+    }
+
+    function SelectLM()
+    {
+        document.getElementById("LineManagers").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("Jobs").style["display"] = "none"
+        document.getElementById("Submissions").style["display"] = "none"
+    }
+
+    function SelectSub()
+    {
+        document.getElementById("Submissions").style["display"] = "block"
+        document.getElementById("Students").style["display"] = "none"
+        document.getElementById("LineManagers").style["display"] = "none"
+        document.getElementById("Jobs").style["display"] = "none"
+    }
+</script>
+
+
+<!-- Table Layout: Job -->
+<div class = "TableBox">
+    <table id="Jobs" style="display: none">
+        <tr>
+            <th>Job ID:</th>
+            <th>Job Name:</th>
+            <th>Cost Code:</th>
+            <th>Pay Rate:</th>
+        </tr>
+        {% for item in Jobs %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.Job_Name }}</td>
+            <td>{{ item.Cost_Code }}</td>
+            <td>{{ item.Pay_Rate }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Table Layout: Student -->
+<div class = "TableBox">
+    <table id="Students" style="display: none">
+        <tr>
+            <th>Student ID:</th>
+            <th>Student Payroll:</th>
+            <th>Firstname:</th>
+            <th>Surname:</th>
+            <th>Username:</th>
+            <th>Password:</th>
+        </tr>
+        {% for item in Students %}
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.Student_Payroll }}</td>
+            <td>{{ item.Surname }}</td>
+            <td>{{ item.First_Name }}</td>
+            <td>{{ item.Username }}</td>
+            <td>{{ item.Password }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Table Layout: Line Manager -->
+<div class = "TableBox">
+    <table id="LineManagers" style="display: none">
+        <tr>
+            <th>Line Manager ID:</th>
+            <th>Email:</th>
+            <th>Name:</th>
+            <th>Username:</th>
+            <th>Password:</th>
+      {% for item in LineManagers %}
+        </tr>
+        <tr>
+            <td>{{ item.id }}</td>
+            <td>{{ item.Email }}</td>
+            <td>{{ item.Name }}</td>
+            <td>{{ item.Username }}</td>
+            <td>{{ item.Password }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- Table Layout: Submissions -->
+<div class = "TableBox">
+    <table id="Submissions" style="display: none">
+        <tr>
+            <th>Submission ID:</th>
+            <th>Hours:</th>
+            <th>Student Number:</th>
+            <th>Job ID:</th>
+            <th>Line Manager ID:</th>
+            <th>Date Worked</th>
+            <th>Date Submitted</th>
+        </tr>
+        {% for item in Submissions %}
+        <tr>
+            <td>{{ item.Student_ID_id }}</td>
+            <td>{{ item.Hours }}</td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.Job_ID_id }}</td>
+            <td>{{ item.Line_Manager_ID_id }}</td>
+            <td>{{ item.Date_Worked }}</td>
+            <td>{{ item.Date_Submitted }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+{% endblock %}

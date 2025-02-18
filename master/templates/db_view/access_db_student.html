@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<body>
+<!-- Table Layout: Submissions -->
+<div class = "TableBox">
+    <table id="Submissions">
+        <tr>
+            <th>Submission ID:</th>
+            <th>Hours:</th>
+            <th>Student Number:</th>
+            <th>Job ID:</th>
+            <th>Line Manager ID:</th>
+            <th>Date Worked</th>
+            <th>Date Submitted</th>
+        </tr>
+        {% for item in Submissions %}
+        <tr>
+            <td>{{ item.Student_ID_id }}</td>
+            <td>{{ item.Hours }}</td>
+            <td>{{ item.id }}</td>
+            <td>{{ item.Job_ID_id }}</td>
+            <td>{{ item.Line_Manager_ID_id }}</td>
+            <td>{{ item.Date_Worked }}</td>
+            <td>{{ item.Date_Submitted }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
