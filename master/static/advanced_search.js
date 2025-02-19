@@ -13,7 +13,9 @@ class AdvancedSearch {
         this.linkToHTML();
         this.url_search_params = new URLSearchParams(window.location.search);
         for (const search_param of this.url_search_params) {
-            this.addSearchParameter(search_param[0], search_param[1]);
+            if (search_param[0] !== "page") {
+                this.addSearchParameter(search_param[0], search_param[1]);
+            }
         }
         this.number_of_parameters = 0;
     }
