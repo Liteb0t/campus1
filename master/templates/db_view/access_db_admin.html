@@ -60,7 +60,7 @@
     {
         if (document.getElementById("AddStudent").style["display"] == "none")
         {
-            document.getElementById("AddStudent").style["display"] = "block"
+            document.getElementById("AddStudent").style["display"] = "flex"
             if (clicked_id == "AddStu")
             {
                 document.getElementById("Add").style["display"] = "block"
@@ -202,18 +202,21 @@
     </div>
 </div>
 <div id="AddStudent" style="display: none" class="CRUDBox">
-    <form id="Add" method="post" style="display: none">
-        {% csrf_token %}
-        <button type="submit">Add Student</button>
-    </form>
-    <form id="Upd" method="post" style="display: none">
-        {% csrf_token %}
-        <button type="submit">Update Student</button>
-    </form>
-    <form id="Del" method="post" style="display: none">
-        {% csrf_token %}
-        <button type="submit">Delete Student</button>
-    </form>
+    <div class="Grow"></div>
+    <div class="Bottom">
+        <form id="Add" method="post" style="display: none">
+            {% csrf_token %}
+            <button type="submit">Add Student</button>
+        </form>
+        <form id="Upd" method="post" style="display: none">
+            {% csrf_token %}
+            <button type="submit">Update Student</button>
+        </form>
+        <form id="Del" method="post" style="display: none">
+            {% csrf_token %}
+            <button type="submit">Delete Student</button>
+        </form>
+    </div>
 </div>
 </body>
 {% endblock %}

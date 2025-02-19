@@ -92,9 +92,10 @@ body {
     width: 600px;
     border: 3px solid #797979;
     background-image: linear-gradient(#ba0046 0%, #621b40 100%);
-    text-align: center;
     display: block;
-    margin: 0 auto;
+    text-align: center;
+    flex-flow: column;
+
 }
 
 #AddStudent{
@@ -105,4 +106,12 @@ body {
     left: 0;
     right: 0;
     margin: auto;
+}
+
+.Grow{
+    flex: 1 1 100%;
+}
+
+.Bottom{
+    flex: 0 0 100px;
 }
