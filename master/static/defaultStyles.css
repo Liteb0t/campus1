@@ -3,7 +3,6 @@
     justify-content: left;
     flex-flow: row wrap;
 }
-
 table{
     border: 3px solid #333;
     align-self: center;
@@ -12,16 +11,17 @@ table{
     font-size: 20px;
     float: left;
     border-spacing: 0px;
+    display: block;
+    height: 800px;
+    overflow-y: scroll;
 }
+
 th, td{
     text-align: center;
     border: 0.5px solid #333;
     background-color: #ddd;
-}
-
-th{
-    background-color: #ddd;
     color: black;
+    width: 20%;
 }
 
 body {
