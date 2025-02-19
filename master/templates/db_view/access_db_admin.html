@@ -4,8 +4,6 @@
 {% endblock %}
 
 {% block content %}
-<body>
-
 
 <script>
     function SelectStudent()
@@ -91,7 +89,9 @@
 
 </script>
 
-
+{% if Message is not None %}
+    <h3>{{ Message }}</h3>
+{% endif %}
 <!-- Table Layout: Job -->
 <div class = "Row">
     <div class = "Col left">
@@ -113,7 +113,24 @@
         </div>
     </div>
     <div class = "Col right">
-        <div class = "TableBox">
+        <div class = "TableBox"> 
+            <div class="Pagination">
+                <span class="StepLinks">
+                    {% if Jobs.has_previous %}
+                        <a href="?Jobs_page=1">&laquo; first</a>
+                        <a href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
+                    {% endif %}
+    
+                    <span class="CurrentPage">
+                        Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
+                    </span>
+    
+                    {% if Jobs.has_next %}
+                        <a href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
+                        <a href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
             <table id="Jobs" style="display: none">
                 <tr>
                     <th>Job ID:</th>
@@ -134,6 +151,23 @@
 
         <!-- Table Layout: Student -->
         <div class = "TableBox">
+            <div class="Pagination">
+                <span class="StepLinks">
+                    {% if Students.has_previous %}
+                        <a href="?Students_page=1">&laquo; first</a>
+                        <a href="?Students_page={{ Students.previous_page_number }}">previous</a>
+                    {% endif %}
+    
+                    <span class="CurrentPage">
+                        Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
+                    </span>
+    
+                    {% if Students.has_next %}
+                        <a href="?Students_page={{ Students.next_page_number }}">next</a>
+                        <a href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
             <table id="Students" style="display: none">
                 <tr>
                     <th>Student ID:</th>
@@ -156,6 +190,23 @@
 
         <!-- Table Layout: Line Manager -->
         <div class = "TableBox">
+            <div class="Pagination">
+                <span class="StepLinks">
+                    {% if LineManagers.has_previous %}
+                        <a href="?LineManagers_page=1">&laquo; first</a>
+                        <a href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
+                    {% endif %}
+    
+                    <span class="CurrentPage">
+                        Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
+                    </span>
+    
+                    {% if LineManagers.has_next %}
+                        <a href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
+                        <a href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
             <table id="LineManagers" style="display: none">
                 <tr>
                     <th>Line Manager ID:</th>
@@ -176,6 +227,23 @@
 
         <!-- Table Layout: Submissions -->
         <div class = "TableBox">
+            <div class="Pagination">
+                <span class="StepLinks">
+                    {% if Submissions.has_previous %}
+                        <a href="?Submissions_page=1">&laquo; first</a>
+                        <a href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
+                    {% endif %}
+    
+                    <span class="CurrentPage">
+                        Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
+                    </span>
+    
+                    {% if Submissions.has_next %}
+                        <a href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
+                        <a href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
             <table id="Submissions" style="display: none">
                 <tr>
                     <th>Submission ID:</th>
@@ -204,6 +272,11 @@
 <div id="AddStudent" style="display: none" class="CRUDBox">
     <div class="Grow"></div>
     <div class="Bottom">
+        <form method="post">
+            {% csrf_token %}
+            {{ StudentCreationForm.as_p }}
+            <button type="submit">Create student</button>
+        </form>
         <form id="Add" method="post" style="display: none">
             {% csrf_token %}
             <button type="submit">Add Student</button>
@@ -218,6 +291,5 @@
         </form>
     </div>
 </div>
-</body>
 {% endblock %}
 

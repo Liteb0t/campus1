@@ -22,8 +22,8 @@
         <div class="Pagination">
             <span class="StepLinks">
                 {% if Submissions.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ Submissions.previous_page_number }}">previous</a>
+                    <a href="?Submissions_page=1">&laquo; first</a>
+                    <a href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
                 {% endif %}
 
                 <span class="CurrentPage">
@@ -31,12 +31,15 @@
                 </span>
 
                 {% if Submissions.has_next %}
-                    <a href="?page={{ Submissions.next_page_number }}">next</a>
-                    <a href="?page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
+                    <a href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
                 {% endif %}
             </span>
         </div>
-        {{ StudentCreationForm.as_div }}
+        <form method="post">
+            {{ StudentCreationForm.as_p }}
+            <button type="submit">Create</button>
+        </form>
     </div>
     <div class="Col right">
 
