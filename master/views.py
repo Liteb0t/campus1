@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
-from master.forms import AddStudentForm
+from .forms import AddStudentForm
 
 @login_required
 def homepage(request):
@@ -37,6 +37,6 @@ def access_db_student(request):
     return render(request, "db_view/access_db_student.html", {"Submissions": submissions, "ValidSearchParameters": valid_search_parameters})
 
 def add_student_form(request):
-    context ={}
+    context = {}
     context['form'] = AddStudentForm()
     return render(request, "access_db_admin.html", context)
