@@ -1,11 +1,22 @@
 {% extends "_base.html" %}
+{% load static %}
 {% block title %}
  View Timesheet
 {% endblock %}
 {% block content %}
-<body>
+{#    <div id="advanced_search">#}
+{#    <form action="{% url 'access_db_student' %}">#}
+{#    <label for="search_hours">hours</label>#}
+{#    <input id="search_hours" name="hours" type="text" placeholder="Search...">#}
+{#    <label for="search_student_id">student ID</label>#}
+{#    <input id="search_student_id" name="student_id" type="text" placeholder="Search...">#}
+{#    <button type="submit">Go</button>#}
+{#    </form>#}
+{#    </div>#}
+    <div id="advanced_search">
+    </div>
 <!-- Table Layout: Submissions -->
-<div class = "TableBox">
+<div class="TableBox">
     <table id="Submissions">
         <tr>
             <th>Submission ID:</th>
@@ -29,5 +40,12 @@
         {% endfor %}
     </table>
 </div>
-</body>
+    <script src="{% static 'advanced_search.js' %}"></script>
+    <script>
+    advanced_search = new AdvancedSearch("advanced_search", {
+        "parameter_options": [{% for item in ValidSearchParameters %}
+            "{{ item }}",
+        {% endfor %}]
+    });
+    </script>
 {% endblock %}

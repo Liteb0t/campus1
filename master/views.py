@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
+# from django.db.models import Q # for complex search lookups
 from django.template import loader
 
 @login_required
@@ -19,13 +20,18 @@ def profile(request):
     return render(request, "profile.html")
 
 def access_db_admin(request):
-    Jobs = Job.objects.all()
-    Students = Student.objects.all()
-    Submissions = Submission.objects.all()
-    LineManagers = LineManager.objects.all()
-    return render(request, "db_view/access_db_admin.html", {"Jobs": Jobs,"Students": Students, "Submissions": Submissions,"LineManagers": LineManagers})
+    jobs = Job.objects.all()
+    students = Student.objects.all()
+    submissions = Submission.objects.all()
+    line_managers = LineManager.objects.all()
+    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs, "Students": students, "Submissions": submissions, "LineManagers": line_managers})
 
 def access_db_student(request):
-    Submissions = Submission.objects.filter(hours=16)
-    return render(request, "db_view/access_db_student.html", {"Submissions" : Submissions})
+    submissions = Submission.objects.all()
+    valid_search_parameters = ["hours", "student_id"]
+    for search_parameter in valid_search_parameters:
+        if request.GET.__contains__(search_parameter):
+            # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
+            submissions = submissions.filter(**{search_parameter: request.GET[search_parameter]})
+    return render(request, "db_view/access_db_student.html", {"Submissions": submissions, "ValidSearchParameters": valid_search_parameters})
 
