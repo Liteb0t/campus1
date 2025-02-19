@@ -26,7 +26,19 @@ def access_db_admin(request):
     students = Student.objects.all()
     submissions = Submission.objects.all()
     line_managers = LineManager.objects.all()
-    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs, "Students": students, "Submissions": submissions, "LineManagers": line_managers})
+    if request.GET.__contains__("page"):
+        page_number = request.GET.get("page")
+    else:
+        page_number = 1
+    paginator = Paginator(jobs, 25)
+    page_obj_job = paginator.get_page(page_number)
+    paginator = Paginator(students, 25)
+    page_obj_stu = paginator.get_page(page_number)
+    paginator = Paginator(LineManager, 25)
+    page_obj_man = paginator.get_page(page_number)
+    paginator = Paginator(submissions, 25)
+    page_obj_sub = paginator.get_page(page_number)
+    return render(request, "db_view/access_db_admin.html", {"Jobs": page_obj_job, "Students": page_obj_stu, "Submissions": page_obj_sub, "LineManagers": page_obj_man})
 
 def access_db_student(request):
     submissions = Submission.objects.all()
