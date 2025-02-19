@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
+from django.core.paginator import Paginator
 
 @login_required
 def homepage(request):
@@ -33,5 +34,11 @@ def access_db_student(request):
         if request.GET.__contains__(search_parameter):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
             submissions = submissions.filter(**{search_parameter: request.GET[search_parameter]})
-    return render(request, "db_view/access_db_student.html", {"Submissions": submissions, "ValidSearchParameters": valid_search_parameters})
+    if request.GET.__contains__("page"):
+        page_number = request.GET.get("page")
+    else:
+        page_number = 1
+    paginator = Paginator(submissions, 20)
+    page_obj = paginator.get_page(page_number)
+    return render(request, "db_view/access_db_student.html", {"Submissions": page_obj, "ValidSearchParameters": valid_search_parameters})
 
