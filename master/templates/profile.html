@@ -1,14 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Profile</title>
-</head>
-<body>
-<span>
-    Logged in as {{ request.user.username}}
-</span>
-<button type="submit">Logout</button>
+{% extends "_base.html" %}
+{% block title %}
+ View Timesheet
+{% endblock %}
+{% block content %}
+<div class = "Row">
+    <div class = "Col left">
+        <div class = "SideBox">
+                Logged in as {{ request.user.username}}
+            <button type="submit">Logout</button>
+            <!-- CRUD GOES HERE FOR UPDATING AND DELETING PROFILES -->
 
-</body>
-</html>
+            <p>Profile Settings:</p>
+        </div>
+    </div>
+    <!-- Table Layout: Student table -->
+<div class = "Col right">
+    <div class = "TableBox">
+                <table id="Students">
+                    <tr>
+                        <th>Username:</th>
+                        <th>First name:</th>
+                        <th>Last name:</th>
+                        <th>On visa?</th>
+                    </tr>
+                    <tr>
+                        <td>{{ request.user.username }}</td>
+                        <td>{{ request.user.first_name }}</td>
+                        <td>{{ request.user.last_name }}</td>
+                        <td>{{ request.user.on_visa }}</td>
+                    </tr>
+                </table>
+            </div>
+</div>
+</div>
+
+{% endblock %}
