@@ -1,7 +1,7 @@
 .Box{
     height: 15%;
-    min-width: 15vw;
-    max-width: 15vw;
+    min-width: 15em;
+    max-width: 15em;
     padding: 10px;
     position: relative;
     text-align: center;

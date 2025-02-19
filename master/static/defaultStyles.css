@@ -116,12 +116,12 @@ body {
     flex: 0 0 100px;
 }
 
-.AddParameterButton, .SearchButton{
+.AddParameterButton, .SearchButton, .DeleteParameterButton{
     font: inherit;
     background-color: #f2f2f2;
 }
 
-.AddParameterButton:hover, .SearchButton:hover{
+.AddParameterButton:hover, .SearchButton:hover, .DeleteParameterButton:hover{
     background-color: #ddd;
     color: black;
     cursor: pointer;
