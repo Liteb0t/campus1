@@ -37,6 +37,8 @@ def access_db_student(request):
     return render(request, "db_view/access_db_student.html", {"Submissions": submissions, "ValidSearchParameters": valid_search_parameters})
 
 def add_student_form(request):
-    context = {}
-    context['form'] = AddStudentForm()
-    return render(request, "access_db_admin.html", context)
+    student_id = request.POST["student_id"]
+    email = request.POST["email"]
+    first_name = request.POST["first_name"]
+    surname = request.POST["surname"]
+    password = request.POST["password"]

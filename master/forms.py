@@ -9,4 +9,6 @@ class AddStudentForm(forms.Form):
     first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
     surname = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Surname'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-
+    class meta:
+        model = Student
+        fields = ("student_id", "email", "first_name", "surname", "password")

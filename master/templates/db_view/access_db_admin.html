@@ -206,7 +206,7 @@
     <div class="Bottom">
         <form id="Add" action="" method="POST" style="display: none">
             {% csrf_token %}
-            {% form.as_p %}
+            {{ form }}
             <button type="submit">Add Student</button>
         </form>
         <form id="Upd" action="" method="POST" style="display: none">
