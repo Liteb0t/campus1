@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
+from master.forms import StudentCreationForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
@@ -25,6 +26,9 @@ def access_db_admin(request):
     students = Student.objects.all()
     submissions = Submission.objects.all()
     line_managers = LineManager.objects.all()
+
+
+
     return render(request, "db_view/access_db_admin.html", {"Jobs": jobs, "Students": students, "Submissions": submissions, "LineManagers": line_managers})
 
 def access_db_student(request):
@@ -40,5 +44,6 @@ def access_db_student(request):
         page_number = 1
     paginator = Paginator(submissions, 20)
     page_obj = paginator.get_page(page_number)
-    return render(request, "db_view/access_db_student.html", {"Submissions": page_obj, "ValidSearchParameters": valid_search_parameters})
+    student_creation_form = StudentCreationForm()
+    return render(request, "db_view/access_db_student.html", {"Submissions": page_obj, "ValidSearchParameters": valid_search_parameters, "StudentCreationForm": student_creation_form})
 
