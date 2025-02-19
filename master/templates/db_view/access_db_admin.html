@@ -204,16 +204,16 @@
 <div id="AddStudent" style="display: none" class="CRUDBox">
     <div class="Grow"></div>
     <div class="Bottom">
-        <form id="Add" method="post" style="display: none">
+        <form id="Add" action="" method="post" style="display: none">
             {% csrf_token %}
-            
+            {{form }}
             <button type="submit">Add Student</button>
         </form>
-        <form id="Upd" method="post" style="display: none">
+        <form id="Upd" action="" method="post" style="display: none">
             {% csrf_token %}
             <button type="submit">Update Student</button>
         </form>
-        <form id="Del" method="post" style="display: none">
+        <form id="Del" action="" method="post" style="display: none">
             {% csrf_token %}
             <button type="submit">Delete Student</button>
         </form>
