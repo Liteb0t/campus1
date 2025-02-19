@@ -90,8 +90,11 @@ body {
 .CRUDBox{
     height: 600px;
     width: 600px;
-    display: flex;
-    background-color: #f2f2f2;
+    border: 3px solid #797979;
+    background-image: linear-gradient(#ba0046 0%, #621b40 100%);
+    text-align: center;
+    display: block;
+    margin: 0 auto;
 }
 
 #AddStudent{
