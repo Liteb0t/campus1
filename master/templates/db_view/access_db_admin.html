@@ -14,6 +14,10 @@
         document.getElementById("Jobs").style["display"] = "none"
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
+        document.getElementById("AddStu").style["display"] = "block"
+        document.getElementById("UpdStu").style["display"] = "block"
+        document.getElementById("DelStu").style["display"] = "block"
+        document.getElementById("AddStudent").style["display"] = "none"
     }
 
     function SelectJob()
@@ -22,6 +26,10 @@
         document.getElementById("Students").style["display"] = "none"
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
+        document.getElementById("AddStu").style["display"] = "none"
+        document.getElementById("UpdStu").style["display"] = "none"
+        document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("AddStudent").style["display"] = "none"
     }
 
     function SelectLM()
@@ -30,6 +38,10 @@
         document.getElementById("Students").style["display"] = "none"
         document.getElementById("Jobs").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
+        document.getElementById("AddStu").style["display"] = "none"
+        document.getElementById("UpdStu").style["display"] = "none"
+        document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("AddStudent").style["display"] = "none"
     }
 
     function SelectSub()
@@ -38,7 +50,45 @@
         document.getElementById("Students").style["display"] = "none"
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Jobs").style["display"] = "none"
+        document.getElementById("AddStu").style["display"] = "none"
+        document.getElementById("UpdStu").style["display"] = "none"
+        document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("AddStudent").style["display"] = "none"
     }
+
+    function ShowCRUDBox(clicked_id)
+    {
+        if (document.getElementById("AddStudent").style["display"] == "none")
+        {
+            document.getElementById("AddStudent").style["display"] = "block"
+            if (clicked_id == "AddStu")
+            {
+                document.getElementById("Add").style["display"] = "block"
+                document.getElementById("Upd").style["display"] = "none"
+                document.getElementById("Del").style["display"] = "none"
+            }
+            if (clicked_id == "UpdStu")
+            {
+                document.getElementById("Add").style["display"] = "none"
+                document.getElementById("Upd").style["display"] = "block"
+                document.getElementById("Del").style["display"] = "none"
+            }
+            if (clicked_id == "DelStu")
+            {
+                document.getElementById("Add").style["display"] = "none"
+                document.getElementById("Upd").style["display"] = "none"
+                document.getElementById("Del").style["display"] = "block"
+            }
+        }
+        else
+        {
+            document.getElementById("AddStudent").style["display"] = "none"
+            document.getElementById("Add").style["display"] = "none"
+            document.getElementById("Upd").style["display"] = "none"
+            document.getElementById("Del").style["display"] = "none"
+        }
+    }
+
 </script>
 
 
@@ -57,6 +107,9 @@
                 <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
                 <label for="SubmissionClicker">View Submissions</label><br>
             </form>
+            <button id="AddStu" style="display: none" onclick="ShowCRUDBox(this.id)">Add student</button>
+            <button id="UpdStu" style="display: none" onclick="ShowCRUDBox(this.id)">Update student</button>
+            <button id="DelStu" style="display: none" onclick="ShowCRUDBox(this.id)">Delete student</button>
         </div>
     </div>
     <div class = "Col right">
@@ -109,7 +162,7 @@
                     <th>Email:</th>
                     <th>Name:</th>
                     <th>Username:</th>
-              {% for item in LineManagers %}
+                {% for item in LineManagers %}
                 </tr>
                 <tr>
                     <td>{{ item.id }}</td>
@@ -147,6 +200,20 @@
             </table>
         </div>
     </div>
+</div>
+<div id="AddStudent" style="display: none" class="CRUDBox">
+    <form id="Add" method="post" style="display: none">
+        {% csrf_token %}
+        <button type="submit">Add Student</button>
+    </form>
+    <form id="Upd" method="post" style="display: none">
+        {% csrf_token %}
+        <button type="submit">Update Student</button>
+    </form>
+    <form id="Del" method="post" style="display: none">
+        {% csrf_token %}
+        <button type="submit">Delete Student</button>
+    </form>
 </div>
 </body>
 {% endblock %}
