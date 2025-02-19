@@ -13,34 +13,42 @@
 {#    <button type="submit">Go</button>#}
 {#    </form>#}
 {#    </div>#}
-    <div id="advanced_search">
-    </div>
+
 <!-- Table Layout: Submissions -->
-<div class="TableBox">
-    <table id="Submissions">
-        <tr>
-            <th>Submission ID:</th>
-            <th>Hours:</th>
-            <th>Student Number:</th>
-            <th>Job ID:</th>
-            <th>Line Manager ID:</th>
-            <th>Date Worked</th>
-            <th>Date Submitted</th>
-        </tr>
-        {% for item in Submissions %}
-        <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.hours }}</td>
-            <td>{{ item.student_id }}</td>
-            <td>{{ item.job_id }}</td>
-            <td>{{ item.line_manager_id }}</td>
-            <td>{{ item.date_worked }}</td>
-            <td>{{ item.date_submitted }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<div class="Row">
+    <div class="Col left">
+        <div id="advanced_search" class="SideBox">
+        </div>
+    </div>
+    <div class="Col right">
+        <div class="TableBox">
+            <table id="Submissions">
+                <tr>
+                    <th>Submission ID:</th>
+                    <th>Hours:</th>
+                    <th>Student Number:</th>
+                    <th>Job ID:</th>
+                    <th>Line Manager ID:</th>
+                    <th>Date Worked</th>
+                    <th>Date Submitted</th>
+                </tr>
+                {% for item in Submissions %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.hours }}</td>
+                    <td>{{ item.student_id }}</td>
+                    <td>{{ item.job_id }}</td>
+                    <td>{{ item.line_manager_id }}</td>
+                    <td>{{ item.date_worked }}</td>
+                    <td>{{ item.date_submitted }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 </div>
-    <script src="{% static 'advanced_search.js' %}"></script>
+
+<script src="{% static 'advanced_search.js' %}"></script>
     <script>
     advanced_search = new AdvancedSearch("advanced_search", {
         "parameter_options": [{% for item in ValidSearchParameters %}

@@ -81,7 +81,6 @@ body {
 .Navlink.OverrideButton{
     border: none;
     outline: none;
-    border: none;
     font: inherit;
     color: #f2f2f2;
     background-color: transparent;
@@ -116,3 +115,15 @@ body {
 .Bottom{
     flex: 0 0 100px;
 }
+
+.AddParameterButton, .SearchButton{
+    font: inherit;
+    background-color: #f2f2f2;
+}
+
+.AddParameterButton:hover, .SearchButton:hover{
+    background-color: #ddd;
+    color: black;
+    cursor: pointer;
+}
+
