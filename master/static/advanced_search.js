@@ -11,6 +11,10 @@ class AdvancedSearch {
         Object.assign(this, config);
         this.container_id = container_id;
         this.linkToHTML();
+        this.url_search_params = new URLSearchParams(window.location.search);
+        for (const search_param of this.url_search_params) {
+            this.addSearchParameter(search_param[0], search_param[1]);
+        }
         this.number_of_parameters = 0;
     }
 
@@ -45,7 +49,7 @@ class AdvancedSearch {
         this.form_element.appendChild(this.search_button);
     }
 
-    addSearchParameter() {
+    addSearchParameter(option = null, value = null) {
         // let fragment = new DocumentFragment();
 
         let parameter_container = document.createElement("div");
@@ -67,7 +71,12 @@ class AdvancedSearch {
         let search_box = document.createElement("input");
         search_box.classList.add("ParameterSearchBox");
         search_box.type = "text";
-        if (this.parameter_options.length > 0) {
+        if (value) {
+            search_box.name = option;
+            search_box.value = value;
+            parameter_select.value = option;
+        }
+        else if (this.parameter_options.length > 0) {
             search_box.name = this.parameter_options[0];
         }
         parameter_container.appendChild(search_box);
