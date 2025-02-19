@@ -39,21 +39,37 @@ body {
     opacity: 0.75;
 }
 
-.Row {
+.ADVBox{
+    height: 50em;
+    min-width: 25em;
+    max-width: 25em;
+    background-color: #ddd;
+    opacity: 0.75;
+}
+
+.Row{
   display: flex;
 }
 
-.Col {
+.Col{
   float: left;
   padding: 10px;
 }
 
-.left {
+.left{
   width: 10%;
 }
 
-.right {
+.right{
   width: 90%;
+}
+
+.ADVLeft{
+  width: 15%;
+}
+
+.ADVRight{
+  width: 85%;
 }
 
 /*navbar*/
