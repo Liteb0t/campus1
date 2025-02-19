@@ -38,3 +38,11 @@ class Submission(models.Model):
     hours = models.IntegerField()
     date_worked = models.DateField()
     date_submitted = models.DateField()
+
+class Recruiter(models.Model):
+    email = models.CharField(max_length=255)
+    first_Name = models.CharField(max_length=255)
+    last_Name = models.CharField(max_length=255)
+    username = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
+
