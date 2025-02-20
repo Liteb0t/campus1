@@ -10,6 +10,7 @@ urlpatterns = [
     path("admin_profile", views.admin_profile, name="admin_profile"),
     path("access_db_admin", views.access_db_admin, name="adminSHU"),
     path("access_db_student", views.access_db_student, name="student"),
-    path("TempUpdatePageForTesting/<int:id>", views.updatestudent, name="update"),
+    path("UpdateStudent/<int:id>", views.updatestudent, name="update"),
+    path("DeleteStudent/<int:id>", views.deletestudent, name="delete")
 
 ]

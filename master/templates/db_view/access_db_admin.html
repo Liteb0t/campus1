@@ -225,6 +225,7 @@
                     <th>Last name:</th>
                     <th>On visa?</th>
                     <th> </th>
+                    <th> </th>
                 </tr>
                 {% for item in Students %}
                 <tr>
@@ -233,6 +234,7 @@
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
                     <td><a href="{% url 'update' item.id %}">Update</a></td>
+                    <td><a href="{% url 'delete' item.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </table>

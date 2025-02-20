@@ -4,8 +4,9 @@
 {% endblock %}
 
 {% block content %}
-<div>
-  <form id="Upd" action="" method="POST">
+
+<div class = "Box">
+  <form method="POST" action="">
     {% csrf_token %}
     {{ StudentUpdateForm.as_p }}
     <button type="submit">Update Student</button>

@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student, Recruiter
 from master.forms import StudentCreationForm, StudentUpdateForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
+from django.shortcuts import redirect
 
 @login_required
 def homepage(request):
@@ -79,17 +80,19 @@ def access_db_admin(request):
 
 @login_required
 def updatestudent(request, id):
-    message = None
     stu_id = Student.objects.get(id=id)
     student_update_form = StudentUpdateForm(instance=stu_id)
     if request.method == "POST":
         form = StudentUpdateForm(request.POST, instance=stu_id)
         if form.is_valid():
             form.save()
-            message = "Added student!"
-        else:
-            message = "Form invalid, Student not added!"
-    return render(request, "db_view/TempUpdatePageForTesting.html", {"StudentUpdateForm": student_update_form, "Message": message})
+
+    return render(request, "db_view/UpdateStudent.html", {"StudentUpdateForm": student_update_form})
+
+def deletestudent(request, id):
+    stu_id = Student.objects.get(id=id)
+    stu_id.delete()
+    return redirect("adminSHU")
 
 @login_required
 def access_db_student(request):
