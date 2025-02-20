@@ -80,7 +80,7 @@
         "parameter_options": [{% for item in ValidSearchParameters %}
             "{{ item }}",
         {% endfor %}]
-        ,"form_action": "{% url 'access_db_student' %}"
+        ,"form_action": "{% url 'student' %}"
     });
     </script>
 {% endblock %}
