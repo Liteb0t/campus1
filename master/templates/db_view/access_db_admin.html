@@ -296,8 +296,9 @@
             {{ StudentCreationForm.as_p }}
             <button type="submit">Add Student</button>
         </form>
-        <form id="Upd" method="post" style="display: none">
+        <form id="Upd" action="{% url 'update' %}" method="post" style="display: none">
             {% csrf_token %}
+            {{ StudentUpdateForm.as_p }}
             <button type="submit">Update Student</button>
         </form>
         <form id="Del" method="post" style="display: none">
