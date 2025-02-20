@@ -15,6 +15,10 @@
         document.getElementById("AddStu").style["display"] = "block"
         document.getElementById("UpdStu").style["display"] = "block"
         document.getElementById("DelStu").style["display"] = "block"
+        document.getElementById("StuLink").style["display"] = "block"
+        document.getElementById("JobLink").style["display"] = "none"
+        document.getElementById("ManLink").style["display"] = "none"
+        document.getElementById("SubLink").style["display"] = "none"
         document.getElementById("AddStudent").style["display"] = "none"
     }
 
@@ -27,6 +31,10 @@
         document.getElementById("AddStu").style["display"] = "none"
         document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("StuLink").style["display"] = "none"
+        document.getElementById("JobLink").style["display"] = "block"
+        document.getElementById("ManLink").style["display"] = "none"
+        document.getElementById("SubLink").style["display"] = "none"
         document.getElementById("AddStudent").style["display"] = "none"
     }
 
@@ -39,6 +47,10 @@
         document.getElementById("AddStu").style["display"] = "none"
         document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("StuLink").style["display"] = "none"
+        document.getElementById("JobLink").style["display"] = "none"
+        document.getElementById("ManLink").style["display"] = "block"
+        document.getElementById("SubLink").style["display"] = "none"
         document.getElementById("AddStudent").style["display"] = "none"
     }
 
@@ -51,6 +63,10 @@
         document.getElementById("AddStu").style["display"] = "none"
         document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
+        document.getElementById("StuLink").style["display"] = "none"
+        document.getElementById("JobLink").style["display"] = "none"
+        document.getElementById("ManLink").style["display"] = "none"
+        document.getElementById("SubLink").style["display"] = "block"
         document.getElementById("AddStudent").style["display"] = "none"
     }
 
@@ -111,28 +127,82 @@
                 <button id="AddStu" style="display: none" onclick="ShowCRUDBox(this.id)">Add student</button>
                 <button id="UpdStu" style="display: none" onclick="ShowCRUDBox(this.id)">Update student</button>
                 <button id="DelStu" style="display: none" onclick="ShowCRUDBox(this.id)">Delete student</button>
+                <div class="Pagination">
+                    <div id="StuLink" style="display: none">
+                        <span class="StepLinks">
+                            {% if Students.has_previous %}
+                                <a class="PaginationLinks" href="?Students_page=1">&laquo; first</a>
+                                <a class="PaginationLinks" href="?Students_page={{ Students.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            <span class="CurrentPage">
+                                Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
+                            </span>
+
+                            {% if Students.has_next %}
+                                <a class="PaginationLinks" href="?Students_page={{ Students.next_page_number }}">next</a>
+                                <a class="PaginationLinks" href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div id="JobLink" style="display: none">
+                        <span class="StepLinks">
+                            {% if Jobs.has_previous %}
+                                <a class="PaginationLinks" href="?Jobs_page=1">&laquo; first</a>
+                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            <span class="CurrentPage">
+                                Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
+                            </span>
+
+                            {% if Jobs.has_next %}
+                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
+                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div id="ManLink" style="display: none">
+                        <span class="StepLinks">
+                            {% if LineManagers.has_previous %}
+                                <a class="PaginationLinks" href="?LineManagers_page=1">&laquo; first</a>
+                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            <span class="CurrentPage">
+                                Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
+                            </span>
+
+                            {% if LineManagers.has_next %}
+                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
+                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div id="SubLink" style="display: none">
+                        <span class="StepLinks">
+                            {% if Submissions.has_previous %}
+                                <a class="PaginationLinks" href="?Submissions_page=1">&laquo; first</a>
+                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
+                            {% endif %}
+
+                            <span class="CurrentPage">
+                                Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
+                            </span>
+
+                            {% if Submissions.has_next %}
+                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
+                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class = "Col right">
         <div class = "TableBox">
-            <div class="Pagination">
-                <span class="StepLinks">
-                    {% if Jobs.has_previous %}
-                        <a href="?Jobs_page=1">&laquo; first</a>
-                        <a href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="CurrentPage">
-                        Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
-                    </span>
-
-                    {% if Jobs.has_next %}
-                        <a href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
-                        <a href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
             <table id="Jobs" style="display: none">
                 <tr>
                     <th>Job ID:</th>
@@ -153,26 +223,8 @@
 
         <!-- Table Layout: Student -->
         <div class = "TableBox">
-            <div class="Pagination">
-                <span class="StepLinks">
-                    {% if Students.has_previous %}
-                        <a href="?Students_page=1">&laquo; first</a>
-                        <a href="?Students_page={{ Students.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="CurrentPage">
-                        Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
-                    </span>
-
-                    {% if Students.has_next %}
-                        <a href="?Students_page={{ Students.next_page_number }}">next</a>
-                        <a href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
             <table id="Students" style="display: none">
                 <tr>
-                    <th>Student ID:</th>
                     <th>Username:</th>
                     <th>First name:</th>
                     <th>Last name:</th>
@@ -180,7 +232,6 @@
                 </tr>
                 {% for item in Students %}
                 <tr>
-                    <td>{{ item.id }}</td>
                     <td>{{ item.username }}</td>
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
@@ -192,23 +243,6 @@
 
         <!-- Table Layout: Line Manager -->
         <div class = "TableBox">
-            <div class="Pagination">
-                <span class="StepLinks">
-                    {% if LineManagers.has_previous %}
-                        <a href="?LineManagers_page=1">&laquo; first</a>
-                        <a href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="CurrentPage">
-                        Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
-                    </span>
-
-                    {% if LineManagers.has_next %}
-                        <a href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
-                        <a href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
             <table id="LineManagers" style="display: none">
                 <tr>
                     <th>Line Manager ID:</th>
@@ -229,23 +263,6 @@
 
         <!-- Table Layout: Submissions -->
         <div class = "TableBox">
-            <div class="Pagination">
-                <span class="StepLinks">
-                    {% if Submissions.has_previous %}
-                        <a href="?Submissions_page=1">&laquo; first</a>
-                        <a href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="CurrentPage">
-                        Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
-                    </span>
-
-                    {% if Submissions.has_next %}
-                        <a href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
-                        <a href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
             <table id="Submissions" style="display: none">
                 <tr>
                     <th>Submission ID:</th>
