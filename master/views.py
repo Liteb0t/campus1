@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from master.models import Job, LineManager, Submission, Student
-from master.forms import StudentCreationForm
+from master.models import Job, LineManager, Submission, Student, Recruiter
+from master.forms import StudentCreationForm, StudentUpdateForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
