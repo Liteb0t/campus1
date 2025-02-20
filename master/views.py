@@ -97,11 +97,11 @@ def deletestudent(request, id):
 @login_required
 def access_db_student(request):
     submissions = Submission.objects.select_related("student")
-    valid_search_parameters = ["hours", "student__username", "student__first_name", "student__last_name"]
+    valid_search_parameters = [[ "hours", "text"], ["student__username", "text"], ["student__first_name", "text"], ["student__last_name", "text"], ["date_worked", "date"]]
     for search_parameter in valid_search_parameters:
-        if request.GET.__contains__(search_parameter):
+        if request.GET.__contains__(search_parameter[0]):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
-            submissions = submissions.filter(**{search_parameter: request.GET[search_parameter]})
+            submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
     if request.GET.__contains__("Submissions_page"):
         submissions_page_number = request.GET.get("Submissions_page")
     else:

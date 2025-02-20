@@ -77,9 +77,11 @@
 <script src="{% static 'advanced_search.js' %}"></script>
     <script>
     advanced_search = new AdvancedSearch("advanced_search", {
-        "parameter_options": [{% for item in ValidSearchParameters %}
-            "{{ item }}",
-        {% endfor %}]
+        "parameter_options": {
+            {% for item in ValidSearchParameters %}
+                "{{ item.0 }}": {"type": "{{ item.1 }}"},
+            {% endfor %}
+        }
         ,"form_action": "{% url 'student' %}"
     });
     </script>

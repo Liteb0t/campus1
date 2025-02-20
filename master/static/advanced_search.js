@@ -12,12 +12,12 @@ class AdvancedSearch {
         this.container_id = container_id;
         this.linkToHTML();
         this.url_search_params = new URLSearchParams(window.location.search);
+        this.number_of_parameters = 0;
         for (const search_param of this.url_search_params) {
             if (search_param[0] !== "page") {
                 this.addSearchParameter(search_param[0], search_param[1]);
             }
         }
-        this.number_of_parameters = 0;
     }
 
     linkToHTML() {
@@ -51,7 +51,7 @@ class AdvancedSearch {
         this.form_element.appendChild(this.search_button);
     }
 
-    addSearchParameter(option = null, value = null) {
+    addSearchParameter(option = null, value = null/*, type = "test"*/) {
         // let fragment = new DocumentFragment();
 
         let parameter_container = document.createElement("div");
@@ -60,8 +60,7 @@ class AdvancedSearch {
         // fragment.appendChild(parameter_container);
 
         let parameter_select = document.createElement("select");
-
-        for (let parameter_option of this.parameter_options) {
+        for (const [parameter_option, type] of Object.entries(this.parameter_options)) {
             console.log(`Parameter option: ${parameter_option}`);
             let option_element = document.createElement("option");
             option_element.value = parameter_option;
@@ -70,18 +69,25 @@ class AdvancedSearch {
         }
         parameter_container.appendChild(parameter_select);
 
-        let search_box = document.createElement("input");
-        search_box.classList.add("ParameterSearchBox");
-        search_box.type = "text";
+
+        let input_element = document.createElement("input")
+        if (option !== null && this.parameter_options[option].type === "date") {
+            input_element.classList.add("ParameterDateBox");
+            input_element.type = "date";
+        }
+        else {
+            input_element.classList.add("ParameterSearchBox");
+            input_element.type = "text";
+        }
         if (value) {
-            search_box.name = option;
-            search_box.value = value;
+            input_element.name = option;
+            input_element.value = value;
             parameter_select.value = option;
         }
-        else if (this.parameter_options.length > 0) {
-            search_box.name = this.parameter_options[0];
+        else if (this.parameter_options !== {}) {
+            input_element.name = Object.keys(this.parameter_options)[0];
         }
-        parameter_container.appendChild(search_box);
+        parameter_container.appendChild(input_element);
 
         let delete_button = document.createElement("button");
         delete_button.classList.add("DeleteParameterButton")
@@ -94,7 +100,11 @@ class AdvancedSearch {
             }
         }
         parameter_select.onchange = (event) => {
-            search_box.name = parameter_select.value;
+            // if (this.parameter_options[parameter_select.value].type === "date") {
+            //     input_element.type = "date";
+            // }
+            input_element.type = this.parameter_options[parameter_select.value].type;
+            input_element.name = parameter_select.value;
         }
         parameter_container.appendChild(delete_button);
 
