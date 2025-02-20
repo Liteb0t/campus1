@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
 from master.forms import StudentCreationForm, StudentUpdateForm
@@ -68,14 +69,14 @@ def access_db_admin(request):
 
     return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "Message": message})
 
-def updatestudent(request):
+def updatestudent(request, id):
     message = None
-    student_update_form = StudentUpdateForm()
+    Stu_ID = Student.objects.get(id=id)
+    student_update_form = StudentUpdateForm(instance=Stu_ID)
     if request.method == "POST":
-        form = StudentUpdateForm(request.POST)
+        form = StudentUpdateForm(request.POST, instance=Stu_ID)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+            form.save()
             message = "Added student!"
         else:
             message = "Form invalid, Student not added!"

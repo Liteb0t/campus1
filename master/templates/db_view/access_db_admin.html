@@ -13,7 +13,6 @@
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
         document.getElementById("AddStu").style["display"] = "block"
-        document.getElementById("UpdStu").style["display"] = "block"
         document.getElementById("DelStu").style["display"] = "block"
         document.getElementById("StuLink").style["display"] = "block"
         document.getElementById("JobLink").style["display"] = "none"
@@ -29,7 +28,6 @@
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
         document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
         document.getElementById("StuLink").style["display"] = "none"
         document.getElementById("JobLink").style["display"] = "block"
@@ -45,7 +43,6 @@
         document.getElementById("Jobs").style["display"] = "none"
         document.getElementById("Submissions").style["display"] = "none"
         document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
         document.getElementById("StuLink").style["display"] = "none"
         document.getElementById("JobLink").style["display"] = "none"
@@ -61,7 +58,6 @@
         document.getElementById("LineManagers").style["display"] = "none"
         document.getElementById("Jobs").style["display"] = "none"
         document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("UpdStu").style["display"] = "none"
         document.getElementById("DelStu").style["display"] = "none"
         document.getElementById("StuLink").style["display"] = "none"
         document.getElementById("JobLink").style["display"] = "none"
@@ -125,7 +121,6 @@
                     <label for="SubmissionClicker">View Submissions</label><br>
                 </form>
                 <button id="AddStu" style="display: none" onclick="ShowCRUDBox(this.id)">Add student</button>
-                <button id="UpdStu" style="display: none" onclick="ShowCRUDBox(this.id)">Update student</button>
                 <button id="DelStu" style="display: none" onclick="ShowCRUDBox(this.id)">Delete student</button>
                 <div class="Pagination">
                     <div id="StuLink" style="display: none">
@@ -229,6 +224,7 @@
                     <th>First name:</th>
                     <th>Last name:</th>
                     <th>On visa?</th>
+                    <th> </th>
                 </tr>
                 {% for item in Students %}
                 <tr>
@@ -236,6 +232,7 @@
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
+                    <td><a id="UpdStu"  href="{% url 'update' item.id %}">Update</a></td>
                 </tr>
                 {% endfor %}
             </table>
@@ -296,17 +293,16 @@
             {{ StudentCreationForm.as_p }}
             <button type="submit">Add Student</button>
         </form>
-        <form id="Upd" action="{% url 'update' %}" method="post" style="display: none">
+        <form id="Upd" action="" method="POST" style="display: none">
             {% csrf_token %}
             {{ StudentUpdateForm.as_p }}
             <button type="submit">Update Student</button>
         </form>
-        <form id="Del" method="post" style="display: none">
+        <form id="Del" method="POST" style="display: none">
             {% csrf_token %}
             <button type="submit">Delete Student</button>
         </form>
     </div>
 </div>
-</body>
 {% endblock %}
 
