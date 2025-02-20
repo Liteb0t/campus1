@@ -38,6 +38,7 @@ class Submission(models.Model):
     hours = models.IntegerField()
     date_worked = models.DateField()
     date_submitted = models.DateField()
+    accepted = models.BooleanField()
 
 class Recruiter(models.Model):
     email = models.CharField(max_length=255)
