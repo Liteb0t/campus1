@@ -13,21 +13,21 @@
             <p>Profile Settings:</p>
         </div>
     </div>
-    <!-- Table Layout: Student table -->
+    <!-- Table Layout: Admin table -->
 <div class = "Col right">
     <div class = "TableBox">
-                <table id="Students">
+                <table id="Admins">
                     <tr>
                         <th>Username:</th>
                         <th>First name:</th>
                         <th>Last name:</th>
-                        <th>On visa?</th>
+                        <th>Email</th>
                     </tr>
                     <tr>
                         <td>{{ request.user.username }}</td>
                         <td>{{ request.user.first_name }}</td>
                         <td>{{ request.user.last_name }}</td>
-                        <td>{{ request.user.on_visa }}</td>
+                        <td>{{ request.user.email }}</td>
                     </tr>
                 </table>
             </div>
