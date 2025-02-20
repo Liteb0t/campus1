@@ -27,6 +27,7 @@ def recruiter_profile(request):
 def admin_profile(request):
     return render(request, "admin_profile.html")
 
+@login_required()
 def access_db_admin(request):
     jobs = Job.objects.all()
     recruiters = Recruiter.objects.all() #paginate this!
@@ -86,6 +87,7 @@ def updatestudent(request, id):
             message = "Form invalid, Student not added!"
     return render(request, "db_view/TempUpdatePageForTesting.html", {"StudentUpdateForm": student_update_form, "Message": message})
 
+@login_required
 def access_db_student(request):
     submissions = Submission.objects.select_related("student")
     valid_search_parameters = ["hours", "student_id"]
