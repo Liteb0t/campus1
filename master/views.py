@@ -27,13 +27,6 @@ def access_db_admin(request):
     submissions = Submission.objects.all()
     line_managers = LineManager.objects.all()
 
-    if request.GET.__contains__("Jobs_page"):
-        jobs_page_number = request.GET.get("Jobs_page")
-    else:
-        jobs_page_number = 1
-    jobs_paginator = Paginator(jobs, 20)
-    jobs_page_obj = jobs_paginator.get_page(jobs_page_number)
-
     if request.GET.__contains__("Students_page"):
         students_page_number = request.GET.get("Students_page")
     else:
@@ -41,12 +34,12 @@ def access_db_admin(request):
     students_paginator = Paginator(students, 20)
     students_page_obj = students_paginator.get_page(students_page_number)
 
-    if request.GET.__contains__("Submissions_page"):
-        submissions_page_number = request.GET.get("Submissions_page")
+    if request.GET.__contains__("Jobs_page"):
+        jobs_page_number = request.GET.get("Jobs_page")
     else:
-        submissions_page_number = 1
-    submissions_paginator = Paginator(submissions, 20)
-    submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
+        jobs_page_number = 1
+    jobs_paginator = Paginator(jobs, 20)
+    jobs_page_obj = jobs_paginator.get_page(jobs_page_number)
 
     if request.GET.__contains__("LineManagers_page"):
         line_managers_page_number = request.GET.get("LineManagers_page")
@@ -54,6 +47,13 @@ def access_db_admin(request):
         line_managers_page_number = 1
     line_managers_paginator = Paginator(line_managers, 20)
     line_managers_page_obj = line_managers_paginator.get_page(line_managers_page_number)
+
+    if request.GET.__contains__("Submissions_page"):
+        submissions_page_number = request.GET.get("Submissions_page")
+    else:
+        submissions_page_number = 1
+    submissions_paginator = Paginator(submissions, 20)
+    submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
 
     message = None
     student_creation_form = StudentCreationForm()

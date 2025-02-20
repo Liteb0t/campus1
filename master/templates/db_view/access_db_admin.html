@@ -274,13 +274,9 @@
 <div id="AddStudent" style="display: none" class="CRUDBox">
     <div class="Grow"></div>
     <div class="Bottom">
-        <form method="post">
-            {% csrf_token %}
-            {{ StudentCreationForm.as_p }}
-            <button type="submit">Create student</button>
-        </form>
         <form id="Add" action="" method="POST" style="display: none">
             {% csrf_token %}
+            {{ StudentCreationForm.as_p }}
             <button type="submit">Add Student</button>
         </form>
         <form id="Upd" method="post" style="display: none">
