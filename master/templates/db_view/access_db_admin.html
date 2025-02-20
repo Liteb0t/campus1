@@ -269,6 +269,7 @@
                     <th>Line Manager:</th>
                     <th>Date Worked</th>
                     <th>Date Submitted</th>
+                    <th>Accepted</th>
                 </tr>
                 {% for item in Submissions %}
                 <tr>
@@ -279,6 +280,7 @@
                     <td>{{ item.line_manager.name }}</td>
                     <td>{{ item.date_worked }}</td>
                     <td>{{ item.date_submitted }}</td>
+                    <td>{{ item.accepted }}</td>
                 </tr>
                 {% endfor %}
             </table>
