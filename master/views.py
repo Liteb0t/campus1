@@ -18,16 +18,19 @@ def logged_out(request):
 def secure(request):
     return render(request, "secure.html")
 
+@login_required
 def profile(request):
     return render(request, "profile.html")
 
+@login_required
 def recruiter_profile(request):
     return render(request, "recruiter_profile.html")
 
+@login_required
 def admin_profile(request):
     return render(request, "admin_profile.html")
 
-@login_required()
+@login_required
 def access_db_admin(request):
     jobs = Job.objects.all()
     recruiters = Recruiter.objects.all() #paginate this!
@@ -74,6 +77,7 @@ def access_db_admin(request):
 
     return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "Message": message})
 
+@login_required
 def updatestudent(request, id):
     message = None
     stu_id = Student.objects.get(id=id)
@@ -102,4 +106,3 @@ def access_db_student(request):
     submissions_paginator = Paginator(submissions, 20)
     submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
     return render(request, "db_view/access_db_student.html", {"Submissions": submissions_page_obj, "ValidSearchParameters": valid_search_parameters})
-
