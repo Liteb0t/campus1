@@ -94,7 +94,7 @@ def updatestudent(request, id):
 @login_required
 def access_db_student(request):
     submissions = Submission.objects.select_related("student")
-    valid_search_parameters = ["hours", "student_id"]
+    valid_search_parameters = ["hours", "student__username", "student__first_name", "student__last_name"]
     for search_parameter in valid_search_parameters:
         if request.GET.__contains__(search_parameter):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
