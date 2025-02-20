@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
+from master.forms import StudentCreationForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
-from .forms import AddStudentForm
 
 @login_required
 def homepage(request):
@@ -26,19 +26,47 @@ def access_db_admin(request):
     students = Student.objects.all()
     submissions = Submission.objects.all()
     line_managers = LineManager.objects.all()
-    if request.GET.__contains__("page"):
-        page_number = request.GET.get("page")
+
+    if request.GET.__contains__("Jobs_page"):
+        jobs_page_number = request.GET.get("Jobs_page")
     else:
-        page_number = 1
-    paginator = Paginator(jobs, 25)
-    page_obj_job = paginator.get_page(page_number)
-    paginator = Paginator(students, 25)
-    page_obj_stu = paginator.get_page(page_number)
-    paginator = Paginator(LineManager, 25)
-    page_obj_man = paginator.get_page(page_number)
-    paginator = Paginator(submissions, 25)
-    page_obj_sub = paginator.get_page(page_number)
-    return render(request, "db_view/access_db_admin.html", {"Jobs": page_obj_job, "Students": page_obj_stu, "Submissions": page_obj_sub, "LineManagers": page_obj_man})
+        jobs_page_number = 1
+    jobs_paginator = Paginator(jobs, 20)
+    jobs_page_obj = jobs_paginator.get_page(jobs_page_number)
+
+    if request.GET.__contains__("Students_page"):
+        students_page_number = request.GET.get("Students_page")
+    else:
+        students_page_number = 1
+    students_paginator = Paginator(students, 20)
+    students_page_obj = students_paginator.get_page(students_page_number)
+
+    if request.GET.__contains__("Submissions_page"):
+        submissions_page_number = request.GET.get("Submissions_page")
+    else:
+        submissions_page_number = 1
+    submissions_paginator = Paginator(submissions, 20)
+    submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
+
+    if request.GET.__contains__("LineManagers_page"):
+        line_managers_page_number = request.GET.get("LineManagers_page")
+    else:
+        line_managers_page_number = 1
+    line_managers_paginator = Paginator(line_managers, 20)
+    line_managers_page_obj = line_managers_paginator.get_page(line_managers_page_number)
+
+    message = None
+    student_creation_form = StudentCreationForm()
+    if request.method == "POST":
+        form = StudentCreationForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            message = "Added student!"
+        else:
+            message = "Form invalid, Student not added!"
+
+    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "Message": message})
 
 def access_db_student(request):
     submissions = Submission.objects.all()
@@ -47,17 +75,11 @@ def access_db_student(request):
         if request.GET.__contains__(search_parameter):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
             submissions = submissions.filter(**{search_parameter: request.GET[search_parameter]})
-    if request.GET.__contains__("page"):
-        page_number = request.GET.get("page")
+    if request.GET.__contains__("Submissions_page"):
+        submissions_page_number = request.GET.get("Submissions_page")
     else:
-        page_number = 1
-    paginator = Paginator(submissions, 20)
-    page_obj = paginator.get_page(page_number)
-    return render(request, "db_view/access_db_student.html", {"Submissions": page_obj, "ValidSearchParameters": valid_search_parameters})
+        submissions_page_number = 1
+    submissions_paginator = Paginator(submissions, 20)
+    submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
+    return render(request, "db_view/access_db_student.html", {"Submissions": submissions_page_obj, "ValidSearchParameters": valid_search_parameters})
 
-def add_student_form(request):
-    student_id = request.POST["student_id"]
-    email = request.POST["email"]
-    first_name = request.POST["first_name"]
-    surname = request.POST["surname"]
-    password = request.POST["password"]

@@ -1,14 +1,8 @@
-from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from master.models import Student
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 
-class AddStudentForm(forms.Form):
-    student_id = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Student ID'}))
-    email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Email'}))
-    first_name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'First Name'}))
-    surname = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Surname'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    class meta:
+class StudentCreationForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
         model = Student
-        fields = ("student_id", "email", "first_name", "surname", "password")
+        fields = UserCreationForm.Meta.fields + ("on_visa",)
