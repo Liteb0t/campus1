@@ -24,7 +24,7 @@ def profile(request):
 def access_db_admin(request):
     jobs = Job.objects.all()
     students = Student.objects.all()
-    submissions = Submission.objects.all()
+    submissions = Submission.objects.select_related("student", "job", "line_manager")
     line_managers = LineManager.objects.all()
 
     if request.GET.__contains__("Students_page"):
@@ -82,7 +82,7 @@ def updatestudent(request):
     return render(request, "db_view/access_db_admin.html", {"StudentUpdateForm": student_update_form, "Message": message})
 
 def access_db_student(request):
-    submissions = Submission.objects.all()
+    submissions = Submission.objects.select_related("student")
     valid_search_parameters = ["hours", "student_id"]
     for search_parameter in valid_search_parameters:
         if request.GET.__contains__(search_parameter):
