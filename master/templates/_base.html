@@ -13,9 +13,9 @@
         <div class="Navbar">
             <a class="Navlink" href="{% url 'homepage' %}">Home</a>
             {% if request.user.is_superuser == 1 %}
-                <a class="Navlink" href="{% url 'access_db_admin' %}">Admin</a>
+                <a class="Navlink" href="{% url 'adminSHU' %}">Admin</a>
             {% else %}
-                <a class="Navlink" href="{% url 'access_db_student' %}">Student</a>
+                <a class="Navlink" href="{% url 'student' %}">Student</a>
             {% endif %}
             <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
