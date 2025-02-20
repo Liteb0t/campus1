@@ -64,23 +64,21 @@ def access_db_admin(request):
             obj = form.save(commit=False)
             obj.save()
             message = "Added student!"
-        else:
-            message = "Form invalid, Student not added!"
 
     return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "Message": message})
 
 def updatestudent(request, id):
     message = None
-    Stu_ID = Student.objects.get(id=id)
-    student_update_form = StudentUpdateForm(instance=Stu_ID)
+    stu_id = Student.objects.get(id=id)
+    student_update_form = StudentUpdateForm(instance=stu_id)
     if request.method == "POST":
-        form = StudentUpdateForm(request.POST, instance=Stu_ID)
+        form = StudentUpdateForm(request.POST, instance=stu_id)
         if form.is_valid():
             form.save()
             message = "Added student!"
         else:
             message = "Form invalid, Student not added!"
-    return render(request, "db_view/access_db_admin.html", {"StudentUpdateForm": student_update_form, "Message": message})
+    return render(request, "db_view/TempUpdatePageForTesting.html", {"StudentUpdateForm": student_update_form, "Message": message})
 
 def access_db_student(request):
     submissions = Submission.objects.select_related("student")

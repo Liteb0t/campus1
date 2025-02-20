@@ -51,14 +51,7 @@ class StudentCreationForm(UserCreationForm):
 
 
 class StudentUpdateForm(forms.ModelForm):
-    username = forms.CharField(
-        label="",
-        strip=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Username'}),
-        help_text=None,
-    )
-
     class Meta:
         model = Student
-        fields = ["username", "on_visa"]
+        fields = ["on_visa"]
 

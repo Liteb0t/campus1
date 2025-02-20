@@ -232,7 +232,7 @@
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
-                    <td><a id="UpdStu"  href="{% url 'update' item.id %}">Update</a></td>
+                    <td><a href="{% url 'update' item.id %}">Update</a></td>
                 </tr>
                 {% endfor %}
             </table>
