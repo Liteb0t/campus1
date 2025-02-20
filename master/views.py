@@ -1,9 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.forms import ModelForm
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student
-from master.forms import StudentCreationForm, StudentUpdateForm
+from master.forms import StudentCreationForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
@@ -22,8 +21,15 @@ def secure(request):
 def profile(request):
     return render(request, "profile.html")
 
+def recruiter_profile(request):
+    return render(request, "recruiter_profile.html")
+
+def admin_profile(request):
+    return render(request, "admin_profile.html")
+
 def access_db_admin(request):
     jobs = Job.objects.all()
+    recruiters = Recruiter.objects.all() #paginate this!
     students = Student.objects.all()
     submissions = Submission.objects.select_related("student", "job", "line_manager")
     line_managers = LineManager.objects.all()
