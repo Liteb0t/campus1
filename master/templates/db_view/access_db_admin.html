@@ -204,6 +204,7 @@
                     <th>Job Name:</th>
                     <th>Cost Code:</th>
                     <th>Pay Rate:</th>
+                    <th> </th>
                 </tr>
                 {% for item in Jobs %}
                 <tr>
@@ -211,6 +212,7 @@
                     <td>{{ item.job_name }}</td>
                     <td>{{ item.cost_code }}</td>
                     <td>{{ item.pay_rate }}</td>
+                    <td><a class="UDLinks" href="{% url 'deletejob' item.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </table>
@@ -233,8 +235,8 @@
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
-                    <td><a href="{% url 'update' item.id %}">Update</a></td>
-                    <td><a href="{% url 'delete' item.id %}">Delete</a></td>
+                    <td><a class="UDLinks" href="{% url 'update' item.id %}">Update</a></td>
+                    <td><a class="UDLinks" href="{% url 'delete' item.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </table>

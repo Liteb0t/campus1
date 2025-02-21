@@ -86,12 +86,26 @@ def updatestudent(request, id):
         form = StudentUpdateForm(request.POST, instance=stu_id)
         if form.is_valid():
             form.save()
+            return redirect("adminSHU")
 
     return render(request, "db_view/UpdateStudent.html", {"StudentUpdateForm": student_update_form})
 
+@login_required
 def deletestudent(request, id):
     stu_id = Student.objects.get(id=id)
     stu_id.delete()
+    return redirect("adminSHU")
+
+@login_required
+def deletejob(request, id):
+    Job_id = Job.objects.get(id=id)
+    Job_id.delete()
+    return redirect("adminSHU")
+
+@login_required
+def deletesubmission(request, id):
+    sub_id = Submission.objects.get(id=id)
+    sub_id.delete()
     return redirect("adminSHU")
 
 @login_required

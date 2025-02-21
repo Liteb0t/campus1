@@ -1,3 +1,7 @@
+*{
+    font-family: sans-serif;
+}
+
 .TableBox {
     display: flex;
     justify-content: left;
@@ -30,6 +34,7 @@ html, body{
 }
 
 body {
+    font-family: Sans-serif;
     background-color: #621b40;
     margin: 0;
     padding: 0;
@@ -61,17 +66,18 @@ body {
 }
 
 .left{
-  width: 10%;
+  width: 15%;
 }
 
 .right{
-  width: 90%;
+  width: 85%;
 }
 
 /*navbar*/
 
 .Navbar{
-    background-color: #333;
+    font-family: Sans-serif;
+    background-color: #BF0167;
     overflow: hidden;
 }
 
@@ -147,7 +153,14 @@ body {
     color: #0000EE;
 }
 
-.PaginationLinks:hover{
+.UDLinks{
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    color: #0000EE;
+}
+
+.PaginationLinks:hover, UDLinks:hover{
     color: #551A8B;
     cursor: pointer;
 }
