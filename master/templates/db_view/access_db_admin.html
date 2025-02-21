@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% load static %}
 {% block title %}
  View Tables
 {% endblock %}
@@ -108,7 +109,7 @@
 <div class = "Row">
     <div class = "Col left">
         <div class="Pagination">
-            <div class = "SideBox">
+            <div id="advanced_search" class="ADVBox">
                 <p>Select a table to oversee:</p>
                 <form id = TableSelect>
                     <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
@@ -317,5 +318,16 @@
         </form>
     </div>
 </div>
+<script src="{% static 'advanced_search.js' %}"></script>
+    <script>
+    advanced_search = new AdvancedSearch("advanced_search", {
+        "parameter_options": {
+            {% for item in ValidSearchParameters %}
+                "{{ item.0 }}": {"type": "{{ item.1 }}"},
+            {% endfor %}
+        }
+        ,"form_action": "{% url 'adminSHU' %}"
+    });
+    </script>
 {% endblock %}
 

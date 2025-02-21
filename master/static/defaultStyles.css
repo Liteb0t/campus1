@@ -1,6 +1,6 @@
-/**{*/
-/*    font-family: sans-serif;*/
-/*}*/
+*{
+    font-family: sans-serif;
+}
 
 .TableBox {
     display: flex;
@@ -80,6 +80,7 @@ body {
 /*navbar*/
 
 .Navbar{
+    position: sticky;
     /*font-family: Sans-serif;*/
     background-color: #BF0167;
     overflow: hidden;
@@ -88,9 +89,9 @@ body {
 .Navlink{
     color: #f2f2f2;
     text-align: center;
-    padding: 20px 24px;
+    padding: 24px 28px;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 22px;
     float: left;
 }
 
@@ -105,7 +106,7 @@ body {
     outline: none;
     font: inherit;
     color: #f2f2f2;
-    font-size: 20px;
+    font-size: 22px;
     background-color: transparent;
     float: right;
 }

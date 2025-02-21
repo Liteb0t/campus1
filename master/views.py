@@ -10,7 +10,10 @@ from django.shortcuts import redirect
 
 @login_required
 def homepage(request):
-    return render(request, "homepage.html")
+    if request.user.is_superuser == 1:
+        return render(request, "homepage.html")
+    else:
+        return redirect("student")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
@@ -34,6 +37,27 @@ def access_db_admin(request):
     students = Student.objects.all()
     submissions = Submission.objects.select_related("student", "job", "line_manager")
     line_managers = LineManager.objects.all()
+
+    valid_search_parameters = [["hours", "text"], ["student__username", "text"], ["student__first_name", "text"],
+                               ["student__last_name", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
+    for search_parameter in valid_search_parameters:
+        if request.GET.__contains__(search_parameter[0]):
+            # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
+            if search_parameter[1] == "date":
+                delimiter = request.GET.get(search_parameter[0] + "-delimiter")
+
+                ## Stuff delimiter conditional
+                if delimiter == "At":
+                    submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
+                elif delimiter == "Before":
+                    submissions = submissions.filter(
+                        **{search_parameter[0] + "__range": ["0001-01-01", request.GET[search_parameter[0]]]})
+                # elif delimiter == "After":
+                else:
+                    submissions = submissions.filter(
+                        **{search_parameter[0] + "__range": [request.GET[search_parameter[0]], "9999-12-31"]})
+            else:
+                submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
 
     if request.GET.__contains__("Students_page"):
         students_page_number = request.GET.get("Students_page")
@@ -72,7 +96,7 @@ def access_db_admin(request):
             obj.save()
             message = "Added student!"
 
-    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "Message": message})
+    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "ValidSearchParameters": valid_search_parameters, "Message": message})
 
 @login_required
 def updatestudent(request, id):
