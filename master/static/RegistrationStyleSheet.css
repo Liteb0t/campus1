@@ -1,19 +1,29 @@
 .Box{
-    height: 15%;
-    min-width: 15em;
-    max-width: 15em;
-    padding: 10px;
+    max-width: 425px;
     position: relative;
+    padding-bottom: 2rem;
     text-align: center;
-    opacity: 0.75;
+    opacity: 0.70;
     background: #F2F2F2;
-    border-radius: 1px;
-    border: 1px solid #797979;
     word-wrap: break-word;
-    margin: 38vh auto auto auto;
+    margin: 30vh auto auto auto;
 }
 
 body {
     background-color: #621b40;
 }
+
+.width100{
+    width: 100%;
+}
+
+.LoginHeader{
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: darkgrey;
+}
+
+
 
