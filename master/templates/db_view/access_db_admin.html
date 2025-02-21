@@ -205,7 +205,7 @@
                     <th>Job Name:</th>
                     <th>Cost Code:</th>
                     <th>Pay Rate:</th>
-                    <th> </th>
+                    <th></th>
                 </tr>
                 {% for item in Jobs %}
                 <tr>
@@ -230,8 +230,7 @@
                     <th>Visa Expiry:</th>
                     <th>Student Number:</th>
                     <th>Payroll Number:</th>
-                    <th> </th>
-                    <th> </th>
+                    <th colspan="2">Actions</th>
                 </tr>
 
                 {% for item in Students %}
@@ -240,7 +239,13 @@
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
-                    <td>{{ item.visa_expiry }}</td>
+                    <td>
+                        {% if item.on_visa == True %}
+                            {{ item.visa_expiry }}
+                        {% else %}
+                            n/a
+                        {% endif %}
+                    </td>
                     <td>{{ item.student_number }}</td>
                     <td>{{ item.payroll_number }}</td>
                     <td><a class="UDLinks" href="{% url 'update' item.id %}">Update</a></td>
