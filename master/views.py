@@ -111,15 +111,29 @@ def deletesubmission(request, id):
 @login_required
 def access_db_student(request):
     submissions = Submission.objects.select_related("student")
-    valid_search_parameters = [[ "hours", "text"], ["student__username", "text"], ["student__first_name", "text"], ["student__last_name", "text"], ["date_worked", "date"]]
+    valid_search_parameters = [[ "hours", "text"], ["student__username", "text"], ["student__first_name", "text"], ["student__last_name", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
     for search_parameter in valid_search_parameters:
         if request.GET.__contains__(search_parameter[0]):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
-            submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
+            if search_parameter[1] == "date":
+                delimiter = request.GET.get(search_parameter[0] + "-delimiter")
+
+                ## Stuff delimiter conditional
+                if delimiter == "At":
+                    submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
+                elif delimiter == "Before":
+                    submissions = submissions.filter(**{search_parameter[0] + "__range": ["0001-01-01", request.GET[search_parameter[0]]]})
+                # elif delimiter == "After":
+                else:
+                    submissions = submissions.filter(**{search_parameter[0] + "__range": [request.GET[search_parameter[0]], "9999-12-31"]})
+            else:
+                submissions = submissions.filter(**{search_parameter[0]: request.GET[search_parameter[0]]})
     if request.GET.__contains__("Submissions_page"):
         submissions_page_number = request.GET.get("Submissions_page")
     else:
         submissions_page_number = 1
+    # if request.GET.__contains__("worked_delimiter"):
+    #     worked_delimiter = request.GET.get("worked_delimiter")
     submissions_paginator = Paginator(submissions, 20)
     submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
     return render(request, "db_view/access_db_student.html", {"Submissions": submissions_page_obj, "ValidSearchParameters": valid_search_parameters})

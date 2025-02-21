@@ -13,9 +13,19 @@ class AdvancedSearch {
         this.linkToHTML();
         this.url_search_params = new URLSearchParams(window.location.search);
         this.number_of_parameters = 0;
-        for (const search_param of this.url_search_params) {
-            if (search_param[0] !== "page") {
-                this.addSearchParameter(search_param[0], search_param[1]);
+        this.date_delimiters = {};
+        for (const [parameter_option, type] of Object.entries(this.parameter_options)) {
+            if (type === "date") {
+                this.date_delimiters[parameter_option] = "At";
+            }
+        }
+        for (const [search_param_option, search_param_value] of this.url_search_params) {
+            if (search_param_option.endsWith("delimiter")) {
+                let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
+                this.date_delimiters[search_param_option_truncated] = search_param_value;
+            }
+            else if (search_param_option !== "page") {
+                this.addSearchParameter(search_param_option, search_param_value);
             }
         }
     }
@@ -68,12 +78,22 @@ class AdvancedSearch {
             parameter_select.appendChild(option_element);
         }
         parameter_container.appendChild(parameter_select);
-
+        let parameter_select_2 = null;
 
         let input_element = document.createElement("input")
         if (option !== null && this.parameter_options[option].type === "date") {
             input_element.classList.add("ParameterDateBox");
             input_element.type = "date";
+            parameter_select_2 = document.createElement("select");
+            ["At", "Before", "After"].forEach(delimiter => {
+                let temp_option_element = document.createElement("option");
+                temp_option_element.value = delimiter;
+                temp_option_element.innerText = delimiter;
+                parameter_select_2.appendChild(temp_option_element);
+            });
+            parameter_select_2.name = option + "-delimiter";
+            parameter_select_2.value = this.date_delimiters[option];
+            parameter_select.insertAdjacentElement("afterend", parameter_select_2);
         }
         else {
             input_element.classList.add("ParameterSearchBox");
@@ -100,11 +120,31 @@ class AdvancedSearch {
             }
         }
         parameter_select.onchange = (event) => {
+            let new_value = parameter_select.value;
+            let new_type = this.parameter_options[new_value].type;
             // if (this.parameter_options[parameter_select.value].type === "date") {
             //     input_element.type = "date";
             // }
-            input_element.type = this.parameter_options[parameter_select.value].type;
-            input_element.name = parameter_select.value;
+            input_element.type = new_type;
+            input_element.name = new_value;
+            if (new_type === "date") {
+                parameter_select_2 = document.createElement("select");
+                // parameter_select_2.name = "date_delimiter";
+                ["At", "Before", "After"].forEach(delimiter => {
+                    let temp_option_element = document.createElement("option");
+                    temp_option_element.value = delimiter;
+                    temp_option_element.innerText = delimiter;
+                    parameter_select_2.appendChild(temp_option_element);
+                });
+                parameter_select_2.name = new_value + "-delimiter";
+                parameter_select.insertAdjacentElement("afterend", parameter_select_2);
+            }
+            else {
+                if (parameter_select_2 !== null) {
+                    parameter_container.removeChild(parameter_select_2);
+                    // parameter_select_2 = null;
+                }
+            }
         }
         parameter_container.appendChild(delete_button);
 
