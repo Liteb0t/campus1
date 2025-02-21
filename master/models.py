@@ -1,9 +1,9 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, Group
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
 class Student(AbstractUser):
     on_visa = models.BooleanField(default=False)
-    visa_expiry = models.DateField()
+    visa_expiry = models.DateField(default="0001-01-01")
 
 class LineManager(models.Model):
     name = models.CharField(max_length=255)
@@ -34,3 +34,7 @@ class Recruiter(models.Model):
     username = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
 
+class Recruiter_Submission(models.Model):
+    hours = models.IntegerField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    accepted = models.BooleanField()
