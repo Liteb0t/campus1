@@ -9,7 +9,7 @@
     <div class="LoginHeader">
         <img id="imgLogo" alt="" class="img-fluid" src="/static/logo-shu.svg">
     </div>
-    <form method="post" action="{% url 'login' %}" style="padding-top: 2rem">
+    <form method="post" action="{% url 'login' %}" style="padding-top: 2  rem">
             {% csrf_token %}
             {{ form.as_p }}
             <div>
