@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("", views.homepage, name="homepage"),
-    path("secure", views.secure, name="secure"),
     path("profile", views.profile, name="profile"),
     path("recruiter_profile", views.recruiter_profile, name="recruiter_profile"),
     path("admin_profile", views.admin_profile, name="admin_profile"),
@@ -14,5 +13,4 @@ urlpatterns = [
     path("DeleteStu/<int:id>", views.deletestudent, name="delete"),
     path("DeleteSub/<int:id>", views.deletesubmission, name="deletesub"),
     path("DeleteJob/<int:id>", views.deletejob, name="deletejob"),
-
 ]

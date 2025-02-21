@@ -16,10 +16,6 @@ def logged_out(request):
     return render(request, "registration/logged_out.html")
 
 @login_required
-def secure(request):
-    return render(request, "secure.html")
-
-@login_required
 def profile(request):
     return render(request, "profile.html")
 
@@ -110,8 +106,8 @@ def deletesubmission(request, id):
 
 @login_required
 def access_db_student(request):
-    submissions = Submission.objects.select_related("student")
-    valid_search_parameters = [[ "hours", "text"], ["student__username", "text"], ["student__first_name", "text"], ["student__last_name", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
+    submissions = Submission.objects.select_related("student").filter(student__username=request.user.username)
+    valid_search_parameters = [[ "hours", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
     for search_parameter in valid_search_parameters:
         if request.GET.__contains__(search_parameter[0]):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
