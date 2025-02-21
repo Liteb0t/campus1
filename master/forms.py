@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from master.models import Student
 from django import forms
+from django.db import models
 
 
 class StudentCreationForm(UserCreationForm):
@@ -53,5 +54,8 @@ class StudentCreationForm(UserCreationForm):
 class StudentUpdateForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ["on_visa"]
+        fields = ["on_visa", "visa_expiry"]
+        widgets = {
+            "visa_expiry": forms.widgets.DateInput(attrs={'type': 'date'})
+        }
 
