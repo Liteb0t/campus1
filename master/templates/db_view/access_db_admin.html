@@ -226,15 +226,22 @@
                     <th>First name:</th>
                     <th>Last name:</th>
                     <th>On visa?</th>
+                    <th>Visa Expiry:</th>
+                    <th>Student Number:</th>
+                    <th>Payroll Number:</th>
                     <th> </th>
                     <th> </th>
                 </tr>
+
                 {% for item in Students %}
                 <tr>
                     <td>{{ item.username }}</td>
                     <td>{{ item.first_name }}</td>
                     <td>{{ item.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
+                    <td>{{ item.visa_expiry }}</td>
+                    <td>{{ item.student_number }}</td>
+                    <td>{{ item.payroll_number }}</td>
                     <td><a class="UDLinks" href="{% url 'update' item.id %}">Update</a></td>
                     <td><a class="UDLinks" href="{% url 'delete' item.id %}">Delete</a></td>
                 </tr>
