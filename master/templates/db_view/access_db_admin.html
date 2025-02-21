@@ -204,6 +204,7 @@
                     <th>Job Name:</th>
                     <th>Cost Code:</th>
                     <th>Pay Rate:</th>
+                    <th> </th>
                 </tr>
                 {% for item in Jobs %}
                 <tr>
@@ -211,6 +212,7 @@
                     <td>{{ item.job_name }}</td>
                     <td>{{ item.cost_code }}</td>
                     <td>{{ item.pay_rate }}</td>
+                    <td><a class="UDLinks" href="{% url 'deletejob' item.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </table>
