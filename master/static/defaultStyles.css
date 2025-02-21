@@ -147,7 +147,14 @@ body {
     color: #0000EE;
 }
 
-.PaginationLinks:hover{
+.UDLinks{
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+    color: #0000EE;
+}
+
+.PaginationLinks:hover, UDLinks:hover{
     color: #551A8B;
     cursor: pointer;
 }

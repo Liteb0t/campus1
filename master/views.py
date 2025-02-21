@@ -86,6 +86,7 @@ def updatestudent(request, id):
         form = StudentUpdateForm(request.POST, instance=stu_id)
         if form.is_valid():
             form.save()
+            return redirect("adminSHU")
 
     return render(request, "db_view/UpdateStudent.html", {"StudentUpdateForm": student_update_form})
 
