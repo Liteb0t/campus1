@@ -14,23 +14,13 @@
         </div>
     </div>
     <!-- Table Layout: Student table -->
-<div class = "Col right">
-    <div class = "TableBox">
-                <table id="Students">
-                    <tr>
-                        <th>Username:</th>
-                        <th>First name:</th>
-                        <th>Last name:</th>
-                        <th>On visa?</th>
-                    </tr>
-                    <tr>
-                        <td>{{ request.user.username }}</td>
-                        <td>{{ request.user.first_name }}</td>
-                        <td>{{ request.user.last_name }}</td>
-                        <td>{{ request.user.on_visa }}</td>
-                    </tr>
-                </table>
-            </div>
+    <div class = "Col right">
+        <h2>Your profile:</h2>
+        <p>
+            Username: {{ request.user.username }}<br>
+            Name: {{ request.user.first_name }} {{ request.user.last_name }}<br>
+            On visa: {{ request.user.on_visa }}
+        </p>
     </div>
 </div>
 

@@ -14,23 +14,23 @@
         </div>
     </div>
     <!-- Table Layout: admin table -->
-<div class = "Col right">
-    <div class = "TableBox">
-                <table id="Admin">
-                    <tr>
-                        <th>Username:</th>
-                        <th>First name:</th>
-                        <th>Last name:</th>
-                        <th>Email</th>
-                    </tr>
-                    <tr>
-                        <td>{{ request.user.username }}</td>
-                        <td>{{ request.user.first_name }}</td>
-                        <td>{{ request.user.last_name }}</td>
-                        <td>{{ request.user.email }}</td>
-                    </tr>
-                </table>
-            </div>
+    <div class = "Col right">
+        <div class = "TableBox">
+            <table id="Admin">
+                <tr>
+                    <th>Username:</th>
+                    <th>First name:</th>
+                    <th>Last name:</th>
+                    <th>Email</th>
+                </tr>
+                <tr>
+                    <td>{{ request.user.username }}</td>
+                    <td>{{ request.user.first_name }}</td>
+                    <td>{{ request.user.last_name }}</td>
+                    <td>{{ request.user.email }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 
