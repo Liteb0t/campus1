@@ -112,7 +112,7 @@
             <div id="advanced_search" class="ADVBox">
                 <p>Select a table to oversee:</p>
                 <form id = TableSelect>
-                    <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()">
+                    <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()" checked>
                     <label for="StudentClicker">View Student Timesheet</label><br>
                     <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
                     <label for="JobClicker">View Stored Jobs</label><br>
@@ -121,10 +121,10 @@
                     <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
                     <label for="SubmissionClicker">View Submissions</label><br>
                 </form>
-                <button id="AddStu" style="display: none" onclick="ShowCRUDBox(this.id)">Add student</button>
-                <button id="DelStu" style="display: none" onclick="ShowCRUDBox(this.id)">Delete student</button>
+                <button id="AddStu" style="display: block" onclick="ShowCRUDBox(this.id)">Add student</button>
+                <button id="DelStu" style="display: block" onclick="ShowCRUDBox(this.id)">Delete student</button>
                 <div class="Pagination">
-                    <div id="StuLink" style="display: none">
+                    <div id="StuLink" style="display: block">
                         <span class="StepLinks">
                             {% if Students.has_previous %}
                                 <a class="PaginationLinks" href="?Students_page=1">&laquo; first</a>
@@ -221,7 +221,7 @@
 
         <!-- Table Layout: Student -->
         <div class = "TableBox">
-            <table id="Students" style="display: none">
+            <table id="Students" style="display: block">
                 <tr>
                     <th>Username:</th>
                     <th>First name:</th>

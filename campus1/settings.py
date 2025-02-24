@@ -25,8 +25,11 @@ SECRET_KEY = 'django-insecure-@&3-esy=@e$##iyd@3kif5qb@^wjwdrg@g4s_el@i%w5$vw%-z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# # Settings for deployment to Fuze.page
+# CSRF_TRUSTED_ORIGINS = ['edrms.fuze.page', 'campusjobs.fuze.page']
+# ALLOWED_HOSTS = ['edrms.fuze.page', 'campusjobs.fuze.page']
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 # Application definition
 
@@ -98,7 +101,7 @@ DATABASES = {
     'shhtunnel_db': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': '127.0.0.1',
-        'PORT': ssh_tunnel.local_bind_port,
+        'PORT': ssh_tunnel.local_bind_port, # For Fuze.page deployment, comment out this line
         'NAME': 'campoos',
         'USER': 'root',
         'PASSWORD': 'str0ngpassword',
@@ -151,10 +154,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'master.Student'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
-EMAIL_USE_TLS = False
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'your@djangoapp.com'
-EMAIL_HOST_PASSWORD = 'your password'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# # Settings for deployment to Fuze.page
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = False
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
