@@ -19,6 +19,7 @@
         <p>
             Username: {{ request.user.username }}<br>
             Name: {{ request.user.first_name }} {{ request.user.last_name }}<br>
+            {{ if request
             On visa: {{ request.user.on_visa }}
         </p>
     </div>

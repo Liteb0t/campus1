@@ -151,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # LOGOUT_REDIRECT_URL = 'accounts/logged_out'
 
-AUTH_USER_MODEL = 'master.Student'
+# AUTH_USER_MODEL = 'master.Student'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

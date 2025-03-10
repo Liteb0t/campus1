@@ -38,8 +38,8 @@ def access_db_admin(request):
     submissions = Submission.objects.select_related("student", "job", "line_manager")
     line_managers = LineManager.objects.all()
 
-    valid_search_parameters = [["hours", "text"], ["student__username", "text"], ["student__first_name", "text"],
-                               ["student__last_name", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
+    valid_search_parameters = [["hours", "text"], ["student__user__username", "text"], ["student__user__first_name", "text"],
+                               ["student__user__last_name", "text"], ["date_worked", "date"], ["date_submitted", "date"]]
     for search_parameter in valid_search_parameters:
         if request.GET.__contains__(search_parameter[0]):
             # submissions = submissions.filter(search_parameter=request.GET[search_parameter])
