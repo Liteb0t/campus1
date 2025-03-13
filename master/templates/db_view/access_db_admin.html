@@ -236,9 +236,9 @@
 
                 {% for item in Students %}
                 <tr>
-<!--                    <td>{{ item.user.username }}</td>-->
-<!--                    <td>{{ item.user.first_name }}</td>-->
-<!--                    <td>{{ item.user.last_name }}</td>-->
+{#<!--                    <td>{{ item.user.username }}</td>-->#}
+{#<!--                    <td>{{ item.user.first_name }}</td>-->#}
+{#<!--                    <td>{{ item.user.last_name }}</td>-->#}
                     <td>{{ item.on_visa }}</td>
                     <td>
                         {% if item.on_visa == True %}
@@ -310,6 +310,7 @@
     <div class="Bottom">
         <form id="Add" action="" method="POST" style="display: none">
             {% csrf_token %}
+            {{ UserCreationForm.as_p }}
             {{ StudentCreationForm.as_p }}
             <button type="submit">Add Student</button>
         </form>

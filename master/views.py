@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from master.models import Job, LineManager, Submission, Student, Recruiter
-from master.forms import StudentCreationForm, StudentUpdateForm
+from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
 from django.core.paginator import Paginator
@@ -88,15 +88,21 @@ def access_db_admin(request):
     submissions_page_obj = submissions_paginator.get_page(submissions_page_number)
 
     message = None
+    user_creation_form = UserCreationForm()
     student_creation_form = StudentCreationForm()
     if request.method == "POST":
-        form = StudentCreationForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.save()
+        user_form = UserCreationForm(request.POST)
+        student_form = StudentCreationForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            user.save()
             message = "Added student!"
+            if student_form.is_valid():
+                student = student_form.save(commit=False)
+                student.user = user
+                student.save()
 
-    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "ValidSearchParameters": valid_search_parameters, "Message": message})
+    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "UserCreationForm": user_creation_form, "ValidSearchParameters": valid_search_parameters, "Message": message})
 
 @login_required
 def updatestudent(request, id):
