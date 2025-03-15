@@ -1,0 +1,23 @@
+{% extends "registration/_base.html" %}
+{% block title %}
+ Login Page
+{% endblock %}
+
+{% block content %}
+
+<div class = "Box width100">
+    <div class="LoginHeader">
+        <img id="imgLogo" alt="" class="img-fluid" src="/static/logo-shu.svg">
+    </div>
+    <form method="post" action="{% url 'login' %}" style="padding-top: 2  rem">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+                <input type="submit" value="login">
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+        </form>
+    <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+</div>
+
+{% endblock %}

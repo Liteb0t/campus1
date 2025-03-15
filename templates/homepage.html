@@ -1,0 +1,64 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}Careers & Employability - Home{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+    
+    <!-- Welcome Section -->
+    <div class="text-center mt-5">
+        <h1 class="fw-bold text-dark">Streamline Your Campus Jobs Management</h1>
+        <p class="lead text-muted">Find job opportunities, explore career paths, and manage applications effortlessly.</p>
+    </div>
+
+    <!-- User Greeting Section -->
+    <div class="text-center my-4">
+        {% if request.user.is_authenticated %}
+            <h3 class="fw-bold text-dark">Welcome, {{ request.user.first_name|default:request.user.username }}!</h3>
+        {% else %}
+            <h3 class="fw-bold text-dark">Welcome, Guest!</h3>
+        {% endif %}
+    </div>
+
+    <!-- Career Cards Section -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card h-100 d-flex flex-column">
+                <img src="{% static 'images/image1.jpeg' %}" class="card-img-top" alt="Identifying Your Strengths">
+                <div class="card-body">
+                    <h5 class="card-title">Identifying Your Strengths</h5>
+                    <p class="card-text">Skills and preferences, Strength assessments, Learning styles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 d-flex flex-column">
+                <img src="{% static 'images/image2.jpeg' %}" class="card-img-top" alt="Choosing a Career Path">
+                <div class="card-body">
+                    <h5 class="card-title">Choosing a Career Path</h5>
+                    <p class="card-text">Industry insights, sector differences, building experience, self-employment</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 d-flex flex-column">
+                <img src="{% static 'images/image3.jpeg' %}" class="card-img-top" alt="Your Job Search">
+                <div class="card-body">
+                    <h5 class="card-title">Your Job Search</h5>
+                    <p class="card-text">Where to look for jobs in your sector, Labour market information</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 d-flex flex-column">
+                <img src="{% static 'images/image4.jpeg' %}" class="card-img-top" alt="Applying for Jobs">
+                <div class="card-body">
+                    <h5 class="card-title">Applying for Jobs</h5>
+                    <p class="card-text">Application resources and tips from SHU</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

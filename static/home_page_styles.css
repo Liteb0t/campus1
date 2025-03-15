@@ -1,0 +1,70 @@
+
+/* Welcome Message */
+.welcome-text {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.login-btn {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.login-btn:hover {
+    background-color: #218838;
+}
+
+.logout-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+/* Reviews Section */
+.reviews {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.review {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 15px auto;
+    width: 80%;
+    max-width: 600px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease-in-out;
+}
+
+.review:hover {
+    transform: translateY(-5px);
+}
+
+.review h4 {
+    margin-bottom: 8px;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.review p {
+    font-size: 1rem;
+    color: #f8f9fa;
+}
