@@ -14,6 +14,7 @@
             <a class="Navlink" href="{% url 'homepage' %}">Home</a>
             <a class="Navlink" href="{% url 'profile' %}">Profile</a>
             {% if request.user.is_superuser == 1 %}
+                <a class="Navlink" href="{% url 'access_db_admin' %}">Admin (new)</a>
                 <a class="Navlink" href="{% url 'adminSHU' %}">Admin</a>
             {% else %}
                 <a class="Navlink" href="{% url 'student' %}">Student</a>

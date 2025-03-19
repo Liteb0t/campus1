@@ -1,0 +1,8 @@
+LineManager
+username: lm
+password: test
+
+Recruiter
+username: recruiter
+Password: test
+(id 1001)

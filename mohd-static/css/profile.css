@@ -1,0 +1,87 @@
+/* General Layout */
+.Row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+/* Sidebar Styling */
+.Col.left {
+    flex: 1;
+    max-width: 300px;
+}
+
+.SideBox {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.SideBox button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: 0.3s ease-in-out;
+}
+
+.SideBox button:hover {
+    background-color: #c82333;
+}
+
+/* Profile Table */
+.Col.right {
+    flex: 2;
+    max-width: 700px;
+}
+
+.TableBox {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+#Admin {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#Admin th, #Admin td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+#Admin th {
+    background-color: #007bff;
+    color: white;
+}
+
+#Admin tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#Admin tr:hover {
+    background-color: #ddd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .Row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .Col.left, .Col.right {
+        max-width: 100%;
+    }
+}

@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from master.models import Job, LineManager, Submission, Student, Recruiter
+from master.models import Job, LineManager, Submission, Student, Recruiter, DBAdminStudentSerialiser ,DBAdminSubmissionSerialiser
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
 from django.template import loader
+from django.core import serializers
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
+import json
 
 @login_required
 def homepage(request):
@@ -31,7 +33,7 @@ def admin_profile(request):
     return render(request, "admin_profile.html")
 
 @login_required
-def access_db_admin(request):
+def access_db_admin_old(request):
     jobs = Job.objects.all()
     recruiters = Recruiter.objects.all() #paginate this!
     students = Student.objects.all()
@@ -102,7 +104,36 @@ def access_db_admin(request):
                 student.user = user
                 student.save()
 
-    return render(request, "db_view/access_db_admin.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "UserCreationForm": user_creation_form, "ValidSearchParameters": valid_search_parameters, "Message": message})
+    return render(request, "db_view/access_db_admin_old.html", {"Jobs": jobs_page_obj, "Students": students_page_obj, "Submissions": submissions_page_obj, "LineManagers": line_managers_page_obj, "StudentCreationForm": student_creation_form, "UserCreationForm": user_creation_form, "ValidSearchParameters": valid_search_parameters, "Message": message})
+
+@login_required
+def access_db_admin(request):
+    jobs = Job.objects.all()
+    recruiters = Recruiter.objects.all() #paginate this!
+    students = Student.objects.select_related("user")
+    submissions = Submission.objects.select_related("student", "job", "line_manager")
+    line_managers = LineManager.objects.all()
+
+    message = None
+    user_creation_form = UserCreationForm()
+    student_creation_form = StudentCreationForm()
+    if request.method == "POST":
+        user_form = UserCreationForm(request.POST)
+        student_form = StudentCreationForm(request.POST)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            user.save()
+            message = "Added student!"
+            if student_form.is_valid():
+                student = student_form.save(commit=False)
+                student.user = user
+                student.save()
+
+    submissions_pure = submissions.values("hours", "student__user__username")
+    # students_pure = students.only("user__username", "on_visa")
+    students_json = DBAdminStudentSerialiser(students, many=True).data
+    submissions_json = DBAdminSubmissionSerialiser(submissions, many=True).data
+    return render(request, "db_view/access_db_admin.html", {"StudentCreationForm": student_creation_form, "UserCreationForm": user_creation_form, "Message": message, "StudentsJSON": json.dumps(students_json), "SubmissionsJSON": json.dumps(submissions_json)})
 
 @login_required
 def updatestudent(request, id):

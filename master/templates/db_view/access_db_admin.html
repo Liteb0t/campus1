@@ -6,335 +6,548 @@
 
 {% block content %}
 
-<script>
-    function SelectStudent()
-    {
-        document.getElementById("Students").style["display"] = "block"
-        document.getElementById("Jobs").style["display"] = "none"
-        document.getElementById("LineManagers").style["display"] = "none"
-        document.getElementById("Submissions").style["display"] = "none"
-        document.getElementById("AddStu").style["display"] = "block"
-        document.getElementById("DelStu").style["display"] = "block"
-        document.getElementById("StuLink").style["display"] = "block"
-        document.getElementById("JobLink").style["display"] = "none"
-        document.getElementById("ManLink").style["display"] = "none"
-        document.getElementById("SubLink").style["display"] = "none"
-        document.getElementById("AddStudent").style["display"] = "none"
-    }
-
-    function SelectJob()
-    {
-        document.getElementById("Jobs").style["display"] = "block"
-        document.getElementById("Students").style["display"] = "none"
-        document.getElementById("LineManagers").style["display"] = "none"
-        document.getElementById("Submissions").style["display"] = "none"
-        document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("DelStu").style["display"] = "none"
-        document.getElementById("StuLink").style["display"] = "none"
-        document.getElementById("JobLink").style["display"] = "block"
-        document.getElementById("ManLink").style["display"] = "none"
-        document.getElementById("SubLink").style["display"] = "none"
-        document.getElementById("AddStudent").style["display"] = "none"
-    }
-
-    function SelectLM()
-    {
-        document.getElementById("LineManagers").style["display"] = "block"
-        document.getElementById("Students").style["display"] = "none"
-        document.getElementById("Jobs").style["display"] = "none"
-        document.getElementById("Submissions").style["display"] = "none"
-        document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("DelStu").style["display"] = "none"
-        document.getElementById("StuLink").style["display"] = "none"
-        document.getElementById("JobLink").style["display"] = "none"
-        document.getElementById("ManLink").style["display"] = "block"
-        document.getElementById("SubLink").style["display"] = "none"
-        document.getElementById("AddStudent").style["display"] = "none"
-    }
-
-    function SelectSub()
-    {
-        document.getElementById("Submissions").style["display"] = "block"
-        document.getElementById("Students").style["display"] = "none"
-        document.getElementById("LineManagers").style["display"] = "none"
-        document.getElementById("Jobs").style["display"] = "none"
-        document.getElementById("AddStu").style["display"] = "none"
-        document.getElementById("DelStu").style["display"] = "none"
-        document.getElementById("StuLink").style["display"] = "none"
-        document.getElementById("JobLink").style["display"] = "none"
-        document.getElementById("ManLink").style["display"] = "none"
-        document.getElementById("SubLink").style["display"] = "block"
-        document.getElementById("AddStudent").style["display"] = "none"
-    }
-
-    function ShowCRUDBox(clicked_id)
-    {
-        if (document.getElementById("AddStudent").style["display"] == "none")
-        {
-            document.getElementById("AddStudent").style["display"] = "flex"
-            if (clicked_id == "AddStu")
-            {
-                document.getElementById("Add").style["display"] = "block"
-                document.getElementById("Upd").style["display"] = "none"
-                document.getElementById("Del").style["display"] = "none"
-            }
-            if (clicked_id == "UpdStu")
-            {
-                document.getElementById("Add").style["display"] = "none"
-                document.getElementById("Upd").style["display"] = "block"
-                document.getElementById("Del").style["display"] = "none"
-            }
-            if (clicked_id == "DelStu")
-            {
-                document.getElementById("Add").style["display"] = "none"
-                document.getElementById("Upd").style["display"] = "none"
-                document.getElementById("Del").style["display"] = "block"
-            }
-        }
-        else
-        {
-            document.getElementById("AddStudent").style["display"] = "none"
-            document.getElementById("Add").style["display"] = "none"
-            document.getElementById("Upd").style["display"] = "none"
-            document.getElementById("Del").style["display"] = "none"
-        }
-    }
-
-</script>
+{#            {{ SubmissionsPure|json_script:"SubmissionsJSON" }}#}
+{#            {{ StudentsPure|json_script:"StudentsJSON" }}#}
+{#    <script>#}
+{#    document.getElementById("json-test").textContent = document.getElementById("StudentsJSON").textContent#}
+{#    </script>#}
 <!-- Table Layout: Job -->
 {% if Message is not None %}
     <script>
         window.alert('Successfully added student')
     </script>
 {% endif %}
-<div class = "Row">
-    <div class = "Col left">
-        <div class="Pagination">
-            <div id="advanced_search" class="ADVBox">
-                <p>Select a table to oversee:</p>
-                <form id = TableSelect>
-                    <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()" checked>
-                    <label for="StudentClicker">View Student Timesheet</label><br>
-                    <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
-                    <label for="JobClicker">View Stored Jobs</label><br>
-                    <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
-                    <label for="LineManagerClicker">View Line Managers</label><br>
-                    <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
-                    <label for="SubmissionClicker">View Submissions</label><br>
-                </form>
-                <button id="AddStu" style="display: block" onclick="ShowCRUDBox(this.id)">Add student</button>
-                <button id="DelStu" style="display: block" onclick="ShowCRUDBox(this.id)">Delete student</button>
-                <div class="Pagination">
-                    <div id="StuLink" style="display: block">
-                        <span class="StepLinks">
-                            {% if Students.has_previous %}
-                                <a class="PaginationLinks" href="?Students_page=1">&laquo; first</a>
-                                <a class="PaginationLinks" href="?Students_page={{ Students.previous_page_number }}">previous</a>
-                            {% endif %}
+    <!--
+    <p>Select a table to oversee:</p>
+    <form id = TableSelect>
+        <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()" checked>
+        <label for="StudentClicker">View Student Timesheet</label><br>
+        <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
+        <label for="JobClicker">View Stored Jobs</label><br>
+        <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
+        <label for="LineManagerClicker">View Line Managers</label><br>
+        <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
+        <label for="SubmissionClicker">View Submissions</label><br>
+    </form>
+    <button id="AddStu" style="display: block" onclick="ShowCRUDBox(this.id)">Add student</button>
+    <button id="DelStu" style="display: block" onclick="ShowCRUDBox(this.id)">Delete student</button>
+    <div class="Pagination">
+        <div id="StuLink" style="display: block">
+            <span class="StepLinks">
+                {% if Students.has_previous %}
+                    <a class="PaginationLinks" href="?Students_page=1">&laquo; first</a>
+                    <a class="PaginationLinks" href="?Students_page={{ Students.previous_page_number }}">previous</a>
+                {% endif %}
 
-                            <span class="CurrentPage">
-                                Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
-                            </span>
+                <span class="CurrentPage">
+                    Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
+                </span>
 
-                            {% if Students.has_next %}
-                                <a class="PaginationLinks" href="?Students_page={{ Students.next_page_number }}">next</a>
-                                <a class="PaginationLinks" href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div id="JobLink" style="display: none">
-                        <span class="StepLinks">
-                            {% if Jobs.has_previous %}
-                                <a class="PaginationLinks" href="?Jobs_page=1">&laquo; first</a>
-                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
-                            {% endif %}
+                {% if Students.has_next %}
+                    <a class="PaginationLinks" href="?Students_page={{ Students.next_page_number }}">next</a>
+                    <a class="PaginationLinks" href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        <div id="JobLink" style="display: none">
+            <span class="StepLinks">
+                {% if Jobs.has_previous %}
+                    <a class="PaginationLinks" href="?Jobs_page=1">&laquo; first</a>
+                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
+                {% endif %}
 
-                            <span class="CurrentPage">
-                                Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
-                            </span>
+                <span class="CurrentPage">
+                    Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
+                </span>
 
-                            {% if Jobs.has_next %}
-                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
-                                <a class="PaginationLinks" href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div>
+                {% if Jobs.has_next %}
+                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
+                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
 
-                    <div id="ManLink" style="display: none">
-                        <span class="StepLinks">
-                            {% if LineManagers.has_previous %}
-                                <a class="PaginationLinks" href="?LineManagers_page=1">&laquo; first</a>
-                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
-                            {% endif %}
+        <div id="ManLink" style="display: none">
+            <span class="StepLinks">
+                {% if LineManagers.has_previous %}
+                    <a class="PaginationLinks" href="?LineManagers_page=1">&laquo; first</a>
+                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
+                {% endif %}
 
-                            <span class="CurrentPage">
-                                Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
-                            </span>
+                <span class="CurrentPage">
+                    Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
+                </span>
 
-                            {% if LineManagers.has_next %}
-                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
-                                <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div>
-                    <div id="SubLink" style="display: none">
-                        <span class="StepLinks">
-                            {% if Submissions.has_previous %}
-                                <a class="PaginationLinks" href="?Submissions_page=1">&laquo; first</a>
-                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
-                            {% endif %}
+                {% if LineManagers.has_next %}
+                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
+                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+        <div id="SubLink" style="display: none">
+            <span class="StepLinks">
+                {% if Submissions.has_previous %}
+                    <a class="PaginationLinks" href="?Submissions_page=1">&laquo; first</a>
+                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
+                {% endif %}
 
-                            <span class="CurrentPage">
-                                Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
-                            </span>
+                <span class="CurrentPage">
+                    Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
+                </span>
 
-                            {% if Submissions.has_next %}
-                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
-                                <a class="PaginationLinks" href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
-                    </div>
-                </div>
-            </div>
+                {% if Submissions.has_next %}
+                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
+                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
         </div>
     </div>
-    <div class = "Col right">
-        <div class = "TableBox">
-            <table id="Jobs" style="display: none">
-                <tr>
-                    <th>Job ID:</th>
-                    <th>Job Name:</th>
-                    <th>Cost Code:</th>
-                    <th>Pay Rate:</th>
-                    <th></th>
-                </tr>
-                {% for item in Jobs %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.job_name }}</td>
-                    <td>{{ item.cost_code }}</td>
-                    <td>{{ item.pay_rate }}</td>
-                    <td><a class="UDLinks" href="{% url 'deletejob' item.id %}">Delete</a></td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <!-- Table Layout: Student -->
-        <div class = "TableBox">
-            <table id="Students" style="display: block">
-                <tr>
-                    <th>Username:</th>
-                    <th>First name:</th>
-                    <th>Last name:</th>
-                    <th>On visa?</th>
-                    <th>Visa Expiry:</th>
-                    <th>Student Number:</th>
-                    <th>Payroll Number:</th>
-                    <th colspan="2">Actions</th>
-                </tr>
-
-                {% for item in Students %}
-                <tr>
-                    <td>{{ item.user.username }}</td>
-                    <td>{{ item.user.first_name }}</td>
-                    <td>{{ item.user.last_name }}</td>
-                    <td>{{ item.on_visa }}</td>
-                    <td>
-                        {% if item.on_visa == True %}
-                            {{ item.visa_expiry }}
-                        {% else %}
-                            n/a
-                        {% endif %}
-                    </td>
-                    <td>{{ item.student_number }}</td>
-                    <td>{{ item.payroll_number }}</td>
-                    <td><a class="UDLinks" href="{% url 'update' item.id %}">Update</a></td>
-                    <td><a class="UDLinks" href="{% url 'delete' item.id %}">Delete</a></td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <!-- Table Layout: Line Manager -->
-        <div class = "TableBox">
-            <table id="LineManagers" style="display: none">
-                <tr>
-                    <th>Line Manager ID:</th>
-                    <th>Email:</th>
-                    <th>Name:</th>
-                    <th>Username:</th>
-                {% for item in LineManagers %}
-                </tr>
-                <tr>
-<!--                    <td>{{ item.id }}</td>-->
-                    <td>{{ item.user.email }}</td>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.user.username }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-
-        <!-- Table Layout: Submissions -->
-        <div class = "TableBox">
-            <table id="Submissions" style="display: none">
-                <tr>
-                    <th>Submission ID:</th>
-                    <th>Hours:</th>
-                    <th>Student Name:</th>
-                    <th>Job:</th>
-                    <th>Line Manager:</th>
-                    <th>Date Worked</th>
-                    <th>Date Submitted</th>
-                    <th>Accepted</th>
-                </tr>
-                {% for item in Submissions %}
-                <tr>
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.hours }}</td>
-                    <td>{{ item.student.first_name }} {{ item.student.last_name }}</td>
-                    <td>{{ item.job.job_name }}</td>
-                    <td>{{ item.line_manager.name }}</td>
-                    <td>{{ item.date_worked }}</td>
-                    <td>{{ item.date_submitted }}</td>
-                    <td>{{ item.accepted }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+    -->
+{#    <div class="multi-table-container">#}
+    <button onclick="showTable('students-table-container')">Students</button>
+    <button onclick="showTable('submissions-table-container')">Submissions</button>
+    <div id="students-table-container">
+        <div id="students-advanced-search"></div>
+        <div id="students-table-pagination"></div>
+        <table id="students-table">
+            <thead>
+            <tr id="students-table-header">
+                <th>Username</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>On visa</th>
+            </tr>
+            </thead>
+            <tbody id="students-table-tbody"></tbody>
+        </table>
     </div>
-</div>
-<div id="AddStudent" style="display: none" class="CRUDBox">
-    <div class="Grow"></div>
-    <div class="Bottom">
-        <form id="Add" action="" method="POST" style="display: none">
-            {% csrf_token %}
-            {{ UserCreationForm.as_p }}
-            {{ StudentCreationForm.as_p }}
-            <button type="submit">Add Student</button>
-        </form>
-        <form id="Upd" action="" method="POST" style="display: none">
-            {% csrf_token %}
-            {{ StudentUpdateForm.as_p }}
-            <button type="submit">Update Student</button>
-        </form>
-        <form id="Del" method="POST" style="display: none">
-            {% csrf_token %}
-            <button type="submit">Delete Student</button>
-        </form>
+    <div id="submissions-table-container" style="display:none">
+        <div id="submissions-advanced-search"></div>
+        <div id="submissions-table-pagination"></div>
+        <table id="submissions-table">
+            <thead>
+            <tr id="submissions-table-header">
+                <th>Username</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Job name</th>
+                <th>Line manager</th>
+                <th>Hours</th>
+                <th>Date worked</th>
+                <th>Date submitted</th>
+                <th>Accepted</th>
+            </tr>
+            </thead>
+            <tbody id="submissions-table-tbody"></tbody>
+        </table>
     </div>
-</div>
-<script src="{% static 'advanced_search.js' %}"></script>
+
+{#    </div>#}
+    <p id="json-test" style="color: white">
+        {{ SubmissionsJSON|escapejs }}
+    </p>
+{#    <script src="{% static 'advanced_search_spa.js' %}"></script>#}
     <script>
-    advanced_search = new AdvancedSearch("advanced_search", {
-        "parameter_options": {
-            {% for item in ValidSearchParameters %}
-                "{{ item.0 }}": {"type": "{{ item.1 }}"},
-            {% endfor %}
+    swappable_table_containers = [
+        document.getElementById("students-table-container"),
+        document.getElementById("submissions-table-container")
+    ];
+    function showTable(container_id) {
+        for (let table_container of swappable_table_containers) {
+            if (container_id === table_container.id) {
+                table_container.style["display"] = "block";
+            }
+            else {
+                table_container.style["display"] = "none";
+            }
         }
-        ,"form_action": "{% url 'adminSHU' %}"
+    }
+    entries_per_page = 50;
+
+    class Tbody {
+        constructor(tbody_id, pagination_container_id, options = {}) {
+            Object.assign(this, {
+                page: 1
+                ,json: []
+                ,columns: []
+                ,alias: tbody_id
+            }, options);
+            this.tbody_element = document.getElementById(tbody_id);
+
+            // Generate pagination buttons
+            this.pagination_container_element = document.getElementById(pagination_container_id);
+            this.previous_page_button = document.createElement("button");
+            this.previous_page_button.textContent = "Previous";
+            this.previous_page_button.onclick = () => {this.setPage(this.page - 1)};
+            this.next_page_button = document.createElement("button");
+            this.next_page_button.textContent = "Next";
+            this.next_page_button.onclick = () => {this.setPage(this.page + 1)};
+            this.previous_page_button.disabled = this.page === 1;
+            this.next_page_button.disabled = this.page * entries_per_page > this.json.length;
+            this.pagination_container_element.appendChild(this.previous_page_button);
+            this.pagination_container_element.appendChild(this.next_page_button)
+
+            this.populate();
+        }
+        populate() {
+            // Delete existing rows if there are any
+            while (this.tbody_element.lastChild) {
+                this.tbody_element.removeChild(this.tbody_element.lastChild);
+            }
+            let start_index = (this.page - 1) * entries_per_page;
+            let until_index = this.page * entries_per_page;
+            if ((this.page - 1) * entries_per_page >= this.json.length) {
+                this.tbody_element.textContent = "No data found.";
+            }
+            else {
+                for (let i = start_index; i < until_index && i < this.json.length; i++) {
+                    let json_row = this.json[i];
+                    let table_row_element = document.createElement("tr");
+                    for (let column of this.columns) {
+                        let cell_element = document.createElement("td");
+                        cell_element.textContent = json_row[column];
+                        table_row_element.appendChild(cell_element);
+                    }
+                    this.tbody_element.appendChild(table_row_element);
+                    // table_row_element.onclick = () => {
+                    //     console.log(`Username: be like ${json_row.username}`);
+                    // }
+                }
+            }
+            this.updatePageButtons();
+        }
+        setPage(page) {
+            // if (page > 0 && (page-1) * entries_per_page < this.json.length) {
+                this.page = page;
+                this.populate();
+            // }
+            // else {
+            //     throw(`Attempt to navigate to page ${page} in table ${this.alias} failed because it goes outside the bounds of the data`);
+            // }
+        }
+        updatePageButtons() {
+            this.previous_page_button.disabled = this.page === 1;
+            this.next_page_button.disabled = this.page * entries_per_page > this.json.length;
+        }
+    }
+    class AdvancedSearchTbody extends Tbody {
+        constructor(tbody_id, pagination_container_id, advanced_search_container_id, options = {}) {
+            super(tbody_id, pagination_container_id, options);
+            this.initial_json = this.json;
+            this.advanced_search_container_id = advanced_search_container_id;
+            this.linkToHTML();
+            this.url_search_params = new URLSearchParams(window.location.search);
+            this.number_of_parameters = 0;
+            this.date_delimiters = {};
+            this.active_parameters = {};
+            for (const [parameter_option, type] of Object.entries(this.parameter_options)) {
+                if (type === "date") {
+                    this.date_delimiters[parameter_option] = "At";
+                }
+            }
+            for (const [search_param_option, search_param_value] of this.url_search_params) {
+                if (search_param_option.endsWith("delimiter")) {
+                    let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
+                    this.date_delimiters[search_param_option_truncated] = search_param_value;
+                }
+                else if (search_param_option !== "page") {
+                    this.addSearchParameter(search_param_option, search_param_value);
+                }
+            }
+        }
+        linkToHTML() {
+            this.container_element = document.getElementById(this.advanced_search_container_id);
+            this.container_element.classList.add("AdvancedSearchContainer");
+
+            this.add_parameter_button = document.createElement("button");
+            this.add_parameter_button.classList.add("AddParameterButton");
+            this.add_parameter_button.textContent = "Add parameter"
+            this.add_parameter_button.type = "button";
+            this.add_parameter_button.onclick = (event) => {
+                console.log("Adding a search parameter!");
+                this.addSearchParameter();
+            };
+            this.container_element.appendChild(this.add_parameter_button);
+
+            this.parameter_container_container = document.createElement("div");
+            this.parameter_container_container.classList.add("ParameterContainer");
+            this.container_element.appendChild(this.parameter_container_container);
+
+            this.search_button = document.createElement("button");
+            this.search_button.classList.add("SearchButton");
+            // this.search_button.disabled = true;
+            this.search_button.textContent = "Search";
+            this.search_button.onclick = () => { this.doSearch() };
+            this.container_element.appendChild(this.search_button);
+        }
+
+        addSearchParameter(option = null, value = null/*, type = "test"*/) {
+            // TODO update URL on search without refreshing webpage
+            // TODO search by date
+            // let fragment = new DocumentFragment();
+            // When "new parameter" button clicked, it just adds the constraint to the first column
+            if (option === null) {
+                option = Object.keys(this.parameter_options)[0];
+            }
+
+            let parameter_container = document.createElement("div");
+            parameter_container.classList.add("SearchParameter");
+            // parameter_container.id = `${this.container_id}_${}`
+            // fragment.appendChild(parameter_container);
+
+            // Drop down menu of what column to search
+            let parameter_select = document.createElement("select");
+            for (const [parameter_option, type] of Object.entries(this.parameter_options)) {
+                console.log(`Parameter option: ${parameter_option}`);
+                let option_element = document.createElement("option");
+                option_element.value = parameter_option;
+                option_element.innerText = parameter_option;
+                parameter_select.appendChild(option_element);
+            }
+            parameter_container.appendChild(parameter_select);
+            let parameter_select_2 = null;
+
+            let input_element;
+            // Generates one or two input elements depending on the parameter type.
+            // strings use one text box, dates use a date picker and a drop-down "select" element
+            if (this.parameter_options[option].type === "date" || this.parameter_options[option].type === "number" || this.parameter_options[option].type === "boolean") {
+                if (this.parameter_options[option].type !== "boolean") {
+                    input_element = document.createElement("input");
+                    input_element.type = this.parameter_options[option].type;
+                }
+                // input_element.classList.add("ParameterDateBox");
+                parameter_select_2 = document.createElement("select");
+                let delimiter_labels = null;
+                if (this.parameter_options[option].type === "date") {
+                    delimiter_labels = ["At", "Before", "After"];
+                }
+                else if (this.parameter_options[option].type === "boolean") {
+                    delimiter_labels = ["true", "false"];
+                }
+                else { // number
+                    delimiter_labels = ["Equal_To", "Lower_Than", "Higher_Than"];
+                }
+                delimiter_labels.forEach(delimiter => {
+                    let temp_option_element = document.createElement("option");
+                    temp_option_element.value = delimiter;
+                    temp_option_element.innerText = delimiter;
+                    parameter_select_2.appendChild(temp_option_element);
+                });
+                if (this.parameter_options[option].type === "boolean") {
+                    parameter_select_2.name = option;
+                }
+                else {
+                    parameter_select_2.name = option + "-delimiter";
+                }
+                parameter_select_2.value = this.date_delimiters[option];
+                // parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
+                if (this.parameter_options[option].type === "boolean") {
+                    parameter_select_2.onchange = () => {this.active_parameters[parameter_select_2.name].value = parameter_select_2.value}
+                    this.active_parameters[parameter_select_2.name] = {value: parameter_select_2.value, delimiter: null}
+                }
+                else {
+                    parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
+                    this.active_parameters[input_element.name] = {value: input_element.value, delimiter: parameter_select_2.value}
+                }
+                parameter_select.insertAdjacentElement("afterend", parameter_select_2);
+            }
+            else { // type is string
+                input_element = document.createElement("input");
+                input_element.classList.add("ParameterSearchBox");
+                input_element.type = "text";
+                input_element.onchange = () => {
+                    this.active_parameters[input_element.name].value = input_element.value;
+                    // this.doSearch();
+                };
+            }
+            if (this.parameter_options[option].type !== "boolean") {
+                input_element.name = option;
+                input_element.value = value;
+            }
+            parameter_select.value = option;
+            // if (value) {
+            // }
+            // else if (this.parameter_options !== {}) {
+                // When "add parameter" button is clicked it always sets the constraint to column 1. maybe change this
+            //     input_element.name = Object.keys(this.parameter_options)[0];
+            // }
+            if (this.parameter_options[option].type === "date" || this.parameter_options[option].type === "number") {
+                this.active_parameters[option] = {value: value, delimiter: parameter_select_2.value}
+            }
+            else if (this.parameter_options[option].type === "string") { // We don't want to override the boolean
+                this.active_parameters[option] = {value: value, delimiter: null}
+            }
+            if (this.parameter_options[option].type !== "boolean") {
+                parameter_container.appendChild(input_element);
+            }
+
+            let delete_button = document.createElement("button");
+            delete_button.classList.add("DeleteParameterButton")
+            delete_button.innerText = "Delete";
+            if (this.parameter_options[option].type === "boolean") {
+                delete_button.onclick = (event) => {
+                    this.parameter_container_container.removeChild(parameter_container);
+                    delete this.active_parameters[parameter_select_2.name];
+                    --this.number_of_parameters;
+                }
+            }
+            else {
+                delete_button.onclick = (event) => {
+                    this.parameter_container_container.removeChild(parameter_container);
+                    delete this.active_parameters[input_element.name];
+                    --this.number_of_parameters;
+                }
+            }
+            parameter_select.onchange = (event) => {
+                let new_value = parameter_select.value;
+                let new_type = this.parameter_options[new_value].type;
+                // if (this.parameter_options[parameter_select.value].type === "date") {
+                //     input_element.type = "date";
+                // }
+                delete this.active_parameters[option]; // "change" active parameter by deleting the old one
+                option = new_value;
+                if (this.parameter_options[new_value].type !== "boolean") { // boolean type doesn't have input_element
+                    if (!parameter_container.contains(input_element)) {
+                        input_element = document.createElement("input");
+                        parameter_select.insertAdjacentElement("afterend", input_element);
+                        input_element.onchange = () => {
+                            this.active_parameters[input_element.name].value = input_element.value;
+                            // this.doSearch();
+                        };
+                        console.log("there was no input element i hope");
+                    }
+                    input_element.type = new_type;
+                    input_element.name = new_value;
+                }
+                else { // Assuming we're switching to boolean
+                    if (input_element && parameter_container.contains(input_element)) {
+                        parameter_container.removeChild(input_element);
+                    }
+                    console.log("removing input element?");
+                }
+                if (new_type === "date" || new_type === "number" || new_type === "boolean") {
+                    if (parameter_container.contains(parameter_select_2)) {
+                        parameter_container.removeChild(parameter_select_2);
+                    }
+                    parameter_select_2 = document.createElement("select");
+                    // parameter_select_2.name = "date_delimiter";
+                    let delimiter_labels = null;
+                    if (new_type === "date") {
+                        delimiter_labels = ["At", "Before", "After"];
+                    }
+                    else if (new_type === "boolean") {
+                        delimiter_labels = ["true", "false"];
+                    }
+                    else {
+                        delimiter_labels = ["Equal_To", "Lower_Than", "Higher_Than"];
+                    }
+                    delimiter_labels.forEach(delimiter => {
+                        let temp_option_element = document.createElement("option");
+                        temp_option_element.value = delimiter;
+                        temp_option_element.innerText = delimiter;
+                        parameter_select_2.appendChild(temp_option_element);
+                    });
+                    if (this.parameter_options[option].type === "boolean") {
+                        parameter_select_2.name = new_value;
+                    }
+                    else {
+                        parameter_select_2.name = new_value + "-delimiter";
+                    }
+                    if (new_type === "boolean") {
+                        parameter_select_2.onchange = () => {this.active_parameters[new_value].value = parameter_select_2.value}
+                        this.active_parameters[new_value] = {value: parameter_select_2.value, delimiter: null}
+                    }
+                    else {
+                        parameter_select_2.onchange = () => {this.active_parameters[new_value].delimiter = parameter_select_2.value}
+                        this.active_parameters[new_value] = {value: input_element.value, delimiter: parameter_select_2.value}
+                    }
+                    parameter_select.insertAdjacentElement("afterend", parameter_select_2);
+                }
+                else { // Assuming we're switching to "string" search type
+                    // remove the select element
+                    if (parameter_container.contains(parameter_select_2)) {
+                        parameter_container.removeChild(parameter_select_2);
+                    }
+                    if (!parameter_container.contains(input_element)) {
+                        input_element = document.createElement("input");
+                        parameter_select.insertAdjacentElement("afterend", input_element);
+                        input_element.onchange = () => {
+                            this.active_parameters[input_element.name].value = input_element.value;
+                            // this.doSearch();
+                        };
+                    }
+                    this.active_parameters[new_value] = {value: input_element.value, delimiter: null};
+                    // this.active_parameters[new_value] = null;
+                }
+            }
+            parameter_container.appendChild(delete_button);
+
+            this.parameter_container_container.appendChild(parameter_container);
+            ++this.number_of_parameters;
+            // this.search_button.disabled = false;
+
+            // this.container_element.appendChild(fragment);
+            // this.parameter_elements.append(parameter_container);
+        }
+
+        doSearch() {
+            // TODO ignore unchanged parameters
+            this.json = this.initial_json;
+            for (let [parameter, value] of Object.entries(this.active_parameters)) {
+                if (this.parameter_options[parameter].type === "string") {
+                    this.json = this.json.filter(json_row => {
+                        return json_row[parameter].toLowerCase().includes(value.value.toLowerCase());
+                    });
+                }
+                else if (this.parameter_options[parameter].type === "boolean") {
+                    this.json = this.json.filter(json_row => {
+                        if (json_row[parameter] === true) {
+                            return value.value === "true";
+                        }
+                        else {
+                            return value.value === "false";
+                        }
+                        // return json_row[parameter] == value.value;
+                    });
+                }
+                else if (this.parameter_options[parameter].type === "date" || this.parameter_options[parameter].type === "number") {
+                    if (value.delimiter === "At" || value.delimiter === "Equal_To") {
+                        this.json = this.json.filter(json_row => {
+                            return json_row[parameter] == value.value;
+                        });
+                    }
+                    else if (value.delimiter === "Before" || value.delimiter === "Lower_Than") {
+                        this.json = this.json.filter(json_row => {
+                            return json_row[parameter] < value.value;
+                        });
+                    }
+                    else { // After
+                        this.json = this.json.filter(json_row => {
+                            return json_row[parameter] > value.value;
+                        });
+                    }
+                    console.log(`Search column ${parameter} for ${value.delimiter} ${value.value}`);
+                }
+            }
+            // this.json = Object.keys(this.initial_json).reduce((key, value) => {
+            // });
+
+            this.setPage(1);
+        }
+    }
+    students_tbody = new AdvancedSearchTbody("students-table-tbody", "students-table-pagination", "students-advanced-search", {
+        json: JSON.parse('{{ StudentsJSON|escapejs }}')
+        ,columns: ["username" ,"first_name" ,"last_name" ,"on_visa"]
+        ,alias: "students"
+        ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
     });
+    submissions_tbody = new AdvancedSearchTbody("submissions-table-tbody", "submissions-table-pagination", "submissions-advanced-search", {
+        json: JSON.parse('{{ SubmissionsJSON|escapejs }}')
+        ,columns: ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']
+        ,alias: "submissions"
+        ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "job_name": {type: "string"}, "line_manager_username": {type: "string"}, "hours": {type: "number"}, "date_worked": {type: "date"}, "date_submitted": {type: "date"}, "accepted": {type: "boolean"}}
+    });
+
     </script>
 {% endblock %}
 
