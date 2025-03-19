@@ -12,100 +12,11 @@
 {#    document.getElementById("json-test").textContent = document.getElementById("StudentsJSON").textContent#}
 {#    </script>#}
 <!-- Table Layout: Job -->
-{% if Message is not None %}
-    <script>
-        window.alert('Successfully added student')
-    </script>
-{% endif %}
-    <!--
-    <p>Select a table to oversee:</p>
-    <form id = TableSelect>
-        <input type="radio" id="StudentClicker" name="Selector" value="Students" onclick="SelectStudent()" checked>
-        <label for="StudentClicker">View Student Timesheet</label><br>
-        <input type="radio" id="JobClicker" name="Selector" value="Jobs" onclick="SelectJob()">
-        <label for="JobClicker">View Stored Jobs</label><br>
-        <input type="radio" id="LineManagerClicker" name="Selector" value="LineManagers" onclick="SelectLM()">
-        <label for="LineManagerClicker">View Line Managers</label><br>
-        <input type="radio" id="SubmissionClicker" name="Selector" value="Submissions" onclick="SelectSub()">
-        <label for="SubmissionClicker">View Submissions</label><br>
-    </form>
-    <button id="AddStu" style="display: block" onclick="ShowCRUDBox(this.id)">Add student</button>
-    <button id="DelStu" style="display: block" onclick="ShowCRUDBox(this.id)">Delete student</button>
-    <div class="Pagination">
-        <div id="StuLink" style="display: block">
-            <span class="StepLinks">
-                {% if Students.has_previous %}
-                    <a class="PaginationLinks" href="?Students_page=1">&laquo; first</a>
-                    <a class="PaginationLinks" href="?Students_page={{ Students.previous_page_number }}">previous</a>
-                {% endif %}
 
-                <span class="CurrentPage">
-                    Page {{ Students.number }} of {{ Students.paginator.num_pages }}.
-                </span>
-
-                {% if Students.has_next %}
-                    <a class="PaginationLinks" href="?Students_page={{ Students.next_page_number }}">next</a>
-                    <a class="PaginationLinks" href="?Students_page={{ Students.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-        <div id="JobLink" style="display: none">
-            <span class="StepLinks">
-                {% if Jobs.has_previous %}
-                    <a class="PaginationLinks" href="?Jobs_page=1">&laquo; first</a>
-                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="CurrentPage">
-                    Page {{ Jobs.number }} of {{ Jobs.paginator.num_pages }}.
-                </span>
-
-                {% if Jobs.has_next %}
-                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.next_page_number }}">next</a>
-                    <a class="PaginationLinks" href="?Jobs_page={{ Jobs.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-
-        <div id="ManLink" style="display: none">
-            <span class="StepLinks">
-                {% if LineManagers.has_previous %}
-                    <a class="PaginationLinks" href="?LineManagers_page=1">&laquo; first</a>
-                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="CurrentPage">
-                    Page {{ LineManagers.number }} of {{ LineManagers.paginator.num_pages }}.
-                </span>
-
-                {% if LineManagers.has_next %}
-                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.next_page_number }}">next</a>
-                    <a class="PaginationLinks" href="?LineManagers_page={{ LineManagers.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-        <div id="SubLink" style="display: none">
-            <span class="StepLinks">
-                {% if Submissions.has_previous %}
-                    <a class="PaginationLinks" href="?Submissions_page=1">&laquo; first</a>
-                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.previous_page_number }}">previous</a>
-                {% endif %}
-
-                <span class="CurrentPage">
-                    Page {{ Submissions.number }} of {{ Submissions.paginator.num_pages }}.
-                </span>
-
-                {% if Submissions.has_next %}
-                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.next_page_number }}">next</a>
-                    <a class="PaginationLinks" href="?Submissions_page={{ Submissions.paginator.num_pages }}">last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
-    </div>
-    -->
-{#    <div class="multi-table-container">#}
     <button onclick="showTable('students-table-container')">Students</button>
     <button onclick="showTable('submissions-table-container')">Submissions</button>
+    <button onclick="showTable('jobs-table-container')">Jobs</button>
+    <button onclick="showTable('linemanagers-table-container')">Line Managers</button>
     <div id="students-table-container">
         <div id="students-advanced-search"></div>
         <div id="students-table-pagination"></div>
@@ -141,16 +52,46 @@
             <tbody id="submissions-table-tbody"></tbody>
         </table>
     </div>
+    <div id="jobs-table-container" style="display:none">
+        <div id="jobs-advanced-search"></div>
+        <div id="jobs-table-pagination"></div>
+        <table id="jobs-table">
+            <thead>
+            <tr id="jobs-table-header">
+                <th>Job name</th>
+                <th>Cost code</th>
+                <th>Pay rate</th>
+                <th>Student</th>
+            </tr>
+            </thead>
+            <tbody id="jobs-table-tbody"></tbody>
+        </table>
+    </div>
+    <div id="linemanagers-table-container" style="display: none">
+        <div id="linemanagers-advanced-search"></div>
+        <div id="linemanagers-table-pagination"></div>
+        <table id="linemanagers-table">
+            <thead>
+            <tr id="linemanagers-table-header">
+                <th>Username</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Student</th>
+            </tr>
+            </thead>
+            <tbody id="linemanagers-table-tbody"></tbody>
+        </table>
+    </div>
 
-{#    </div>#}
     <p id="json-test" style="color: white">
-        {{ SubmissionsJSON|escapejs }}
+        {{ JobsJSON|escapejs }}
     </p>
-{#    <script src="{% static 'advanced_search_spa.js' %}"></script>#}
     <script>
     swappable_table_containers = [
         document.getElementById("students-table-container"),
-        document.getElementById("submissions-table-container")
+        document.getElementById("submissions-table-container"),
+        document.getElementById("jobs-table-container"),
+        document.getElementById("linemanagers-table-container")
     ];
     function showTable(container_id) {
         for (let table_container of swappable_table_containers) {
@@ -187,7 +128,7 @@
             this.pagination_container_element.appendChild(this.previous_page_button);
             this.pagination_container_element.appendChild(this.next_page_button)
 
-            this.populate();
+            // this.populate();
         }
         populate() {
             // Delete existing rows if there are any
@@ -227,28 +168,35 @@
         }
         updatePageButtons() {
             this.previous_page_button.disabled = this.page === 1;
-            this.next_page_button.disabled = this.page * entries_per_page > this.json.length;
+            this.next_page_button.disabled = this.page * entries_per_page >= this.json.length;
         }
     }
     class AdvancedSearchTbody extends Tbody {
         constructor(tbody_id, pagination_container_id, advanced_search_container_id, options = {}) {
             super(tbody_id, pagination_container_id, options);
-            this.initial_json = this.json;
             this.advanced_search_container_id = advanced_search_container_id;
             this.linkToHTML();
             this.url_search_params = new URLSearchParams(window.location.search);
             this.number_of_parameters = 0;
-            this.date_delimiters = {};
+            // this.date_delimiters = {};
             this.active_parameters = {};
-            for (const [parameter_option, type] of Object.entries(this.parameter_options)) {
-                if (type === "date") {
-                    this.date_delimiters[parameter_option] = "At";
+            for (const [parameter_option, properties] of Object.entries(this.parameter_options)) {
+                // if (type === "date") {
+                    // this.date_delimiters[parameter_option] = "At";
+                // }
+                // else
+                    if (properties.type === "number") {
+                    console.log("type number");
+                    for (let i = 0; i < this.json.length; i++) {
+                        this.json[i][parameter_option] = Number(this.json[i][parameter_option]);
+                    }
                 }
             }
+            this.initial_json = this.json;
             for (const [search_param_option, search_param_value] of this.url_search_params) {
                 if (search_param_option.endsWith("delimiter")) {
                     let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
-                    this.date_delimiters[search_param_option_truncated] = search_param_value;
+                    // this.date_delimiters[search_param_option_truncated] = search_param_value;
                 }
                 else if (search_param_option !== "page") {
                     this.addSearchParameter(search_param_option, search_param_value);
@@ -339,7 +287,7 @@
                 else {
                     parameter_select_2.name = option + "-delimiter";
                 }
-                parameter_select_2.value = this.date_delimiters[option];
+                // parameter_select_2.value = this.date_delimiters[option];
                 // parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
                 if (this.parameter_options[option].type === "boolean") {
                     parameter_select_2.onchange = () => {this.active_parameters[parameter_select_2.name].value = parameter_select_2.value}
@@ -541,12 +489,28 @@
         ,alias: "students"
         ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
     });
+    students_tbody.populate();
     submissions_tbody = new AdvancedSearchTbody("submissions-table-tbody", "submissions-table-pagination", "submissions-advanced-search", {
         json: JSON.parse('{{ SubmissionsJSON|escapejs }}')
         ,columns: ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']
         ,alias: "submissions"
         ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "job_name": {type: "string"}, "line_manager_username": {type: "string"}, "hours": {type: "number"}, "date_worked": {type: "date"}, "date_submitted": {type: "date"}, "accepted": {type: "boolean"}}
     });
+    submissions_tbody.populate();
+    jobs_tbody = new AdvancedSearchTbody("jobs-table-tbody", "jobs-table-pagination", "jobs-advanced-search", {
+        json: JSON.parse('{{ JobsJSON|escapejs }}')
+        ,columns: ['job_name', 'cost_code', 'pay_rate', 'student_username']
+        ,alias: "jobs"
+        ,parameter_options: {"job_name": {type: "string"}, "cost_code": {type: "string"}, "pay_rate": {type: "number"}, "student_username": {type: "string"}}
+    });
+    jobs_tbody.populate();
+    linemanagers_tbody = new AdvancedSearchTbody("linemanagers-table-tbody", "linemanagers-table-pagination", "linemanagers-advanced-search", {
+        json: JSON.parse('{{ LineManagersJSON|escapejs }}')
+        ,columns: ['username', 'first_name', 'last_name', 'student_username']
+        ,alias: "linemanagers"
+        ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "student_username": {type: "string"}}
+    });
+    linemanagers_tbody.populate();
 
     </script>
 {% endblock %}

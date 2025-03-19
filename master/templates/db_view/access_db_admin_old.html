@@ -236,9 +236,9 @@
 
                 {% for item in Students %}
                 <tr>
-<!--                    <td>{{ item.user.username }}</td>-->
-<!--                    <td>{{ item.user.first_name }}</td>-->
-<!--                    <td>{{ item.user.last_name }}</td>-->
+                    <td>{{ item.user.username }}</td>
+                    <td>{{ item.user.first_name }}</td>
+                    <td>{{ item.user.last_name }}</td>
                     <td>{{ item.on_visa }}</td>
                     <td>
                         {% if item.on_visa == True %}
@@ -267,7 +267,7 @@
                 {% for item in LineManagers %}
                 </tr>
                 <tr>
-<!--                    <td>{{ item.id }}</td>-->
+                    <td>{{ item.id }}</td>
                     <td>{{ item.user.email }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.user.username }}</td>
