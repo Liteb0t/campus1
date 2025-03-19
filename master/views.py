@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from master.models import Job, LineManager, Submission, Student, Recruiter, DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser
+from master.models import Job, LineManager, Submission, Student, Recruiter
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
-from django.template import loader
-from django.core import serializers
+# from django.template import loader
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import JSONParser
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 import json
@@ -134,7 +136,15 @@ def access_db_admin(request):
     submissions_json = DBAdminSubmissionSerialiser(submissions, many=True).data
     jobs_json = DBAdminJobSerialiser(jobs, many=True).data
     linemanagers_json = DBAdminLineManagerSerialiser(line_managers, many=True).data
-    return render(request, "db_view/access_db_admin.html", {"StudentsJSON": json.dumps(students_json), "SubmissionsJSON": json.dumps(submissions_json), "JobsJSON": json.dumps(jobs_json), "LineManagersJSON": json.dumps(linemanagers_json)})
+    return render(request, "db_view/access_db_admin.html", {"SubmissionsJSON": json.dumps(submissions_json), "JobsJSON": json.dumps(jobs_json), "LineManagersJSON": json.dumps(linemanagers_json)})
+
+# JSON API: does not return html but JSON instead. used by the new admin page
+@csrf_exempt
+def studentList(request):
+    if request.method == "GET":
+        students = Student.objects.select_related("user")
+        students_serialiser = DBAdminStudentSerialiser(students, many=True)
+        return JsonResponse(students_serialiser.data, safe=False)
 
 @login_required
 def updatestudent(request, id):

@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, User
-from rest_framework import serializers
 # Create your models here.
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -24,7 +23,7 @@ class Submission(models.Model):
     hours = models.IntegerField()
     date_worked = models.DateField()
     date_submitted = models.DateField()
-    accepted = models.BooleanField()
+    accepted = models.BooleanField(null=True)
 
 class Recruiter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,37 +31,4 @@ class Recruiter(models.Model):
 class Recruiter_Submission(models.Model):
     hours = models.IntegerField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    accepted = models.BooleanField()
-
-class DBAdminStudentSerialiser(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    last_name = serializers.CharField(source='user.last_name', read_only=True)
-    class Meta:
-        model = Student
-        fields = ['username', 'first_name', 'last_name', 'on_visa']
-
-class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
-    username = serializers.CharField(source='student.user.username', read_only=True)
-    first_name = serializers.CharField(source='student.user.first_name', read_only=True)
-    last_name = serializers.CharField(source='student.user.last_name', read_only=True)
-    job_name = serializers.CharField(source='job.job_name', read_only=True)
-    line_manager_username = serializers.CharField(source='line_manager.user.username', read_only=True)
-    class Meta:
-        model = Submission
-        fields = ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']
-
-class DBAdminJobSerialiser(serializers.ModelSerializer):
-    student_username = serializers.CharField(source='student.user.username', read_only=True)
-    class Meta:
-        model = Job
-        fields = ['job_name', 'cost_code', 'pay_rate', 'student_username']
-
-class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username', read_only=True)
-    first_name = serializers.CharField(source='user.first_name', read_only=True)
-    last_name = serializers.CharField(source='user.last_name', read_only=True)
-    student_username = serializers.CharField(source='student.user.username', read_only=True)
-    class Meta:
-        model = LineManager
-        fields = ['username', 'first_name', 'last_name', 'student_username']
+    accepted = models.BooleanField(null=True)

@@ -6,19 +6,12 @@
 
 {% block content %}
 
-{#            {{ SubmissionsPure|json_script:"SubmissionsJSON" }}#}
-{#            {{ StudentsPure|json_script:"StudentsJSON" }}#}
-{#    <script>#}
-{#    document.getElementById("json-test").textContent = document.getElementById("StudentsJSON").textContent#}
-{#    </script>#}
-<!-- Table Layout: Job -->
-
     <button onclick="showTable('students-table-container')">Students</button>
     <button onclick="showTable('submissions-table-container')">Submissions</button>
     <button onclick="showTable('jobs-table-container')">Jobs</button>
     <button onclick="showTable('linemanagers-table-container')">Line Managers</button>
     <div id="students-table-container">
-        <div id="students-advanced-search"></div>
+        <!--<div id="students-advanced-search"></div>
         <div id="students-table-pagination"></div>
         <table id="students-table">
             <thead>
@@ -30,7 +23,7 @@
             </tr>
             </thead>
             <tbody id="students-table-tbody"></tbody>
-        </table>
+        </table>-->
     </div>
     <div id="submissions-table-container" style="display:none">
         <div id="submissions-advanced-search"></div>
@@ -86,6 +79,7 @@
     <p id="json-test" style="color: white">
         {{ JobsJSON|escapejs }}
     </p>
+    <script src="{% static 'table.js' %}"></script>
     <script>
     swappable_table_containers = [
         document.getElementById("students-table-container"),
@@ -477,19 +471,28 @@
                     console.log(`Search column ${parameter} for ${value.delimiter} ${value.value}`);
                 }
             }
-            // this.json = Object.keys(this.initial_json).reduce((key, value) => {
-            // });
 
             this.setPage(1);
         }
     }
-    students_tbody = new AdvancedSearchTbody("students-table-tbody", "students-table-pagination", "students-advanced-search", {
-        json: JSON.parse('{{ StudentsJSON|escapejs }}')
-        ,columns: ["username" ,"first_name" ,"last_name" ,"on_visa"]
-        ,alias: "students"
-        ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
-    });
-    students_tbody.populate();
+    students_table = new Table("students-table-container", {
+        {#json: JSON.parse('{{ StudentsJSON|escapejs }}')#}
+        json_url: "{% url 'studentList' %}"
+        ,columns: {
+            "username": {type: "string", display_name: "Username"}
+            ,"first_name": {type: "string", display_name: "First Name"}
+            ,"last_name": {type: "string", display_name: "Last Name"}
+            ,"on_visa": {type: "boolean", display_name: "On Visa?"}
+        }
+    })
+    // students_table.populate();
+    // students_tbody = new AdvancedSearchTbody("students-table-tbody", "students-table-pagination", "students-advanced-search", {
+    {#//     json: JSON.parse('{{ StudentsJSON|escapejs }}')#}
+    //     ,columns: ["username" ,"first_name" ,"last_name" ,"on_visa"]
+    //     ,alias: "students"
+    //     ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
+    // });
+    // students_tbody.populate();
     submissions_tbody = new AdvancedSearchTbody("submissions-table-tbody", "submissions-table-pagination", "submissions-advanced-search", {
         json: JSON.parse('{{ SubmissionsJSON|escapejs }}')
         ,columns: ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']

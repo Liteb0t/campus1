@@ -14,4 +14,5 @@ urlpatterns = [
     path("DeleteStu/<int:id>", views.deletestudent, name="delete"),
     path("DeleteSub/<int:id>", views.deletesubmission, name="deletesub"),
     path("DeleteJob/<int:id>", views.deletejob, name="deletejob"),
+    path("api/students/", views.studentList, name="studentList"),
 ]
