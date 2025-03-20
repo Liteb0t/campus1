@@ -138,13 +138,29 @@ def access_db_admin(request):
     linemanagers_json = DBAdminLineManagerSerialiser(line_managers, many=True).data
     return render(request, "db_view/access_db_admin.html", {"SubmissionsJSON": json.dumps(submissions_json), "JobsJSON": json.dumps(jobs_json), "LineManagersJSON": json.dumps(linemanagers_json)})
 
-# JSON API: does not return html but JSON instead. used by the new admin page
 @csrf_exempt
 def studentList(request):
     if request.method == "GET":
         students = Student.objects.select_related("user")
         students_serialiser = DBAdminStudentSerialiser(students, many=True)
         return JsonResponse(students_serialiser.data, safe=False)
+
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = DBAdminStudentSerialiser(data=data)
+        if serialiser.is_valid(raise_exception=ValueError):
+            serialiser.create(validated_data=data)
+            return JsonResponse(serialiser.data, status=201)
+        else:
+            return JsonResponse(serialiser.errors, status=400)
+
+# JSON API: does not return html but JSON instead. used by the new admin page
+@csrf_exempt
+def submissionList(request):
+    if request.method == "GET":
+        submissions = Submission.objects.select_related("student", "job", "line_manager")
+        submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
+        return JsonResponse(submissions_serialiser.data, safe=False)
 
 @login_required
 def updatestudent(request, id):

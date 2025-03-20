@@ -26,6 +26,7 @@
         </table>-->
     </div>
     <div id="submissions-table-container" style="display:none">
+		<!--
         <div id="submissions-advanced-search"></div>
         <div id="submissions-table-pagination"></div>
         <table id="submissions-table">
@@ -44,6 +45,7 @@
             </thead>
             <tbody id="submissions-table-tbody"></tbody>
         </table>
+		-->
     </div>
     <div id="jobs-table-container" style="display:none">
         <div id="jobs-advanced-search"></div>
@@ -76,12 +78,10 @@
         </table>
     </div>
 
-    <p id="json-test" style="color: white">
-        {{ JobsJSON|escapejs }}
-    </p>
     <script src="{% static 'table.js' %}"></script>
     <script>
-    swappable_table_containers = [
+		"use strict";
+    const swappable_table_containers = [
         document.getElementById("students-table-container"),
         document.getElementById("submissions-table-container"),
         document.getElementById("jobs-table-container"),
@@ -97,7 +97,7 @@
             }
         }
     }
-    entries_per_page = 50;
+    let entries_per_page = 50;
 
     class Tbody {
         constructor(tbody_id, pagination_container_id, options = {}) {
@@ -475,14 +475,14 @@
             this.setPage(1);
         }
     }
-    students_table = new Table("students-table-container", {
+    const students_table = new AdvancedSearchTable("students-table-container", {
         {#json: JSON.parse('{{ StudentsJSON|escapejs }}')#}
         json_url: "{% url 'studentList' %}"
         ,columns: {
-            "username": {type: "string", display_name: "Username"}
-            ,"first_name": {type: "string", display_name: "First Name"}
-            ,"last_name": {type: "string", display_name: "Last Name"}
-            ,"on_visa": {type: "boolean", display_name: "On Visa?"}
+            "Username": {name: "username", type: "string", display_name: "Username", "parent_object": ["user"]}
+            ,"First Name": {name: "first_name", type: "string", display_name: "First Name", "parent_object": ["user"]}
+            ,"Last Name": {name: "last_name", type: "string", display_name: "Last Name", "parent_object": ["user"]}
+            ,"On Visa?": {name: "on_visa", type: "boolean", display_name: "On Visa?"}
         }
     })
     // students_table.populate();
@@ -493,27 +493,57 @@
     //     ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
     // });
     // students_tbody.populate();
-    submissions_tbody = new AdvancedSearchTbody("submissions-table-tbody", "submissions-table-pagination", "submissions-advanced-search", {
-        json: JSON.parse('{{ SubmissionsJSON|escapejs }}')
-        ,columns: ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']
-        ,alias: "submissions"
-        ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "job_name": {type: "string"}, "line_manager_username": {type: "string"}, "hours": {type: "number"}, "date_worked": {type: "date"}, "date_submitted": {type: "date"}, "accepted": {type: "boolean"}}
-    });
-    submissions_tbody.populate();
-    jobs_tbody = new AdvancedSearchTbody("jobs-table-tbody", "jobs-table-pagination", "jobs-advanced-search", {
+	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
+		json_url: "{% url 'submissionList' %}"
+		,columns: {
+			"Username": {name: "username", type: "string", display_name: "Username", "parent_object": ["student", "user"]}
+			,"First Name": {name: "first_name", type: "string", display_name: "First Name", "parent_object": ["student", "user"]}
+            ,"Last Name": {name: "last_name", type: "string", display_name: "Last Name", "parent_object": ["student", "user"]}
+			,"Job": {name: "job_name", type: "string", display_name: "Job"}
+			,"Line Manager": {name: "username", type: "string", display_name: "Line Manager", "parent_object": ["line_manager", "user"]}
+			,"Hours": {name: "hours", type: "number", display_name: "Hours"}
+			,"Date worked": {name: "date_worked", type: "date", display_name: "Date worked"}
+			,"Date submitted": {name: "date_submitted", type: "date", display_name: "Date submitted"}
+			,"Accepted": {name: "accepted", type: "boolean", display_name: "Accepted"}
+        }
+	});
+			
+    // const submissions_tbody = new AdvancedSearchTbody("submissions-table-tbody", "submissions-table-pagination", "submissions-advanced-search", {
+    //     json: JSON.parse('{{ SubmissionsJSON|escapejs }}')
+    //     ,columns: ['username', 'first_name', 'last_name', 'job_name', 'line_manager_username', 'hours', 'date_worked', 'date_submitted', 'accepted']
+    //     ,alias: "submissions"
+    //     ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "job_name": {type: "string"}, "line_manager_username": {type: "string"}, "hours": {type: "number"}, "date_worked": {type: "date"}, "date_submitted": {type: "date"}, "accepted": {type: "boolean"}}
+    // });
+    // submissions_tbody.populate();
+    const jobs_tbody = new AdvancedSearchTbody("jobs-table-tbody", "jobs-table-pagination", "jobs-advanced-search", {
         json: JSON.parse('{{ JobsJSON|escapejs }}')
         ,columns: ['job_name', 'cost_code', 'pay_rate', 'student_username']
         ,alias: "jobs"
         ,parameter_options: {"job_name": {type: "string"}, "cost_code": {type: "string"}, "pay_rate": {type: "number"}, "student_username": {type: "string"}}
     });
     jobs_tbody.populate();
-    linemanagers_tbody = new AdvancedSearchTbody("linemanagers-table-tbody", "linemanagers-table-pagination", "linemanagers-advanced-search", {
+    const linemanagers_tbody = new AdvancedSearchTbody("linemanagers-table-tbody", "linemanagers-table-pagination", "linemanagers-advanced-search", {
         json: JSON.parse('{{ LineManagersJSON|escapejs }}')
         ,columns: ['username', 'first_name', 'last_name', 'student_username']
         ,alias: "linemanagers"
         ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}, "student_username": {type: "string"}}
     });
     linemanagers_tbody.populate();
+	const fetch_response = fetch("{% url 'studentList' %}", {
+		method: "POST",
+		body: JSON.stringify({
+			user: {
+				username: "jsontest3"
+				,first_name: "Johnny"
+				,last_name: "Zest"
+				,email: "ijsadoif@sairoi.asifo"
+			}
+			,on_visa: false
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	});
 
     </script>
 {% endblock %}
