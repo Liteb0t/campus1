@@ -16,4 +16,6 @@ urlpatterns = [
     path("DeleteJob/<int:id>", views.deletejob, name="deletejob"),
     path("api/students/", views.studentList, name="studentList"),
     path("api/submissions/", views.submissionList, name="submissionList"),
+    path("api/jobs/", views.jobList, name="jobList"),
+    path("api/lineManagers/", views.lineManagerList, name="lineManagerList"),
 ]

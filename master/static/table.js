@@ -3,7 +3,7 @@ class Table {
         Object.assign(this, {
             page: 1
             ,json: []
-            ,columns: {} // display_name, type
+            ,columns: {} // name, type, parents[]
             ,alias: container_id
             ,json_url: null
         }, options);
@@ -22,9 +22,9 @@ class Table {
 
         // Add column headers
         let header_row_element = document.createElement("tr");
-        for (let column of Object.values(this.columns)) {
+        for (let column_name of Object.keys(this.columns)) {
             let column_element = document.createElement("th");
-            column_element.innerText = column.display_name;
+            column_element.innerText = column_name;
             header_row_element.appendChild(column_element);
         }
         this.thead_element.appendChild(header_row_element);

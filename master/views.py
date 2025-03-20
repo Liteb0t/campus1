@@ -110,34 +110,9 @@ def access_db_admin_old(request):
 
 @login_required
 def access_db_admin(request):
-    jobs = Job.objects.all()
-    # recruiters = Recruiter.objects.all()
-    students = Student.objects.select_related("user")
-    submissions = Submission.objects.select_related("student", "job", "line_manager")
-    line_managers = LineManager.objects.select_related("user")
+    return render(request, "db_view/access_db_admin.html")
 
-    # user_creation_form = UserCreationForm()
-    # student_creation_form = StudentCreationForm()
-    # if request.method == "POST":
-    #     user_form = UserCreationForm(request.POST)
-    #     student_form = StudentCreationForm(request.POST)
-    #     if user_form.is_valid():
-    #         user = user_form.save(commit=False)
-    #         user.save()
-    #         message = "Added student!"
-    #         if student_form.is_valid():
-    #             student = student_form.save(commit=False)
-    #             student.user = user
-    #             student.save()
-
-    # submissions_pure = submissions.values("hours", "student__user__username")
-    # students_pure = students.only("user__username", "on_visa")
-    students_json = DBAdminStudentSerialiser(students, many=True).data
-    submissions_json = DBAdminSubmissionSerialiser(submissions, many=True).data
-    jobs_json = DBAdminJobSerialiser(jobs, many=True).data
-    linemanagers_json = DBAdminLineManagerSerialiser(line_managers, many=True).data
-    return render(request, "db_view/access_db_admin.html", {"SubmissionsJSON": json.dumps(submissions_json), "JobsJSON": json.dumps(jobs_json), "LineManagersJSON": json.dumps(linemanagers_json)})
-
+# JSON API: does not return html but JSON instead. used by the new admin page
 @csrf_exempt
 def studentList(request):
     if request.method == "GET":
@@ -154,13 +129,27 @@ def studentList(request):
         else:
             return JsonResponse(serialiser.errors, status=400)
 
-# JSON API: does not return html but JSON instead. used by the new admin page
+# investigate why submissions take much longer to load than the rest
 @csrf_exempt
 def submissionList(request):
     if request.method == "GET":
         submissions = Submission.objects.select_related("student", "job", "line_manager")
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
+
+@csrf_exempt
+def jobList(request):
+    if request.method == "GET":
+        jobs = Job.objects.all()
+        jobs_serialiser = DBAdminJobSerialiser(jobs, many=True)
+        return JsonResponse(jobs_serialiser.data, safe=False)
+
+@csrf_exempt
+def lineManagerList(request):
+    if request.method == "GET":
+        linemanagers = LineManager.objects.all()
+        linemanagers_serialiser = DBAdminLineManagerSerialiser(linemanagers, many=True)
+        return JsonResponse(linemanagers_serialiser.data, safe=False)
 
 @login_required
 def updatestudent(request, id):
