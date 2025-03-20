@@ -3,9 +3,8 @@ class Table {
         Object.assign(this, {
             page: 1
             ,json: []
-            ,columns: {} // name, type, parents[]
-            ,alias: container_id
             ,json_url: null
+            ,columns: {} // name, type, parent_object[]
         }, options);
         this.container_element = document.getElementById(container_id);
         // this.advanced_search_container_element = document.createElement("div");
@@ -36,18 +35,31 @@ class Table {
         this.container_element.appendChild(this.table_element);
 
         // Generate pagination buttons
+        this.first_page_button = document.createElement("button");
+        this.first_page_button.textContent = "First";
+        this.first_page_button.onclick = () => {this.setPage(1)};
         this.previous_page_button = document.createElement("button");
         this.previous_page_button.textContent = "Previous";
         this.previous_page_button.onclick = () => {this.setPage(this.page - 1)};
         this.next_page_button = document.createElement("button");
         this.next_page_button.textContent = "Next";
         this.next_page_button.onclick = () => {this.setPage(this.page + 1)};
+        this.last_page_button = document.createElement("button");
+        this.last_page_button.textContent = "Last";
+        this.last_page_button.onclick = () => {this.setPage(Math.ceil(this.json.length / entries_per_page))};
         this.updatePageButtons();
+        this.pagination_container_element.appendChild(this.first_page_button);
         this.pagination_container_element.appendChild(this.previous_page_button);
         this.pagination_container_element.appendChild(this.next_page_button)
+        this.pagination_container_element.appendChild(this.last_page_button);
+
+		this.refresh_button = document.createElement("button");
+		this.refresh_button.classList.add("TableRefreshButton");
+		this.refresh_button.textContent = "Refresh";
+		this.refresh_button.onclick = () => {this.refresh();}
+		this.pagination_container_element.appendChild(this.refresh_button);
 
         if (this.json.length === 0 && this.json_url !== null) {
-            this.tbody_element.textContent = "Fetching data...";
             this.refresh();
         }
         else {
@@ -62,7 +74,12 @@ class Table {
         let start_index = (this.page - 1) * entries_per_page;
         let until_index = this.page * entries_per_page;
         if ((this.page - 1) * entries_per_page >= this.json.length) {
-            this.tbody_element.textContent = "No data found.";
+			if (this.json.length === 0) {
+	            this.tbody_element.textContent = "No data found.";
+			}
+			else {
+				this.tbody_element.textContent = "No data on this page.";
+			}
         }
         else {
             for (let i = start_index; i < until_index && i < this.json.length; i++) {
@@ -85,19 +102,17 @@ class Table {
         this.updatePageButtons();
     }
     setPage(page) {
-        // if (page > 0 && (page-1) * entries_per_page < this.json.length) {
-            this.page = page;
-            this.populate();
-        // }
-        // else {
-        //     throw(`Attempt to navigate to page ${page} in table ${this.alias} failed because it goes outside the bounds of the data`);
-        // }
+        this.page = page;
+        this.populate();
     }
     updatePageButtons() {
+        this.first_page_button.disabled = this.page === 1;
         this.previous_page_button.disabled = this.page === 1;
         this.next_page_button.disabled = this.page * entries_per_page >= this.json.length;
+		this.last_page_button.disabled = this.next_page_button.disabled && this.page * entries_per_page < this.json.length + entries_per_page || this.json.length === 0;
     }
     async refresh() {
+        this.tbody_element.textContent = "Fetching data...";
         const response = await fetch(this.json_url);
         console.log(response);
         if (!response.ok) {

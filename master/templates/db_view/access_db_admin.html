@@ -14,10 +14,35 @@
     <div id="submissions-table-container" style="display:none"></div>
     <div id="jobs-table-container" style="display:none"></div>
     <div id="linemanagers-table-container" style="display: none"></div>
+	<!-- username first_name last_name email on_visa-->
+	<div id="add-student-form">
+		<input type="text" name="user__username" placeholder="Username"><br>
+		<input type="text" name="user__first_name" placeholder="First name"><br>
+		<input type="text" name="user__last_name" placeholder="Last name"><br>
+		<input type="text" name="user__email" placeholder="Email address"><br>
+		<label for="student_on_visa">On visa?</label>
+		<input type="checkbox" name="on_visa" id="student_on_visa"><br>
+		<button onclick="processStudentForm()">Add student</button>
+	</div>
 
     <script src="{% static 'table.js' %}"></script>
     <script>
 	"use strict";
+	async function processStudentForm() {
+		const formElement = document.getElementById("add-student-form");
+		let data = {
+			user: {
+				username: formElement.querySelector("input[name=user__username]").value,
+				first_name: formElement.querySelector("input[name=user__first_name]").value,
+				last_name: formElement.querySelector("input[name=user__last_name]").value,
+				email: formElement.querySelector("input[name=user__email]").value
+			},
+			on_visa: formElement.querySelector("input[name=on_visa]").checked
+		};
+		let response = await postJSON("{% url 'studentList' %}", data);
+		console.log(response);
+	}
+
     const swappable_table_containers = [
         document.getElementById("students-table-container"),
         document.getElementById("submissions-table-container"),
@@ -52,12 +77,12 @@
 			"Username": {name: "username", type: "string", "parent_object": ["student", "user"]}
 			,"First Name": {name: "first_name", type: "string", "parent_object": ["student", "user"]}
             ,"Last Name": {name: "last_name", type: "string", "parent_object": ["student", "user"]}
-			,"Job": {name: "job_name", type: "string"}
+			,"Job": {name: "job_name", type: "string", parent_object: ["job"]}
 			,"Line Manager": {name: "username", type: "string", "parent_object": ["line_manager", "user"]}
 			,"Hours": {name: "hours", type: "number"}
 			,"Date worked": {name: "date_worked", type: "date"}
 			,"Date submitted": {name: "date_submitted", type: "date"}
-			,"Accepted": {name: "accepted", type: "boolean", display_name: "Accepted"}
+			,"Accepted": {name: "accepted", type: "boolean"}
         }
 	});
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
@@ -87,21 +112,32 @@
     //     ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
     // });
     // students_tbody.populate();
-	const fetch_response = fetch("{% url 'studentList' %}", {
-		method: "POST",
-		body: JSON.stringify({
-			user: {
-				username: "jsontest4"
-				,first_name: "Mel"
-				,last_name: "Stride"
-				,email: "ijsadoif@sairoi.asifo"
+	// const fetch_response = fetch("{% url 'studentList' %}", {
+	// 	method: "POST",
+	// 	body: JSON.stringify({
+	// 		user: {
+	// 			username: "jsontest4"
+	// 			,first_name: "Mel"
+	// 			,last_name: "Stride"
+	// 			,email: "ijsadoif@sairoi.asifo"
+	// 		}
+	// 		,on_visa: true
+	// 	}),
+	// 	headers: {
+	// 		"Content-type": "application/json; charset=UTF-8"
+	// 	}
+	// });
+	async function postJSON(url, data) {
+		const fetch_response = fetch(url, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
 			}
-			,on_visa: true
-		}),
-		headers: {
-			"Content-type": "application/json; charset=UTF-8"
-		}
-	});
+		});
+		return fetch_response;
+	}
+
     </script>
 {% endblock %}
 
