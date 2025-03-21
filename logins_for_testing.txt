@@ -1,3 +1,8 @@
+Admin
+username: admin
+password: str0ngpassword
+(id 1)
+
 LineManager
 username: lm
 password: test

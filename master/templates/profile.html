@@ -3,26 +3,32 @@
  View Profile
 {% endblock %}
 {% block content %}
+<h2>Your profile:</h2>
+<p>
+    Username: {{ request.user.username }}<br>
+    Name: {{ request.user.first_name }} {{ request.user.last_name }}<br>
+    On visa: {{ request.user.on_visa }}
+    Visa expiry: {{ request.user.on_visa }}
+</p>
+<!--
 <div class = "Row">
     <div class = "Col left">
         <div class = "SideBox">
                 Logged in as {{ request.user.username}}
             <button type="submit">Logout</button>
-            <!-- CRUD GOES HERE FOR UPDATING AND DELETING PROFILES -->
 
             <p>Profile Settings:</p>
         </div>
     </div>
-    <!-- Table Layout: Student table -->
     <div class = "Col right">
         <h2>Your profile:</h2>
         <p>
             Username: {{ request.user.username }}<br>
             Name: {{ request.user.first_name }} {{ request.user.last_name }}<br>
-            {{ if request
             On visa: {{ request.user.on_visa }}
+            Visa expiry: {{ request.user.on_visa }}
         </p>
     </div>
 </div>
-
+-->
 {% endblock %}

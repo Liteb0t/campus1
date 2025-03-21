@@ -43,18 +43,11 @@ body {
 
 .SideBox{
     height: 50em;
-    min-width: 20em;
-    max-width: 20em;
-    background-color: #ddd;
-    opacity: 0.75;
-}
-
-.ADVBox{
-    height: 50em;
     min-width: 25em;
     max-width: 25em;
     background-color: #ddd;
     opacity: 0.75;
+	color: #000;
 }
 
 .Row{
@@ -136,13 +129,23 @@ body {
 .Bottom{
     flex: 0 0 200px;
 }
-
+/*
 .AddParameterButton, .SearchButton, .DeleteParameterButton{
     font: inherit;
     background-color: #f2f2f2;
 }
 
 .AddParameterButton:hover, .SearchButton:hover, .DeleteParameterButton:hover{
+    background-color: #ddd;
+    color: black;
+    cursor: pointer;
+} */
+body button {
+    font: inherit;
+    background-color: #f2f2f2;
+}
+
+body button:hover:not([disabled]) {
     background-color: #ddd;
     color: black;
     cursor: pointer;
@@ -182,6 +185,7 @@ body {
     border: 1px solid #797979;
     word-wrap: break-word;
     margin: 38vh auto auto auto;
+	color: #000;
 }
 
 .TableRefreshButton {
