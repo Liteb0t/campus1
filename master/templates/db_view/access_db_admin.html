@@ -14,23 +14,28 @@
     <div id="submissions-table-container" style="display:none"></div>
     <div id="jobs-table-container" style="display:none"></div>
     <div id="linemanagers-table-container" style="display: none"></div>
-	<!-- username first_name last_name email on_visa-->
 	<div id="add-student-form">
+		<label for="student-id-field">Id:</label>
+		<input type="number" name="id" id="student-id-field" min=0><br>
+		ID field is used to select the student to update. It is ignored on adding a student.<br>
 		<input type="text" name="user__username" placeholder="Username"><br>
 		<input type="text" name="user__first_name" placeholder="First name"><br>
 		<input type="text" name="user__last_name" placeholder="Last name"><br>
 		<input type="text" name="user__email" placeholder="Email address"><br>
 		<label for="student_on_visa">On visa?</label>
 		<input type="checkbox" name="on_visa" id="student_on_visa"><br>
-		<button onclick="processStudentForm()">Add student</button>
+		<button onclick="processStudentForm('create')">Add student</button>
+		<button onclick="processStudentForm('update')">Update student</button>
 	</div>
 
     <script src="{% static 'table.js' %}"></script>
     <script>
 	"use strict";
-	async function processStudentForm() {
+	async function processStudentForm(action) {
 		const formElement = document.getElementById("add-student-form");
 		let data = {
+			_action: action,
+			_id: formElement.querySelector("input[name=id]").value,
 			user: {
 				username: formElement.querySelector("input[name=user__username]").value,
 				first_name: formElement.querySelector("input[name=user__first_name]").value,
@@ -62,13 +67,13 @@
     let entries_per_page = 50;
 
     const students_table = new AdvancedSearchTable("students-table-container", {
-        {#json: JSON.parse('{{ StudentsJSON|escapejs }}'),#}
         json_url: "{% url 'studentList' %}"
         ,columns: {
             "Username": {name: "username", type: "string", "parent_object": ["user"]}
             ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
             ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
             ,"On Visa?": {name: "on_visa", type: "boolean"}
+			,"ID": {name: "id", type: "number", parent_object: ["user"]}
         }
     })
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
@@ -104,29 +109,6 @@
         }
     })
 			
-    // students_table.populate();
-    // students_tbody = new AdvancedSearchTbody("students-table-tbody", "students-table-pagination", "students-advanced-search", {
-    {#//     json: JSON.parse('{{ StudentsJSON|escapejs }}')#}
-    //     ,columns: ["username" ,"first_name" ,"last_name" ,"on_visa"]
-    //     ,alias: "students"
-    //     ,parameter_options: {"username": {type: "string"}, "first_name": {type: "string"}, "last_name": {type: "string"}}
-    // });
-    // students_tbody.populate();
-	// const fetch_response = fetch("{% url 'studentList' %}", {
-	// 	method: "POST",
-	// 	body: JSON.stringify({
-	// 		user: {
-	// 			username: "jsontest4"
-	// 			,first_name: "Mel"
-	// 			,last_name: "Stride"
-	// 			,email: "ijsadoif@sairoi.asifo"
-	// 		}
-	// 		,on_visa: true
-	// 	}),
-	// 	headers: {
-	// 		"Content-type": "application/json; charset=UTF-8"
-	// 	}
-	// });
 	async function postJSON(url, data) {
 		const fetch_response = fetch(url, {
 			method: "POST",

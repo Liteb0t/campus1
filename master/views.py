@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from master.models import Job, LineManager, Submission, Student, Recruiter
 from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
@@ -124,7 +125,11 @@ def studentList(request):
         data = JSONParser().parse(request)
         serialiser = DBAdminStudentSerialiser(data=data)
         if serialiser.is_valid(raise_exception=ValueError):
-            serialiser.create(validated_data=data)
+            if data["_action"] == "create":
+                serialiser.create(validated_data=data)
+            elif data["_action"] == "update":
+                instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
+                serialiser.update(instance=instance, validated_data=data)
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)

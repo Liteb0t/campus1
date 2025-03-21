@@ -1,11 +1,17 @@
 from rest_framework import serializers
+from django.contrib.auth.validators import UnicodeUsernameValidator
 from master.models import Student, Submission, Job, LineManager
 from django.contrib.auth.models import User
 
 class UserSerialiser(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+        extra_kwargs = {
+            'username': {
+                'validators': [UnicodeUsernameValidator()],
+            }
+        }
 
 class DBAdminStudentSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
@@ -19,8 +25,19 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
-        student, created = Student.objects.update_or_create(user=user, on_visa=validated_data.pop("on_visa"))
+        student, created = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"))
         return student
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user")
+        instance.user.username = user_data["username"]
+        instance.user.first_name = user_data["first_name"]
+        instance.user.last_name = user_data["last_name"]
+        # instance.user.last_name = validated_data.get("last_name")
+        instance.on_visa = validated_data["on_visa"]
+        instance.user.save()
+        instance.save()
+        return instance
 
 class DBAdminJobSerialiser(serializers.ModelSerializer):
     student = DBAdminStudentSerialiser(many=True)

@@ -1,0 +1,6 @@
+# Pycharm project files
+.idea/campus1.iml
+.idea/misc.xml
+
+# Vim swap files
+*.swp
