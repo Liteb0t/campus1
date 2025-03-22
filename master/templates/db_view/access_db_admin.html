@@ -10,10 +10,12 @@
     <button onclick="showTable('submissions-table-container')">Submissions</button>
     <button onclick="showTable('jobs-table-container')">Jobs</button>
     <button onclick="showTable('linemanagers-table-container')">Line Managers</button>
-    <div id="students-table-container"></div>
-    <div id="submissions-table-container" style="display:none"></div>
-    <div id="jobs-table-container" style="display:none"></div>
-    <div id="linemanagers-table-container" style="display: none"></div>
+	<div style="height: 800px"> <!-- contains our four tables -->
+		<div id="students-table-container"></div>
+    	<div id="submissions-table-container" style="display:none"></div>
+    	<div id="jobs-table-container" style="display:none"></div>
+    	<div id="linemanagers-table-container" style="display: none"></div>
+	</div>
 	<div id="add-student-form">
 		<label for="student-id-field">Id:</label>
 		<input type="number" name="id" id="student-id-field" min=0><br>
@@ -24,15 +26,15 @@
 		<input type="text" name="user__email" placeholder="Email address"><br>
 		<label for="student_on_visa">On visa?</label>
 		<input type="checkbox" name="on_visa" id="student_on_visa"><br>
-		<button onclick="processStudentForm('create')">Add student</button>
-		<button onclick="processStudentForm('update')">Update student</button>
+		<button onclick="processStudentForm('create', 'add-student-form')">Add student</button>
+		<button onclick="processStudentForm('update', 'add-student-form')">Update student</button>
 	</div>
 
     <script src="{% static 'table.js' %}"></script>
     <script>
 	"use strict";
-	async function processStudentForm(action) {
-		const formElement = document.getElementById("add-student-form");
+	async function processStudentForm(action, element_id) {
+		const formElement = document.getElementById(element_id);
 		let data = {
 			_action: action,
 			_id: formElement.querySelector("input[name=id]").value,
@@ -57,7 +59,7 @@
     function showTable(container_id) {
         for (let table_container of swappable_table_containers) {
             if (container_id === table_container.id) {
-                table_container.style["display"] = "block";
+                table_container.style["display"] = "flex";
             }
             else {
                 table_container.style["display"] = "none";
@@ -73,15 +75,16 @@
             ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
             ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
             ,"On Visa?": {name: "on_visa", type: "boolean"}
-			,"ID": {name: "id", type: "number", parent_object: ["user"]}
+			// ,"ID": {name: "id", type: "number", parent_object: ["user"]}
         }
+		,editable: true
     })
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
 		,columns: {
 			"Username": {name: "username", type: "string", "parent_object": ["student", "user"]}
-			,"First Name": {name: "first_name", type: "string", "parent_object": ["student", "user"]}
-            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["student", "user"]}
+			// ,"First Name": {name: "first_name", type: "string", "parent_object": ["student", "user"]}
+            // ,"Last Name": {name: "last_name", type: "string", "parent_object": ["student", "user"]}
 			,"Job": {name: "job_name", type: "string", parent_object: ["job"]}
 			,"Line Manager": {name: "username", type: "string", "parent_object": ["line_manager", "user"]}
 			,"Hours": {name: "hours", type: "number"}

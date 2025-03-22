@@ -20,8 +20,8 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
     # last_name = serializers.CharField(source='user.last_name', read_only=True)
     class Meta:
         model = Student
-        fields = ('user', 'on_visa')
-    
+        fields = ('id', 'user', 'on_visa')
+
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
@@ -37,6 +37,11 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.on_visa = validated_data["on_visa"]
         instance.user.save()
         instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.user.delete()
+        instance.delete()
         return instance
 
 class DBAdminJobSerialiser(serializers.ModelSerializer):

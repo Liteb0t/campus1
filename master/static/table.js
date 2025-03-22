@@ -5,19 +5,23 @@ class Table {
             ,json: []
             ,json_url: null
             ,columns: {} // name, type, parent_object[]
+			,editable: false
         }, options);
+		// Generating HTML
         this.container_element = document.getElementById(container_id);
+		this.container_element.classList.add("AwesomeTableContainer");
         // this.advanced_search_container_element = document.createElement("div");
-        this.pagination_container_element = document.createElement("div");
+        this.toolbar_element = document.createElement("div");
+        this.table_box_element = document.createElement("div");
+		this.table_box_element.classList.add("TableBox");
         this.table_element = document.createElement("table");
         this.thead_element = document.createElement("thead");
         this.tbody_element = document.createElement("tbody");
 
-    //     for (let [key, value] of Object.entries(this.columns)) {
-	// 		if (typeof value === "object") {
-	// 			for (let [key_2, value_2] of Object.entries(value)) {
-	// 				this.columns[key+"__"+key_2] = value_2;
-	// 			}
+		// Shows current page and what rows are being displayed
+		this.showing_indexes_element = document.createElement("div");
+		this.showing_indexes_element.textContent = "Loading...";
+		this.container_element.appendChild(this.showing_indexes_element);
 
         // Add column headers
         let header_row_element = document.createElement("tr");
@@ -26,15 +30,22 @@ class Table {
             column_element.innerText = column_name;
             header_row_element.appendChild(column_element);
         }
+		if (this.editable) {
+            let column_element = document.createElement("th");
+            column_element.innerText = "Actions";
+			column_element.setAttribute("colspan", 2);
+            header_row_element.appendChild(column_element);
+		}
         this.thead_element.appendChild(header_row_element);
 
         this.table_element.appendChild(this.thead_element);
         this.table_element.appendChild(this.tbody_element);
         // this.container_element.appendChild(this.advanced_search_container_element);
-        this.container_element.appendChild(this.pagination_container_element);
-        this.container_element.appendChild(this.table_element);
+        this.container_element.appendChild(this.toolbar_element);
+		this.table_box_element.appendChild(this.table_element);
+        this.container_element.appendChild(this.table_box_element);
 
-        // Generate pagination buttons
+        // Add pagination buttons to the toolbar
         this.first_page_button = document.createElement("button");
         this.first_page_button.textContent = "First";
         this.first_page_button.onclick = () => {this.setPage(1)};
@@ -48,16 +59,30 @@ class Table {
         this.last_page_button.textContent = "Last";
         this.last_page_button.onclick = () => {this.setPage(Math.ceil(this.json.length / entries_per_page))};
         this.updatePageButtons();
-        this.pagination_container_element.appendChild(this.first_page_button);
-        this.pagination_container_element.appendChild(this.previous_page_button);
-        this.pagination_container_element.appendChild(this.next_page_button)
-        this.pagination_container_element.appendChild(this.last_page_button);
+        this.toolbar_element.appendChild(this.first_page_button);
+        this.toolbar_element.appendChild(this.previous_page_button);
+        this.toolbar_element.appendChild(this.next_page_button);
+        this.toolbar_element.appendChild(this.last_page_button);
+
+		// More toolbar buttons
+		if (this.editable) {
+			this.delete_button = document.createElement("button");
+			this.delete_button.classList.add("TableDeleteButton");
+			this.delete_button.textContent = "Delete selected";
+			this.delete_button.disabled = true;
+			this.delete_button.onclick = () => {this.deleteRows();}
+			this.toolbar_element.appendChild(this.delete_button);
+		}
 
 		this.refresh_button = document.createElement("button");
 		this.refresh_button.classList.add("TableRefreshButton");
 		this.refresh_button.textContent = "Refresh";
 		this.refresh_button.onclick = () => {this.refresh();}
-		this.pagination_container_element.appendChild(this.refresh_button);
+		this.toolbar_element.appendChild(this.refresh_button);
+
+		if (this.editable) {
+			this.entries_to_delete = {};
+		}
 
         if (this.json.length === 0 && this.json_url !== null) {
             this.refresh();
@@ -66,6 +91,47 @@ class Table {
             this.populate();
         }
     }
+	async processRowForm(row_element, action, id) {
+		console.log(id);
+		console.log(row_element);
+		let form_data = {
+			_id: id,
+			_action: action
+		}
+		let column_i = 0;
+		for (let [column_name, column_attributes] of Object.entries(this.columns)) {
+			let base_for_entry = form_data;
+			if (typeof column_attributes.parent_object !== "undefined") {
+				for (let parent_object of column_attributes.parent_object) {
+					if (typeof form_data[parent_object] === "undefined") {
+						form_data[parent_object] = {};
+					}
+					base_for_entry = form_data[parent_object];
+				}
+			}
+			console.log(row_element.children[column_i].children[0].value);
+			if (column_attributes.type === "boolean") {
+				base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].checked;
+			}
+			else {
+				base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].value;
+			}
+			++column_i;
+		}
+		console.log(form_data);
+		await this.postJSON(this.json_url, form_data);
+		this.refresh();
+	}
+	async deleteRows() {
+		let form_data = {
+			_action: "deleteMultiple",
+			to_delete: Object.keys(this.entries_to_delete)
+		};
+		await this.postJSON(this.json_url, form_data);
+		this.entries_to_delete = [];
+		this.refresh();
+	}
+
     populate() {
         // Delete existing rows if there are any
         while (this.tbody_element.lastChild) {
@@ -73,6 +139,11 @@ class Table {
         }
         let start_index = (this.page - 1) * entries_per_page;
         let until_index = this.page * entries_per_page;
+
+		let showing_indexes_string = ["Page "]; // Its like a stringbuilder
+		showing_indexes_string.push(this.page.toString());
+		showing_indexes_string.push(" | Showing ");
+
         if ((this.page - 1) * entries_per_page >= this.json.length) {
 			if (this.json.length === 0) {
 	            this.tbody_element.textContent = "No data found.";
@@ -80,6 +151,7 @@ class Table {
 			else {
 				this.tbody_element.textContent = "No data on this page.";
 			}
+			showing_indexes_string.push("nothing");
         }
         else {
             for (let i = start_index; i < until_index && i < this.json.length; i++) {
@@ -88,16 +160,84 @@ class Table {
 					console.log(`Undefined JSON at row ${i}`);
 				}
                 let table_row_element = document.createElement("tr");
+				table_row_element.id = this.container_element.id + "_row_" + i.toString();
                 for (let [column_name, column_attributes] of Object.entries(this.columns)) {
                     let cell_element = document.createElement("td");
 					cell_element.textContent = this.getNestedValueIfNested(json_row, column_name);
                     table_row_element.appendChild(cell_element);
                 }
+				if (this.editable) {
+					// Add HTML for edit and delete columns
+					let edit_entry_td = document.createElement("td");
+					let delete_entry_td = document.createElement("td");
+					let edit_entry_button = document.createElement("button");
+					let confirm_edit_entry_button = document.createElement("button");
+					let delete_entry_checkbox = document.createElement("input");
+
+					delete_entry_checkbox.type = "checkbox";
+					edit_entry_button.classList.add("TableEditButton");
+					confirm_edit_entry_button.classList.add("TableConfirmEditButton");
+					delete_entry_checkbox.classList.add("TableDeleteCheckbox");
+					edit_entry_button.textContent = "Edit";
+					confirm_edit_entry_button.textContent = "Confirm";
+
+					confirm_edit_entry_button.style["display"] = "none";
+					confirm_edit_entry_button.onclick = () => {
+						this.processRowForm(table_row_element, "update", json_row.id);
+					};
+
+					edit_entry_button.onclick = () => {
+						console.log(table_row_element.id);
+						let column_i = 0;
+						for (let [column_name, column_attributes] of Object.entries(this.columns)) {
+							let cell_input_element = document.createElement("input");
+							if (column_attributes.type === "boolean") {
+								cell_input_element.type = "checkbox";
+								cell_input_element.checked = this.getNestedValueIfNested(json_row, column_name);
+							}
+							else {
+								cell_input_element.type = column_attributes.type;
+								cell_input_element.value = this.getNestedValueIfNested(json_row, column_name);
+							}
+							table_row_element.children[column_i].textContent = "";
+							table_row_element.children[column_i].appendChild(cell_input_element);
+							++column_i;
+						}
+						edit_entry_button.style["display"] = "none";
+						confirm_edit_entry_button.style["display"] = "block";
+					}
+					delete_entry_checkbox.onchange = () => {
+						if (delete_entry_checkbox.checked) {
+							this.entries_to_delete[json_row.id] = null;
+							this.delete_button.disabled = false;
+						}
+						else {
+							delete this.entries_to_delete[json_row.id];
+							if (Object.keys(this.entries_to_delete).length === 0) {
+								this.delete_button.disabled = true;
+							}
+						}
+					}
+					delete_entry_checkbox.checked = typeof this.entries_to_delete[json_row.id] !== "undefined";
+
+					edit_entry_td.appendChild(edit_entry_button);
+					edit_entry_td.appendChild(confirm_edit_entry_button);
+					// delete_entry_td.appendChild(delete_entry_button);
+					delete_entry_td.appendChild(delete_entry_checkbox);
+					table_row_element.appendChild(edit_entry_td);
+					table_row_element.appendChild(delete_entry_td);
+				}
                 this.tbody_element.appendChild(table_row_element);
                 // table_row_element.onclick = () => {
                 //     console.log(`Username: be like ${json_row.username}`);
                 // }
             }
+			showing_indexes_string.push((start_index+1).toString());
+			showing_indexes_string.push("-");
+			showing_indexes_string.push(Math.min(until_index, this.json.length).toString());
+			showing_indexes_string.push(" of ");
+			showing_indexes_string.push(this.json.length.toString());
+			this.showing_indexes_element.textContent = showing_indexes_string.join("");
         }
         this.updatePageButtons();
     }
@@ -105,12 +245,29 @@ class Table {
         this.page = page;
         this.populate();
     }
+	// "grey out" buttons to prevent paginating outside the bounds of the data
     updatePageButtons() {
         this.first_page_button.disabled = this.page === 1;
         this.previous_page_button.disabled = this.page === 1;
         this.next_page_button.disabled = this.page * entries_per_page >= this.json.length;
 		this.last_page_button.disabled = this.next_page_button.disabled && this.page * entries_per_page < this.json.length + entries_per_page || this.json.length === 0;
     }
+	// Sometimes a value is nested
+	// eg. the "username" attribute is under "sser" which is itself under a "Student"
+	getNestedValueIfNested(json_row, column_id) {
+		let temp_json_value;
+		if (typeof this.columns[column_id].parent_object !== "undefined") {
+			temp_json_value = json_row;
+			for (let parent_key of this.columns[column_id].parent_object ) {
+				temp_json_value = temp_json_value[parent_key];	
+			}
+			temp_json_value = temp_json_value[this.columns[column_id].name];
+		}
+		else {
+			temp_json_value = json_row[this.columns[column_id].name];
+		}
+		return temp_json_value;
+	}
     async refresh() {
         this.tbody_element.textContent = "Fetching data...";
         const response = await fetch(this.json_url);
@@ -120,11 +277,28 @@ class Table {
         }
         else {
             this.json = await response.json();
+			if (this.editable) {
+				this.entries_to_delete = [];
+				this.delete_button.disabled = true;
+			}
             this.populate();
 			if (students_table.constructor.name === "AdvancedSearchTable") {
 				this.initial_json = this.json;
 			}
         }
+    }
+	// sends JSON to the server. the form handling is in our views.py
+	async postJSON(url, data) {
+        const fetch_response = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        });
+		console.log(fetch_response);
+		alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
+        return fetch_response;
     }
 }
 
@@ -181,7 +355,7 @@ class AdvancedSearchTable extends Table {
         this.search_button.onclick = () => { this.doSearch() };
         this.advanced_search_container_element.appendChild(this.search_button);
 
-		this.pagination_container_element.insertAdjacentElement("BeforeBegin", this.advanced_search_container_element);
+		this.container_element.insertAdjacentElement("AfterBegin", this.advanced_search_container_element);
     }
 
     addSearchParameter(option = null, value = null) {
@@ -408,20 +582,6 @@ class AdvancedSearchTable extends Table {
         // this.container_element.appendChild(fragment);
         // this.parameter_elements.append(parameter_container);
     }
-	getNestedValueIfNested(json_row, column_id) {
-		let temp_json_value;
-		if (typeof this.columns[column_id].parent_object !== "undefined") {
-			temp_json_value = json_row;
-			for (let parent_key of this.columns[column_id].parent_object ) {
-				temp_json_value = temp_json_value[parent_key];	
-			}
-			temp_json_value = temp_json_value[this.columns[column_id].name];
-		}
-		else {
-			temp_json_value = json_row[this.columns[column_id].name];
-		}
-		return temp_json_value;
-	}
 
     doSearch() {
         this.json = this.initial_json;

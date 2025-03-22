@@ -1,44 +1,67 @@
-.TableBox {
-    display: flex;
-    justify-content: left;
-    flex-flow: row wrap;
-}
-
-table{
-    border: 3px solid #333;
-    align-self: center;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 20px;
-    float: left;
-    border-spacing: 0px;
-    display: block;
-    height: 500px;
-    overflow-y: scroll;
-}
-
-th, td{
-    text-align: center;
-    border: 0.5px solid #333;
-    background-color: #ddd;
-    color: black;
-    width: 20%;
-}
-
-td {
-    font-family: serif;
-}
-
-html, body{
-    height: 100%;
-}
-
 body {
     font-family: sans-serif;
     background-color: #621b40;
     margin: 0;
-    padding: 0;
 	color: #fff;
+}
+
+.AwesomeTableContainer {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: fit-content;
+
+	.TableRefreshButton, .TableDeleteButton {
+		float: right;
+	}
+	.TableRefreshButton {
+		background-color: #bdf;
+		&:hover:not([disabled]) {
+			background-color: #9bd;
+		}
+	}
+	.TableDeleteButton {
+		background-color: #fcc;
+		&:hover:not([disabled]) {
+			background-color: #daa;
+		}
+	}
+}
+
+.TableBox {
+	flex: 1 1 auto;
+	min-height: 0;
+	color: #000;
+	border-width: 1px 0;
+	border-color: #222;
+	border-style: solid;
+	overflow: auto scroll;
+	background-color: #ddd;
+	padding-right: 12px;
+
+	table {
+		background-color: #ddd;
+		/* border-collapse: collapse; */
+		border-spacing: 0;
+		font-size: 18px;
+	}
+	thead {
+		position: sticky;
+		top: 0;
+	}
+	th {
+		background-color: #ddd;
+	}
+	th, td {
+		background-color: #ddd;
+		border-width: 1px;
+		border-color: #222;
+		border-style: solid;
+		padding: 2px 4px;
+	}
+	td {
+		font-family: serif;
+	}
 }
 
 .SideBox{
@@ -69,11 +92,16 @@ body {
 
 /*navbar*/
 
+header {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
 .Navbar{
-    position: sticky;
+	display: flow-root;
     /*font-family: Sans-serif;*/
     background-color: #BF0167;
-    overflow: hidden;
 }
 
 .Navlink{
@@ -140,12 +168,12 @@ body {
     color: black;
     cursor: pointer;
 } */
-body button {
+button {
     font: inherit;
     background-color: #f2f2f2;
 }
 
-body button:hover:not([disabled]) {
+button:hover:not([disabled]) {
     background-color: #ddd;
     color: black;
     cursor: pointer;
@@ -186,8 +214,4 @@ body button:hover:not([disabled]) {
     word-wrap: break-word;
     margin: 38vh auto auto auto;
 	color: #000;
-}
-
-.TableRefreshButton {
-	float: right;
 }
