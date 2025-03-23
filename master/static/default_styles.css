@@ -26,6 +26,53 @@ body {
 			background-color: #daa;
 		}
 	}
+	.EntryEditButton, .EntryDeleteCheckbox, .EntryConfirmEditButton, .EntryCancelEditButton {
+		/*content: url("/static/pencil-icon-x24.png") / "Editit";*/
+		/*background-image: url("/static/pencil-icon-x24.png");*/
+		display: block;
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		margin: 1px;
+	}
+	.EntryEditButton::before {
+		content: url("/static/pencil-icon-x24.png") / "Edit";
+	}
+	.EntryConfirmEditButton::before {
+		content: url("/static/checkmark-icon-x24.png") / "Confirm";
+	}
+	.EntryCancelEditButton::before {
+		content: url("/static/rollback-icon-x24.png") / "Rollback";
+	}
+	.EntryDeleteCheckbox {
+		appearance: none; /* Hide the broswer's default checkmark */
+		cursor: pointer;
+		background-color: #fcc;
+		border: 2px outset #ddd;
+		&:hover {
+			background-color: #ebb;
+		}
+		&:checked {
+			background-color: #ebb;
+			border-style: inset;
+			&::before {
+				content: url("/static/trashbin-icon-x24.png") / "Select for deletion";
+			}
+		}
+	}
+	tr:nth-child(even) {
+		background-color: #eee;
+	}
+	/*
+	.TableActionColumn1, .TableActionColumn2 {
+		background-color: #ddd;
+	}
+	*/
+	/*
+	tr:hover {
+		background-color: #ccc;
+	}
+	*/
 }
 
 .TableBox {
@@ -50,10 +97,9 @@ body {
 		top: 0;
 	}
 	th {
-		background-color: #ddd;
+		background-color: #fff;
 	}
 	th, td {
-		background-color: #ddd;
 		border-width: 1px;
 		border-color: #222;
 		border-style: solid;
@@ -214,4 +260,21 @@ button:hover:not([disabled]) {
     word-wrap: break-word;
     margin: 38vh auto auto auto;
 	color: #000;
+}
+
+.DBView {
+	display: flex;
+	flex-wrap: wrap;
+	.Column1 {
+		flex: 1 1 auto;
+		width: min-content;
+		max-width: fit-content;
+	}
+	.Column2 {
+		flex: 2 2 min-content;
+		padding-left: 5px;
+		margin-left: 5px;
+		border-left: 5px solid #a58;
+		/* min-width: 300px; */
+	}
 }

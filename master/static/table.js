@@ -10,6 +10,7 @@ class Table {
 		// Generating HTML
         this.container_element = document.getElementById(container_id);
 		this.container_element.classList.add("AwesomeTableContainer");
+		// this.editable && this.container_element.classList.add("EditableTable");
         // this.advanced_search_container_element = document.createElement("div");
         this.toolbar_element = document.createElement("div");
         this.table_box_element = document.createElement("div");
@@ -172,19 +173,22 @@ class Table {
 					let delete_entry_td = document.createElement("td");
 					let edit_entry_button = document.createElement("button");
 					let confirm_edit_entry_button = document.createElement("button");
+					let cancel_edit_entry_button = document.createElement("button");
 					let delete_entry_checkbox = document.createElement("input");
 
+					edit_entry_td.classList.add("TableActionColumn1");
+					delete_entry_td.classList.add("TableActionColumn2");
 					delete_entry_checkbox.type = "checkbox";
-					edit_entry_button.classList.add("TableEditButton");
-					confirm_edit_entry_button.classList.add("TableConfirmEditButton");
-					delete_entry_checkbox.classList.add("TableDeleteCheckbox");
-					edit_entry_button.textContent = "Edit";
-					confirm_edit_entry_button.textContent = "Confirm";
+					edit_entry_button.classList.add("EntryEditButton");
+					confirm_edit_entry_button.classList.add("EntryConfirmEditButton");
+					cancel_edit_entry_button.classList.add("EntryCancelEditButton");
+					delete_entry_checkbox.classList.add("EntryDeleteCheckbox");
+					edit_entry_button.title = "Edit";
+					confirm_edit_entry_button.title = "Confirm";
+					cancel_edit_entry_button.title = "Cancel";
 
 					confirm_edit_entry_button.style["display"] = "none";
-					confirm_edit_entry_button.onclick = () => {
-						this.processRowForm(table_row_element, "update", json_row.id);
-					};
+					cancel_edit_entry_button.style["display"] = "none";
 
 					edit_entry_button.onclick = () => {
 						console.log(table_row_element.id);
@@ -204,7 +208,24 @@ class Table {
 							++column_i;
 						}
 						edit_entry_button.style["display"] = "none";
+						delete_entry_checkbox.style["display"] = "none";
 						confirm_edit_entry_button.style["display"] = "block";
+						cancel_edit_entry_button.style["display"] = "block";
+					}
+					confirm_edit_entry_button.onclick = () => {
+						this.processRowForm(table_row_element, "update", json_row.id);
+					};
+					cancel_edit_entry_button.onclick = () => {
+						let column_i = 0;
+						for (let [column_name, column_attributes] of Object.entries(this.columns)) {
+							// table_row_element.children[i].removeChild(table_row_element.children[i][0]);
+							table_row_element.children[column_i].innerHTML = this.getNestedValueIfNested(json_row, column_name);
+							++column_i;
+						}
+						edit_entry_button.style["display"] = "block";
+						delete_entry_checkbox.style["display"] = "block";
+						confirm_edit_entry_button.style["display"] = "none";
+						cancel_edit_entry_button.style["display"] = "none";
 					}
 					delete_entry_checkbox.onchange = () => {
 						if (delete_entry_checkbox.checked) {
@@ -224,6 +245,7 @@ class Table {
 					edit_entry_td.appendChild(confirm_edit_entry_button);
 					// delete_entry_td.appendChild(delete_entry_button);
 					delete_entry_td.appendChild(delete_entry_checkbox);
+					delete_entry_td.appendChild(cancel_edit_entry_button);
 					table_row_element.appendChild(edit_entry_td);
 					table_row_element.appendChild(delete_entry_td);
 				}
