@@ -1,0 +1,25 @@
+{% extends "_base.html" %}
+{% block title %}
+ View Profile
+{% endblock %}
+{% block content %}
+<div class = "Row">
+    <div class = "Col left">
+        <div class = "SideBox">
+                Logged in as {{ request.user.username}}
+            <button type="submit">Logout</button>
+            <!-- CRUD GOES HERE FOR UPDATING AND DELETING PROFILES -->
+
+            <p>Profile Settings:</p>
+        </div>
+    </div>
+        <!-- Table Layout: table -->
+    	<div id="edit-user-form" class="Column2">
+
+		<input type="text" name="user__username" placeholder="Username"><br>
+		<input type="text" name="user__first_name" placeholder="First name"><br>
+		<input type="text" name="user__last_name" placeholder="Last name"><br>
+		<input type="text" name="user__email" placeholder="Email address"><br>
+		<button onclick="processUserForm('create', 'edit-user-form')">Edit profile</button>
+	</div>
+</div>

@@ -32,8 +32,8 @@ def recruiter_profile(request):
     return render(request, "recruiter_profile.html")
 
 @login_required
-def admin_profile(request):
-    return render(request, "admin_profile.html")
+def user_profile(request):
+    return render(request, "user_profile.html")
 
 @login_required
 def access_db_admin(request):
