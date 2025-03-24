@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from master.models import Job, LineManager, Submission, Student, Recruiter
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser, UserSerialiser
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
 # from django.template import loader
@@ -34,6 +34,13 @@ def recruiter_profile(request):
 @login_required
 def user_profile(request):
     return render(request, "user_profile.html")
+
+@csrf_exempt
+def user_list(request):
+    if request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = UserSerialiser(data=data)
+        return JsonResponse(User_serialiser.data, safe=False)
 
 @login_required
 def access_db_admin(request):

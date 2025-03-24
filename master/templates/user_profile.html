@@ -1,18 +1,12 @@
 {% extends "_base.html" %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'registration_styles.css' %}" />
 {% block title %}
  View Profile
 {% endblock %}
 {% block content %}
 <div class = "Row">
-    <div class = "Col left">
-        <div class = "SideBox">
-                Logged in as {{ request.user.username}}
-            <button type="submit">Logout</button>
-            <!-- CRUD GOES HERE FOR UPDATING AND DELETING PROFILES -->
 
-            <p>Profile Settings:</p>
-        </div>
-    </div>
         <!-- Table Layout: table -->
     	<div id="edit-user-form" class="Column2">
 
@@ -23,3 +17,58 @@
 		<button onclick="processUserForm('create', 'edit-user-form')">Edit profile</button>
 	</div>
 </div>
+
+<script src="{% static 'table.js' %}"></script>
+    <script>
+	"use strict";
+	async function processUserForm(action, element_id) {
+		const formElement = document.getElementById(element_id);
+		let data = {
+			_action: action,
+			user: {
+				username: formElement.querySelector("input[name=user__username]").value,
+				first_name: formElement.querySelector("input[name=user__first_name]").value,
+				last_name: formElement.querySelector("input[name=user__last_name]").value,
+				email: formElement.querySelector("input[name=user__email]").value
+			},
+		};
+		let response = await psstJSON("{% url 'userList' %}", data);
+		console.log(response);
+	}
+
+	function showTable(container_id) {
+        for (let table_container of swappable_table_containers) {
+            if (container_id === table_container.id) {
+                table_container.style["display"] = "flex";
+            }
+            else {
+                table_container.style["display"] = "none";
+            }
+        }
+    }
+    let entries_per_page = 50;
+
+        const user_table = new AdvancedSearchTable("user-table-container", {
+        json_url: "{% url 'user_list' %}"
+        ,columns: {
+            "Username": {name: "username", type: "string", "parent_object": ["user"]}
+            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
+            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+            ,"Email": {name: "email", type: "boolean"}
+			// ,"ID": {name: "id", type: "number", parent_object: ["user"]}
+        }
+		,editable: true
+    })
+
+    async function postJSON(url, data) {
+		const fetch_response = fetch(url, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		});
+		return fetch_response;
+	}
+            </script>
+          {% endblock %}
