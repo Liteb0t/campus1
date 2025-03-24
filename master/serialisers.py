@@ -25,7 +25,7 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
-        student, created = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"))
+        student = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"))
         return student
 
     def update(self, instance, validated_data):
