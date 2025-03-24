@@ -18,7 +18,7 @@ def homepage(request):
     if request.user.is_superuser == 1:
         return render(request, "homepage.html")
     else:
-        return redirect("student")
+        return redirect("profile")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
@@ -34,6 +34,10 @@ def recruiter_profile(request):
 @login_required
 def admin_profile(request):
     return render(request, "admin_profile.html")
+
+@login_required
+def makesubmissionpage(request):
+    return render(request, "MakeSubmission.html")
 
 @login_required
 def access_db_admin(request):

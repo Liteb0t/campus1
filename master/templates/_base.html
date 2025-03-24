@@ -15,6 +15,9 @@
         {% if request.user.is_superuser == 1 %}
             <a class="Navlink" href="{% url 'access_db_admin' %}">Admin</a>
         {% endif %}
+        {% if request.user.is_superuser == 0 %}
+            <a class="Navlink" href="{% url 'makesubmission' %}">Make Submission</a>
+        {% endif %}
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button class="Navlink OverrideButton" type="submit">Logout</button>

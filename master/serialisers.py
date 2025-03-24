@@ -45,17 +45,20 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         return instance
 
 class DBAdminJobSerialiser(serializers.ModelSerializer):
-    student = DBAdminStudentSerialiser(many=True)
+    student = DBAdminStudentSerialiser(many=True, required=True)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
         fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
 
     def create(self, validated_data):
-        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=None)
+        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=student)
         return job
 
     def update(self, instance, validated_data):
+        instance.job_name = validated_data["job_name"]
+        instance.cost_code = validated_data["cost_code"]
+        instance.pay_rate = validated_data["pay_rate"]
         instance.student = validated_data["student"]
         instance.save()
         return instance
@@ -97,8 +100,8 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.job = Job.objects.get(id=validated_data["job"])
         instance.line_manager = LineManager.objects.get(id=validated_data["line_manager"])
         instance.hours = validated_data["hours"]
-        #instance.date_worked = validated_data["date_worked"]
-        #instance.date_submitted = validated_data["date_submitted"]
+        instance.date_worked = validated_data["date_worked"]
+        instance.date_submitted = validated_data["date_submitted"]
         instance.accepted = validated_data["accepted"]
         instance.save()
         return instance
