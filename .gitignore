@@ -4,4 +4,6 @@
 
 # Vim swap files
 *.swp
-__pycache__
+
+# Pycharm fix
+__pycache__/
