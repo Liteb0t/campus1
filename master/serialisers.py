@@ -61,20 +61,60 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
-        fields = ['job_name', 'cost_code', 'pay_rate', 'student']
+        fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
+
+    def create(self, validated_data):
+        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=None)
+        return job
+
+    def update(self, instance, validated_data):
+        instance.student = validated_data["student"]
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
 
 class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
     student = DBAdminStudentSerialiser(many=True, required=True)
     class Meta:
         model = LineManager
-        fields = ['user', 'student']
+        fields = ['id', 'user', 'student']
 
 class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
-    student = DBAdminStudentSerialiser(required=True)
-    job = DBAdminJobSerialiser(required=True)
-    line_manager = DBAdminLineManagerSerialiser(required=True)
+    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
+    job = serializers.PrimaryKeyRelatedField(queryset=Job.objects.all(), many=False)
+    line_manager = serializers.PrimaryKeyRelatedField(queryset=LineManager.objects.all(), many=False)
+    # student = DBAdminStudentSerialiser(required=True)
+    # job = DBAdminJobSerialiser(required=True)
+    # line_manager = DBAdminLineManagerSerialiser(required=True)
     class Meta:
         model = Submission
-        fields = ['student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted']
+        fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted']
 
+    def create(self, validated_data):
+        submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data.pop("hours"), date_worked=validated_data.pop("date_worked"), date_submitted=validated_data.pop("date_submitted"), accepted=validated_data.pop("accepted"))
+        return submission
+
+    def update(self, instance, validated_data):
+        # student_from_json = validated_data.pop("student")
+        # student_object = Student.objects.get(id=student_from_json["id"])
+        #student_data = validated_data.pop("student")
+        #job_data = validated_data.pop("job")
+        #manager_data = validated_data.pop("line_manager")
+
+        instance.student = Student.objects.get(id=validated_data["student"])
+        instance.job = Job.objects.get(id=validated_data["job"])
+        instance.line_manager = LineManager.objects.get(id=validated_data["line_manager"])
+        instance.hours = validated_data["hours"]
+        #instance.date_worked = validated_data["date_worked"]
+        #instance.date_submitted = validated_data["date_submitted"]
+        instance.accepted = validated_data["accepted"]
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
