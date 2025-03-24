@@ -18,9 +18,7 @@
     	<div id="linemanagers-table-container" style="display: none"></div>
 	</div>
 	<div id="add-student-form" class="Column2">
-		<label for="student-id-field">Id:</label>
-		<input type="number" name="id" id="student-id-field" min=0><br>
-		ID field is used to select the student to update. It is ignored on adding a new student.<br>
+
 		<input type="text" name="user__username" placeholder="Username"><br>
 		<input type="text" name="user__first_name" placeholder="First name"><br>
 		<input type="text" name="user__last_name" placeholder="Last name"><br>
@@ -38,7 +36,6 @@
 		const formElement = document.getElementById(element_id);
 		let data = {
 			_action: action,
-			_id: formElement.querySelector("input[name=id]").value,
 			user: {
 				username: formElement.querySelector("input[name=user__username]").value,
 				first_name: formElement.querySelector("input[name=user__first_name]").value,
