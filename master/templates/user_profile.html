@@ -57,15 +57,19 @@
 			email: formElement.querySelector("input[name=user__email]").value
 		};
 		let response = await postJSON("{% url 'userList' %}", data);
-		if (action === 'delete')
-		{
-		window.location.href = "accounts/login"
+		
+		if (action === 'delete') {
+			// to do: Make it redirect to an "Account deleted successfully" page
+			window.location.href = "accounts/login"
+		}
+		else {
+			alert(`ok: ${response.ok}\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
 		}
 		console.log(response);
 	}
 
     async function postJSON(url, data) {
-		const fetch_response = fetch(url, {
+		const fetch_response = await fetch(url, {
 			method: "POST",
 			body: JSON.stringify(data),
 			headers: {

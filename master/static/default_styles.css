@@ -277,7 +277,7 @@ button:hover:not([disabled]) {
 
 .EditGrid {
 	display: grid;
-	gap: 30px 15px;
+	gap: 20px 15px;
 	margin: 10px 0;
 	grid-template-columns: max-content auto;
 	text-align: end;
