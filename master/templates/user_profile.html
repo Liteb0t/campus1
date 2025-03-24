@@ -6,59 +6,42 @@
 {% endblock %}
 {% block content %}
 <div class = "Row">
-
+	<div id="user-table-container">
+		</div>
+	<div class = "Box">
         <!-- Table Layout: table -->
     	<div id="edit-user-form" class="Column2">
 
-		<input type="text" name="user__username" placeholder="Username"><br>
-		<input type="text" name="user__first_name" placeholder="First name"><br>
-		<input type="text" name="user__last_name" placeholder="Last name"><br>
-		<input type="text" name="user__email" placeholder="Email address"><br>
-		<button onclick="processUserForm('create', 'edit-user-form')">Edit profile</button>
+		<input type="text" name="user__username" placeholder="Username" value={{ request.user.username }} ><br>
+		<input type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} ><br>
+		<input type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} ><br>
+		<input type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} ><br>
+		<button onclick="processUserForm('update', 'edit-user-form')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
 	</div>
 </div>
-
+</div>
 <script src="{% static 'table.js' %}"></script>
     <script>
 	"use strict";
+    let entries_per_page = 1;
+
 	async function processUserForm(action, element_id) {
 		const formElement = document.getElementById(element_id);
 		let data = {
 			_action: action,
-			user: {
-				username: formElement.querySelector("input[name=user__username]").value,
-				first_name: formElement.querySelector("input[name=user__first_name]").value,
-				last_name: formElement.querySelector("input[name=user__last_name]").value,
-				email: formElement.querySelector("input[name=user__email]").value
-			},
+			_id: {{ request.user.id}},
+			username: formElement.querySelector("input[name=user__username]").value,
+			first_name: formElement.querySelector("input[name=user__first_name]").value,
+			last_name: formElement.querySelector("input[name=user__last_name]").value,
+			email: formElement.querySelector("input[name=user__email]").value
 		};
-		let response = await psstJSON("{% url 'userList' %}", data);
+		let response = await postJSON("{% url 'userList' %}", data);
+		if (action === 'delete')
+		{
+		window.location.href = "accounts/login"
+		}
 		console.log(response);
 	}
-
-	function showTable(container_id) {
-        for (let table_container of swappable_table_containers) {
-            if (container_id === table_container.id) {
-                table_container.style["display"] = "flex";
-            }
-            else {
-                table_container.style["display"] = "none";
-            }
-        }
-    }
-    let entries_per_page = 50;
-
-        const user_table = new AdvancedSearchTable("user-table-container", {
-        json_url: "{% url 'user_list' %}"
-        ,columns: {
-            "Username": {name: "username", type: "string", "parent_object": ["user"]}
-            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-            ,"Email": {name: "email", type: "boolean"}
-			// ,"ID": {name: "id", type: "number", parent_object: ["user"]}
-        }
-		,editable: true
-    })
 
     async function postJSON(url, data) {
 		const fetch_response = fetch(url, {
@@ -70,5 +53,6 @@
 		});
 		return fetch_response;
 	}
+
             </script>
           {% endblock %}

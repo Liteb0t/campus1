@@ -33,14 +33,8 @@ def recruiter_profile(request):
 
 @login_required
 def user_profile(request):
-    return render(request, "user_profile.html")
-
-@csrf_exempt
-def user_list(request):
-    if request.method == "POST":
-        data = JSONParser().parse(request)
-        serialiser = UserSerialiser(data=data)
-        return JsonResponse(User_serialiser.data, safe=False)
+    Users_JSON = UserSerialiser(User.objects.all(), many = True).data
+    return render(request, "user_profile.html", { "UsersJSON": json.dumps(Users_JSON)})
 
 @login_required
 def access_db_admin(request):
@@ -99,3 +93,25 @@ def lineManagerList(request):
         linemanagers = LineManager.objects.all()
         linemanagers_serialiser = DBAdminLineManagerSerialiser(linemanagers, many=True)
         return JsonResponse(linemanagers_serialiser.data, safe=False)
+
+@csrf_exempt
+def currentUser(request):
+    if request.method == "GET":
+        users = [request.user]
+        users_serialiser = UserSerialiser(users, many=True)
+        return JsonResponse(users_serialiser.data, safe=False)
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = UserSerialiser(data=data)
+        if serialiser.is_valid(raise_exception=ValueError):
+            if data["_action"] == "create":
+                serialiser.create(validated_data=data)
+            elif data["_action"] == "update":
+                # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
+                instance = User.objects.get(id=data["_id"])
+                serialiser.update(instance=instance, validated_data=data)
+            elif data["_action"] == "delete":
+                    serialiser.delete(instance=User.objects.get(id=data["_id"]))
+            return JsonResponse(serialiser.data, status=201)
+        else:
+            return JsonResponse(serialiser.errors, status=400)

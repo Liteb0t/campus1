@@ -9,6 +9,7 @@ urlpatterns = [
     path("user_profile", views.user_profile, name="user_profile"),
     path("access_db_admin", views.access_db_admin, name="access_db_admin"),
     path("api/students/", views.studentList, name="studentList"),
+    path("api/users/", views.currentUser, name="userList"),
     path("api/submissions/", views.submissionList, name="submissionList"),
     path("api/jobs/", views.jobList, name="jobList"),
     path("api/lineManagers/", views.lineManagerList, name="lineManagerList"),
