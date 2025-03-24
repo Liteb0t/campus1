@@ -18,14 +18,14 @@ def homepage(request):
     if request.user.is_superuser == 1:
         return render(request, "homepage.html")
     else:
-        return redirect("profile")
+        return redirect("homepage")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
 
 @login_required
 def profile(request):
-    return render(request, "profile.html")
+    return render(request, "homepage.html")
 
 @login_required
 def recruiter_profile(request):

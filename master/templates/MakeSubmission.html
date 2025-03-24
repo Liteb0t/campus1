@@ -13,26 +13,25 @@
 	  <input style="margin: 10px" type="text" name="sub__hours" placeholder="Hours"><br>
 	  <input style="margin: 10px" type="text" name="sub__worked" placeholder="Date Worked"><br>
 	  <input style="margin: 10px" type="text" name="sub__submitted" placeholder="Date Submitted"><br>
-	  <button onclick="processSubmissionForm('create', 'submission-form')">Add student</button>
+	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
   </div>
 </div>
 <script src="{% static 'table.js' %}"></script>
 <script>
-    async function processStudentForm(action, element_id) {
+    async function processSubmissionForm(action, element_id) {
 	    const formElement = document.getElementById(element_id);
 	    let data = {
 	    	_action: action,
 	    	user: {
 	    		student: {{ request.user.id }} ,
-	    		job: ,
-	    		line_manager: ,
-		    	hours: ,
-		    	date_worked: ,
-		    	date_submitted:
+	    		job: formElement.querySelector("input[name=sub__job]").value,
+	    		line_manager: formElement.querySelector("input[name=sub__manager]").value,
+		    	hours: formElement.querySelector("input[name=sub__hours]").value,
+		    	date_worked: formElement.querySelector("input[name=sub__worked]").value,
+		    	date_submitted: formElement.querySelector("input[name=sub__submitted]").value
 	    	},
-	    	on_visa: formElement.querySelector("input[name=on_visa]").checked
 	    };
-	    let response = await postJSON("{% url 'studentList' %}", data);
+	    let response = await postJSON("{% url 'submissionList' %}", data);
 	    console.log(response);
 </script>
 {% endblock %}
