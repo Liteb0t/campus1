@@ -6,10 +6,10 @@
 
 {% block content %}
 
-    <button onclick="showTable('students-table-container')">Students</button>
-    <button onclick="showTable('submissions-table-container')">Submissions</button>
-    <button onclick="showTable('jobs-table-container')">Jobs</button>
-    <button onclick="showTable('linemanagers-table-container')">Line Managers</button>
+    <button onclick="showTable('students-table-container', 'add-student-form')">Students</button>
+    <button onclick="showTable('submissions-table-container', 'add-sub-form')">Submissions</button>
+    <button onclick="showTable('jobs-table-container', 'add-job-form')">Jobs</button>
+    <button onclick="showTable('linemanagers-table-container', 'add-man-form')">Line Managers</button>
 	<main class="DBView">
 	<div style="height: 800px" class="Column1" id="AccessDBAdminTables"> <!-- contains our four tables -->
 		<div id="students-table-container"></div>
@@ -18,7 +18,6 @@
     	<div id="linemanagers-table-container" style="display: none"></div>
 	</div>
 	<div id="add-student-form" class="Column2">
-
 		<input type="text" name="user__username" placeholder="Username"><br>
 		<input type="text" name="user__first_name" placeholder="First name"><br>
 		<input type="text" name="user__last_name" placeholder="Last name"><br>
@@ -26,6 +25,18 @@
 		<label for="student_on_visa">On visa?</label>
 		<input type="checkbox" name="on_visa" id="student_on_visa"><br>
 		<button onclick="processStudentForm('create', 'add-student-form')">Add student</button>
+	</div>
+	<div id="add-job-form" class="Column2" style="display: none">
+		<input type="text" name="user__username" placeholder="Username">
+		<p>job</p>
+	</div>
+	<div id="add-sub-form" class="Column2" style="display: none">
+		<input type="text" name="user__username" placeholder="Username">
+		<p>sub</p>
+	</div>
+	<div id="add-man-form" class="Column2" style="display: none">
+		<input type="text" name="user__username" placeholder="Username">
+		<p>man</p>
 	</div>
 	</main>
 
@@ -52,12 +63,19 @@
         document.getElementById("students-table-container"),
         document.getElementById("submissions-table-container"),
         document.getElementById("jobs-table-container"),
-        document.getElementById("linemanagers-table-container")
+        document.getElementById("linemanagers-table-container"),
+        document.getElementById("add-student-form"),
+        document.getElementById("add-sub-form"),
+        document.getElementById("add-job-form"),
+        document.getElementById("add-man-form")
     ];
-    function showTable(container_id) {
+    function showTable(container_id, form_id) {
         for (let table_container of swappable_table_containers) {
             if (container_id === table_container.id) {
                 table_container.style["display"] = "flex";
+            }
+            else if (form_id === table_container.id){
+            	table_container.style["display"] = "block";
             }
             else {
                 table_container.style["display"] = "none";
@@ -80,7 +98,8 @@
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
 		,columns: {
-			"Username": {name: "username", type: "string", "parent_object": ["student", "user"]}
+			"student id": {name: "id", type: "number", "parent_object": ["student"]}
+			// ,"Username": {name: "username", type: "string", "parent_object": ["student", "user"]}
 			// ,"First Name": {name: "first_name", type: "string", "parent_object": ["student", "user"]}
             // ,"Last Name": {name: "last_name", type: "string", "parent_object": ["student", "user"]}
 			,"Job": {name: "job_name", type: "string", parent_object: ["job"]}
@@ -90,6 +109,7 @@
 			,"Date submitted": {name: "date_submitted", type: "date"}
 			,"Accepted": {name: "accepted", type: "boolean"}
         }
+        ,editable: true
 	});
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
 		json_url: "{% url 'jobList' %}"
@@ -97,8 +117,9 @@
 			"Job Name": {name: "job_name", type: "string"}
 			,"Cost Code": {name: "cost_code", type: "string"}
 			,"Pay Rate": {name: "pay_rate", type: "number"}
-			// ,"Students": {name: "username", type: "string", "parent_object": ["student", "user"]}
+			//,"Students": {name: "username", type: "string", "parent_object": ["student", "user"]}
 		}
+		,editable: true
 	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"

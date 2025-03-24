@@ -51,6 +51,19 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         model = Job
         fields = ['job_name', 'cost_code', 'pay_rate', 'student']
 
+    def create(self, validated_data):
+        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=None)
+        return job
+
+    def update(self, instance, validated_data):
+        instance.student = validated_data["student"]
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
+
 class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
     student = DBAdminStudentSerialiser(many=True, required=True)
@@ -66,3 +79,25 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         model = Submission
         fields = ['student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted']
 
+    def create(self, validated_data):
+        submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data.pop("hours"), date_worked=validated_data.pop("date_worked"), date_submitted=validated_data.pop("date_submitted"), accepted=validated_data.pop("accepted"))
+        return submission
+
+    def update(self, instance, validated_data):
+        #student_data = validated_data.pop("student")
+        #job_data = validated_data.pop("job")
+        #manager_data = validated_data.pop("line_manager")
+
+        #instance.student = validated_data["student"]
+        #instance.job = validated_data["job"]
+        #instance.line_manager = validated_data["line_manager"]
+        #instance.hours = validated_data["hours"]
+        #instance.date_worked = validated_data["date_worked"]
+        #instance.date_submitted = validated_data["date_submitted"]
+        instance.accepted = validated_data["accepted"]
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
