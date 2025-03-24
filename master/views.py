@@ -81,19 +81,28 @@ def submissionList(request):
 
     elif request.method == "POST":
         data = JSONParser().parse(request)
-        serialiser = DBAdminSubmissionSerialiser(data=data)
         if data["_action"] == "deleteMultiple":
             for entry_id in data["to_delete"]:
                 instance = Submission.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid(raise_exception=ValueError):
-            if data["_action"] == "create":
+        if data["_action"] == "create":
+            serialiser = DBAdminSubmissionSerialiser(data=data)
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
-            elif data["_action"] == "update":
-                instance = Submission.objects.get(id=data["_id"])
+        elif data["_action"] == "update":
+            instance = Submission.objects.get(id=data["_id"])
+            print(data)
+            # if data["student"]["id"] != instance.student.id:
+            # data["student"] = Student.objects.get(id=data["student"]["id"]).__dict__
+            # data["student"] = data["student"]["id"]
+            print(data)
+            serialiser = DBAdminSubmissionSerialiser(data=data)
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.update(instance=instance, validated_data=data)
-            return JsonResponse(serialiser.data, status=201)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 @csrf_exempt
