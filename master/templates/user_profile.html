@@ -1,0 +1,58 @@
+{% extends "_base.html" %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'registration_styles.css' %}" />
+{% block title %}
+ View Profile
+{% endblock %}
+{% block content %}
+<div class = "Row">
+	<div id="user-table-container">
+		</div>
+	<div class = "Box">
+        <!-- Table Layout: table -->
+    	<div id="edit-user-form" class="Column2">
+
+		<input type="text" name="user__username" placeholder="Username" value={{ request.user.username }} ><br>
+		<input type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} ><br>
+		<input type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} ><br>
+		<input type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} ><br>
+		<button onclick="processUserForm('update', 'edit-user-form')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
+	</div>
+</div>
+</div>
+<script src="{% static 'table.js' %}"></script>
+    <script>
+	"use strict";
+    let entries_per_page = 1;
+
+	async function processUserForm(action, element_id) {
+		const formElement = document.getElementById(element_id);
+		let data = {
+			_action: action,
+			_id: {{ request.user.id}},
+			username: formElement.querySelector("input[name=user__username]").value,
+			first_name: formElement.querySelector("input[name=user__first_name]").value,
+			last_name: formElement.querySelector("input[name=user__last_name]").value,
+			email: formElement.querySelector("input[name=user__email]").value
+		};
+		let response = await postJSON("{% url 'userList' %}", data);
+		if (action === 'delete')
+		{
+		window.location.href = "accounts/login"
+		}
+		console.log(response);
+	}
+
+    async function postJSON(url, data) {
+		const fetch_response = fetch(url, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		});
+		return fetch_response;
+	}
+
+            </script>
+          {% endblock %}

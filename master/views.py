@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from master.models import Job, LineManager, Submission, Student, Recruiter
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser, UserSerialiser
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
 # from django.template import loader
@@ -32,8 +32,9 @@ def recruiter_profile(request):
     return render(request, "recruiter_profile.html")
 
 @login_required
-def admin_profile(request):
-    return render(request, "admin_profile.html")
+def user_profile(request):
+    Users_JSON = UserSerialiser(User.objects.all(), many = True).data
+    return render(request, "user_profile.html", { "UsersJSON": json.dumps(Users_JSON)})
 
 @login_required
 def makesubmissionpage(request):
@@ -139,3 +140,25 @@ def lineManagerList(request):
         linemanagers = LineManager.objects.all()
         linemanagers_serialiser = DBAdminLineManagerSerialiser(linemanagers, many=True)
         return JsonResponse(linemanagers_serialiser.data, safe=False)
+
+@csrf_exempt
+def currentUser(request):
+    if request.method == "GET":
+        users = [request.user]
+        users_serialiser = UserSerialiser(users, many=True)
+        return JsonResponse(users_serialiser.data, safe=False)
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = UserSerialiser(data=data)
+        if serialiser.is_valid(raise_exception=ValueError):
+            if data["_action"] == "create":
+                serialiser.create(validated_data=data)
+            elif data["_action"] == "update":
+                # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
+                instance = User.objects.get(id=data["_id"])
+                serialiser.update(instance=instance, validated_data=data)
+            elif data["_action"] == "delete":
+                    serialiser.delete(instance=User.objects.get(id=data["_id"]))
+            return JsonResponse(serialiser.data, status=201)
+        else:
+            return JsonResponse(serialiser.errors, status=400)

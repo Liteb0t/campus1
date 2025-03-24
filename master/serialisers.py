@@ -13,6 +13,18 @@ class UserSerialiser(serializers.ModelSerializer):
             }
         }
 
+    def update(self, instance, validated_data):
+        instance.username = validated_data["username"]
+        instance.first_name = validated_data["first_name"]
+        instance.last_name = validated_data["last_name"]
+        instance.email = validated_data["email"]
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.delete()
+        return instance
+
 class DBAdminStudentSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
     # username = serializers.CharField(source='user.username', read_only=True)
