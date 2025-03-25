@@ -129,6 +129,19 @@ def submissionListStudent(request):
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
 
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        if data["_action"] == "update":
+            instance = Submission.objects.get(id=data["_id"])
+            data["accepted"] = instance.accepted
+            print(data)
+            serialiser = DBAdminSubmissionSerialiser(data=data)
+            if serialiser.is_valid(raise_exception=ValueError):
+                serialiser.update(instance=instance, validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
+
 @csrf_exempt
 def jobList(request):
     if request.method == "GET":

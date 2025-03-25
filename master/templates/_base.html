@@ -17,6 +17,7 @@
         {% endif %}
         {% if request.user.is_superuser == 0 %}
             <a class="Navlink" href="{% url 'makesubmission' %}">Make Submission</a>
+            <a class="Navlink" href="{% url 'access_student_submission' %}">View Submissions</a>
         {% endif %}
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
