@@ -108,6 +108,18 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+class DBAdminJobDetailSerialiser(serializers.ModelSerializer):
+    student = DBAdminStudentSerialiser(many=True, required=True)
+    # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+    # student_username = serializers.CharField(source='student.user.username', read_only=True)
+    class Meta:
+        model = Job
+        fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
+
+    # def create(self, validated_data):
+    #     job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=student)
+    #     return job
+
 class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
     # student = DBAdminLineManagerSerialiser(many=True, required=True)
