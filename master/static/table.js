@@ -24,12 +24,17 @@ class Table {
 		this.showing_indexes_element.textContent = "Loading...";
 		this.container_element.appendChild(this.showing_indexes_element);
 
-        // Add column headers
         let header_row_element = document.createElement("tr");
         for (let column_name of Object.keys(this.columns)) {
+			// Add column headers
             let column_element = document.createElement("th");
             column_element.innerText = column_name;
             header_row_element.appendChild(column_element);
+
+			// If a column is not explicitly set to be uneditable, the default is true
+			if (typeof this.columns[column_name].editable === "undefined") {
+				this.columns[column_name].editable = true;
+			}
         }
 		if (this.editable) {
             let column_element = document.createElement("th");
@@ -92,30 +97,44 @@ class Table {
             this.populate();
         }
     }
-	async processRowForm(row_element, action, id) {
-		console.log(id);
+	async processRowForm(row_element, action, json_row) {
+		console.log(json_row);
 		console.log(row_element);
 		let form_data = {
-			_id: id,
+			_id: json_row.id,
 			_action: action
 		}
 		let column_i = 0;
 		for (let [column_name, column_attributes] of Object.entries(this.columns)) {
-			let base_for_entry = form_data;
-			if (typeof column_attributes.parent_object !== "undefined") {
-				for (let parent_object of column_attributes.parent_object) {
-					if (typeof form_data[parent_object] === "undefined") {
-						form_data[parent_object] = {};
+			if (column_attributes.editable) {
+				let base_for_entry = form_data;
+				if (typeof column_attributes.parent_object !== "undefined") {
+					for (let parent_object of column_attributes.parent_object) {
+						if (typeof form_data[parent_object] === "undefined") {
+							form_data[parent_object] = {};
+						}
+						base_for_entry = form_data[parent_object];
 					}
-					base_for_entry = form_data[parent_object];
+				}
+				console.log(row_element.children[column_i].children[0].value);
+				if (column_attributes.type === "boolean") {
+					base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].checked;
+				}
+				else {
+					base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].value;
 				}
 			}
-			console.log(row_element.children[column_i].children[0].value);
-			if (column_attributes.type === "boolean") {
-				base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].checked;
-			}
 			else {
-				base_for_entry[column_attributes.name] = row_element.children[column_i].children[0].value;
+				let base_for_entry = form_data;
+				if (typeof column_attributes.parent_object !== "undefined") {
+					for (let parent_object of column_attributes.parent_object) {
+						if (typeof form_data[parent_object] === "undefined") {
+							form_data[parent_object] = {};
+						}
+						base_for_entry = form_data[parent_object];
+					}
+				}
+				base_for_entry[column_attributes.name] = json_row[column_attributes.name];
 			}
 			++column_i;
 		}
@@ -194,17 +213,19 @@ class Table {
 						console.log(table_row_element.id);
 						let column_i = 0;
 						for (let [column_name, column_attributes] of Object.entries(this.columns)) {
-							let cell_input_element = document.createElement("input");
-							if (column_attributes.type === "boolean") {
-								cell_input_element.type = "checkbox";
-								cell_input_element.checked = this.getNestedValueIfNested(json_row, column_name);
+							if (column_attributes.editable) {
+								let cell_input_element = document.createElement("input");
+								if (column_attributes.type === "boolean") {
+									cell_input_element.type = "checkbox";
+									cell_input_element.checked = this.getNestedValueIfNested(json_row, column_name);
+								}
+								else {
+									cell_input_element.type = column_attributes.type;
+									cell_input_element.value = this.getNestedValueIfNested(json_row, column_name);
+								}
+								table_row_element.children[column_i].textContent = "";
+								table_row_element.children[column_i].appendChild(cell_input_element);
 							}
-							else {
-								cell_input_element.type = column_attributes.type;
-								cell_input_element.value = this.getNestedValueIfNested(json_row, column_name);
-							}
-							table_row_element.children[column_i].textContent = "";
-							table_row_element.children[column_i].appendChild(cell_input_element);
 							++column_i;
 						}
 						edit_entry_button.style["display"] = "none";
@@ -213,7 +234,7 @@ class Table {
 						cancel_edit_entry_button.style["display"] = "block";
 					}
 					confirm_edit_entry_button.onclick = () => {
-						this.processRowForm(table_row_element, "update", json_row.id);
+						this.processRowForm(table_row_element, "update", json_row);
 					};
 					cancel_edit_entry_button.onclick = () => {
 						let column_i = 0;

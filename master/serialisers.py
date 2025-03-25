@@ -56,6 +56,32 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+## Dont delet because we might want this later
+# class DynamicFieldsModelSerialiser(serializers.ModelSerializer):
+#     """
+#     A ModelSerializer that takes an additional `fields` argument that
+#     controls which fields should be displayed.
+#     """
+# 
+#     def __init__(self, *args, **kwargs):
+#         # Don't pass the 'fields' arg up to the superclass
+#         fields = kwargs.pop('fields', None)
+# 
+#         # Instantiate the superclass normally
+#         super(DynamicFieldsModelSerialiser, self).__init__(*args, **kwargs)
+# 
+#         if fields is not None:
+#             # Drop any fields that are not specified in the `fields` argument.
+#             allowed = set(fields)
+#             existing = set(self.fields.keys())
+#             for field_name in existing - allowed:
+#                 self.fields.pop(field_name)
+# 
+# class SimpleStudentSerialiser(serializers.ModelSerialiser):
+#     class Meta:
+#         model = Student
+#         fields = '__all__'
+
 class DBAdminJobSerialiser(serializers.ModelSerializer):
     student = DBAdminStudentSerialiser(many=True, required=True)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)

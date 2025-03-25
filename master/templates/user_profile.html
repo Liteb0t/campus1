@@ -10,14 +10,35 @@
 		</div>
 	<div class = "Box">
         <!-- Table Layout: table -->
-    	<div id="edit-user-form" class="Column2">
-
-		<input type="text" name="user__username" placeholder="Username" value={{ request.user.username }} ><br>
-		<input type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} ><br>
-		<input type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} ><br>
-		<input type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} ><br>
-		<button onclick="processUserForm('update', 'edit-user-form')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
+    	<div id="edit-user-form" class="Column2 EditGrid">
+			<!--
+			<p>
+			<label for="edit-username">Username:</label>
+			<input id="edit-username" type="text" name="user__username" placeholder="Username" value={{ request.user.username }} ><br>
+			</p>
+			<p>
+			<label for="edit-fsrst_name">First name:</label>
+			<input id="edit-first_name" type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} ><br>
+			</p>
+			<p>
+			<label for="edit-last_name">Last name:</label>
+			<input id="edit-last_name" type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} ><br>
+			</p>
+			<p>
+			<label for="edit-email">Email address:</label>
+			<input id="edit-email" type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} ><br>
+			</p>
+			-->
+			<label for="edit-username">Username:</label>
+			<input id="qedit-username" type="text" name="user__username" placeholder="Username" value={{ request.user.username }} >
+			<label for="edit-fsrst_name">First name:</label>
+			<input id="qedit-first_name" type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} >
+			<label for="edit-last_name">Last name:</label>
+			<input id="qedit-last_name" type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} >
+			<label for="edit-email">Email address:</label>
+			<input id="qedit-email" type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} >
 	</div>
+	<button onclick="processUserForm('update', 'edit-user-form')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
 </div>
 </div>
 <script src="{% static 'table.js' %}"></script>
@@ -36,15 +57,19 @@
 			email: formElement.querySelector("input[name=user__email]").value
 		};
 		let response = await postJSON("{% url 'userList' %}", data);
-		if (action === 'delete')
-		{
-		window.location.href = "accounts/login"
+		
+		if (action === 'delete') {
+			// to do: Make it redirect to an "Account deleted successfully" page
+			window.location.href = "accounts/login"
+		}
+		else {
+			alert(`ok: ${response.ok}\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
 		}
 		console.log(response);
 	}
 
     async function postJSON(url, data) {
-		const fetch_response = fetch(url, {
+		const fetch_response = await fetch(url, {
 			method: "POST",
 			body: JSON.stringify(data),
 			headers: {
