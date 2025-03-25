@@ -119,20 +119,22 @@
 		,columns: {
 			"ID": {name: "id", type: "number", editable: false},
 			"Job Name": {name: "job_name", type: "string"},
-			"Cost Code": {name: "cost_code", type: "string"}
-			,"Pay Rate": {name: "pay_rate", type: "number"}
-			,"Students": {name: "student", type: "array"}
+			"Cost Code": {name: "cost_code", type: "string"},
+			"Pay Rate": {name: "pay_rate", type: "number"},
+			"Students": {name: "student", type: "array"}
 		}
 		,editable: true
 	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"
         ,columns: {
-            "Username": {name: "username", type: "string", "parent_object": ["user"]}
-            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-            // ,"Students": {name: "username", type: "string", "parent_object": ["student", "user"]}
+			"ID": {name: "id", type: "number", editable: false},
+            "Username": {name: "username", type: "string", "parent_object": ["user"]},
+            "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
+            "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+            "Students": {name: "student", type: "array"}
         }
+		,editable: true
     })
 			
 	async function postJSON(url, data) {
