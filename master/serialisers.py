@@ -101,10 +101,8 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         instance.job_name = validated_data["job_name"]
         instance.cost_code = validated_data["cost_code"]
         instance.pay_rate = validated_data["pay_rate"]
-        # instance.student = validated_data["student"]
         instance.save()
-        for student_item in validated_data["student"]:
-            instance.student.add(student_item)
+        instance.student.set(validated_data["student"])
         return instance
 
     def delete(self, instance):

@@ -1,17 +1,19 @@
 from django.urls import path, include
 from . import views
+from django.contrib import admin
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
-    path("deleted_account", views.deleted_account, name="deleted_account"),
+    path("admin/", admin.site.urls),
+    path("deleted_account", views.deletedAccount, name="deleted_account"),
     path("", views.homepage, name="homepage"),
     path("profile", views.profile, name="profile"),
     path("MakeSubmission", views.makesubmissionpage, name="makesubmission"),
-    path("recruiter_profile", views.recruiter_profile, name="recruiter_profile"),
-    path("user_profile", views.user_profile, name="user_profile"),
-    path("access_db_admin", views.access_db_admin, name="access_db_admin"),
-    path("access_student_submission", views.access_student_submission, name="access_student_submission"),
-    path("access_recruiter_submission", views.access_recruiter_submission, name="access_recruiter_submission"),
+    path("recruiter_profile", views.recruiterProfile, name="recruiter_profile"),
+    path("user_profile", views.userProfile, name="user_profile"),
+    path("access_data_browser", views.accessDataBrowser, name="access_data_browser"),
+    path("access_student_submission", views.accessStudentSubmission, name="access_student_submission"),
+    path("access_recruiter_submission", views.accessRecruiterSubmission, name="access_recruiter_submission"),
     path("api/students/", views.studentList, name="studentList"),
     path("api/users/", views.currentUser, name="userList"),
     path("api/submissions/", views.submissionList, name="submissionList"),

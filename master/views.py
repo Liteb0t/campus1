@@ -25,7 +25,7 @@ def homepage(request):
 def logged_out(request):
     return render(request, "registration/logged_out.html")
 
-def deleted_account(request):
+def deletedAccount(request):
     return render(request, "registration/deleted_account.html")
 
 @login_required
@@ -33,11 +33,11 @@ def profile(request):
     return render(request, "homepage.html")
 
 @login_required
-def recruiter_profile(request):
+def recruiterProfile(request):
     return render(request, "recruiter_profile.html")
 
 @login_required
-def user_profile(request):
+def userProfile(request):
     Users_JSON = UserSerialiser(User.objects.all(), many = True).data
     return render(request, "user_profile.html", { "UsersJSON": json.dumps(Users_JSON)})
 
@@ -49,13 +49,13 @@ def makesubmissionpage(request):
     return render(request, "MakeSubmission.html", {"StudentID": student_id, "Jobs": jobs, "Managers": line_managers})
 
 @login_required
-def access_db_admin(request):
-    return render(request, "db_view/access_db_admin.html")
+def accessDataBrowser(request):
+    return render(request, "db_view/access_data_browser.html")
 
-def access_student_submission(request):
+def accessStudentSubmission(request):
     return render(request, "db_view/access_student_submission.html")
 
-def access_recruiter_submission(request):
+def accessRecruiterSubmission(request):
     return render(request, "db_view/access_recruiter_submission.html")
 
 # JSON API: does not return html but JSON instead. used by the new admin page.

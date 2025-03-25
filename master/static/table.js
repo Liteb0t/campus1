@@ -55,6 +55,10 @@ class Table {
 		this.table_box_element.appendChild(this.table_element);
         this.container_element.appendChild(this.table_box_element);
 
+		if (this.row_click_event) {
+			this.tbody_element.classList.add("ClickableRows");
+		}
+
         // Add pagination buttons to the toolbar
         this.first_page_button = document.createElement("button");
         this.first_page_button.textContent = "First";
@@ -187,12 +191,12 @@ class Table {
 				table_row_element.id = this.container_element.id + "_row_" + i.toString();
                 for (let [column_name, column_attributes] of Object.entries(this.columns)) {
                     let cell_element = document.createElement("td");
-					if (column_attributes.type === "array") {
-						cell_element.textContent = "[" + json_row[column_attributes.name].length + " entries]";
-					}
-					else {
+					// if (column_attributes.type === "array") {
+					// 	cell_element.textContent = "[" + json_row[column_attributes.name].length + " entries]";
+					// }
+					// else {
 						cell_element.textContent = this.getNestedValueIfNested(json_row, column_name);
-					}
+					// }
                     table_row_element.appendChild(cell_element);
                 }
 				if (this.editable) {
@@ -204,8 +208,8 @@ class Table {
 					let cancel_edit_entry_button = document.createElement("button");
 					let delete_entry_checkbox = document.createElement("input");
 
-					edit_entry_td.classList.add("TableActionColumn1");
-					delete_entry_td.classList.add("TableActionColumn2");
+					edit_entry_td.classList.add("TableActionColumn");
+					delete_entry_td.classList.add("TableActionColumn");
 					delete_entry_checkbox.type = "checkbox";
 					edit_entry_button.classList.add("EntryEditButton");
 					confirm_edit_entry_button.classList.add("EntryConfirmEditButton");
@@ -218,7 +222,7 @@ class Table {
 					confirm_edit_entry_button.style["display"] = "none";
 					cancel_edit_entry_button.style["display"] = "none";
 
-					edit_entry_button.onclick = () => {
+					edit_entry_button.onclick = (event) => {
 						console.log(table_row_element.id);
 						let column_i = 0;
 						for (let [column_name, column_attributes] of Object.entries(this.columns)) {
@@ -232,6 +236,9 @@ class Table {
 									cell_input_element.type = column_attributes.type;
 									cell_input_element.value = this.getNestedValueIfNested(json_row, column_name);
 								}
+								cell_input_element.onclick = (event) => {
+									event.stopPropagation();
+								}
 								table_row_element.children[column_i].textContent = "";
 								table_row_element.children[column_i].appendChild(cell_input_element);
 							}
@@ -241,9 +248,11 @@ class Table {
 						delete_entry_checkbox.style["display"] = "none";
 						confirm_edit_entry_button.style["display"] = "block";
 						cancel_edit_entry_button.style["display"] = "block";
+						event.stopPropagation(); // stops the row click event from firing
 					}
 					confirm_edit_entry_button.onclick = () => {
 						this.processRowForm(table_row_element, "update", json_row);
+						event.stopPropagation();
 					};
 					cancel_edit_entry_button.onclick = () => {
 						let column_i = 0;
@@ -256,6 +265,10 @@ class Table {
 						delete_entry_checkbox.style["display"] = "block";
 						confirm_edit_entry_button.style["display"] = "none";
 						cancel_edit_entry_button.style["display"] = "none";
+						event.stopPropagation();
+					}
+					delete_entry_checkbox.onclick = (event) => {
+						event.stopPropagation();
 					}
 					delete_entry_checkbox.onchange = () => {
 						if (delete_entry_checkbox.checked) {
@@ -281,7 +294,8 @@ class Table {
 				}
                 this.tbody_element.appendChild(table_row_element);
 				if (this.row_click_event !== null) {
-					table_row_element.onclick = () => {
+					table_row_element.onclick = (e) => {
+						console.log(e.target);
 						this.row_click_event(json_row.id);
 					}
 				}
@@ -310,7 +324,10 @@ class Table {
 	// eg. the "username" attribute is under "sser" which is itself under a "Student"
 	getNestedValueIfNested(json_row, column_id) {
 		let temp_json_value;
-		if (typeof this.columns[column_id].parent_object !== "undefined") {
+		if (this.columns[column_id].type === "array") {
+			temp_json_value = "[" + json_row[this.columns[column_id].name].length + " entries]";
+		}
+		else if (typeof this.columns[column_id].parent_object !== "undefined") {
 			temp_json_value = json_row;
 			for (let parent_key of this.columns[column_id].parent_object ) {
 				temp_json_value = temp_json_value[parent_key];	

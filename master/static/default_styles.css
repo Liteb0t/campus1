@@ -63,11 +63,9 @@ body {
 	tr:nth-child(even) {
 		background-color: #eee;
 	}
-	/*
-	.TableActionColumn1, .TableActionColumn2 {
-		background-color: #ddd;
+	.TableActionColumn {
+		background-color: #fce;
 	}
-	*/
 	/*
 	tr:hover {
 		background-color: #ccc;
@@ -107,6 +105,11 @@ body {
 	}
 	td {
 		font-family: serif;
+	}
+	.ClickableRows tr:hover:not(:has(.TableActionColumn:hover)) {
+		cursor: pointer;
+		background-color: #ead;
+		text-decoration: underline;
 	}
 }
 
@@ -217,12 +220,17 @@ header {
 button {
     font: inherit;
     background-color: #f2f2f2;
+	border: 2px outset #ddd;
 }
 
 button:hover:not([disabled]) {
     background-color: #ddd;
     color: black;
     cursor: pointer;
+}
+
+button:active {
+	border: 2px inset #ddd;
 }
 
 .PaginationLinks{
@@ -267,11 +275,12 @@ button:hover:not([disabled]) {
 		max-width: fit-content;
 	}
 	.Column2 {
-		flex: 2 2 min-content;
+		flex: 1 1 min-content;
 		padding-left: 5px;
 		margin-left: 5px;
 		border-left: 5px solid #a58;
 		/* min-width: 300px; */
+		max-width: max-content
 	}
 }
 
