@@ -148,6 +148,29 @@ def lineManagerList(request):
         linemanagers_serialiser = DBAdminLineManagerSerialiser(linemanagers, many=True)
         return JsonResponse(linemanagers_serialiser.data, safe=False)
 
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = DBAdminLineManagerSerialiser(data=data)
+        if data["_action"] == "deleteMultiple":
+            for entry_id in data["to_delete"]:
+                instance = LineManager.objects.get(id=entry_id)
+                instance.delete()
+            return JsonResponse(data={"message": "Deleted stuff"}, status=200)
+        elif serialiser.is_valid(raise_exception=ValueError):
+            if data["_action"] == "create":
+                serialiser.create(validated_data=data)
+            elif data["_action"] == "update":
+                # instance = LineManager.objects.get(user=User.objects.get(id=data["_id"]))
+                instance = LineManager.objects.get(id=data["_id"])
+                serialiser.update(instance=instance, validated_data=data)
+            # elif data["_action"] == "deleteMultiple":
+            #     for entry_id in data["to_delete"]:
+            #         instance = LineManager.objects.get(id=entry_id)
+            #         serialiser.delete(instance=instance)
+            return JsonResponse(serialiser.data, status=201)
+        else:
+            return JsonResponse(serialiser.errors, status=400)
+
 @csrf_exempt
 def currentUser(request):
     if request.method == "GET":

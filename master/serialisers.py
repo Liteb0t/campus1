@@ -83,7 +83,8 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
 #         fields = '__all__'
 
 class DBAdminJobSerialiser(serializers.ModelSerializer):
-    student = DBAdminStudentSerialiser(many=True, required=True)
+    # student = DBAdminStudentSerialiser(many=True, required=True)
+    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
@@ -97,8 +98,10 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         instance.job_name = validated_data["job_name"]
         instance.cost_code = validated_data["cost_code"]
         instance.pay_rate = validated_data["pay_rate"]
-        instance.student = validated_data["student"]
+        # instance.student = validated_data["student"]
         instance.save()
+        for student_item in validated_data["student"]:
+            instance.student.add(student_item)
         return instance
 
     def delete(self, instance):
@@ -107,10 +110,33 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
 
 class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
-    student = DBAdminStudentSerialiser(many=True, required=True)
+    # student = DBAdminLineManagerSerialiser(many=True, required=True)
+    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
     class Meta:
         model = LineManager
         fields = ['id', 'user', 'student']
+
+    def create(self, validated_data):
+        user_data = validated_data.pop("user")
+        user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
+        # student = LineManager.objects.create(user=user)
+        return student
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user")
+        instance.user.username = user_data["username"]
+        instance.user.first_name = user_data["first_name"]
+        instance.user.last_name = user_data["last_name"]
+        instance.user.save()
+        instance.save()
+        for student_item in validated_data["student"]:
+            instance.student.add(student_item)
+        return instance
+
+    def delete(self, instance):
+        instance.user.delete()
+        instance.delete()
+        return instance
 
 class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
