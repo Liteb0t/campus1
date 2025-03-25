@@ -50,6 +50,9 @@ def makesubmissionpage(request):
 def access_db_admin(request):
     return render(request, "db_view/access_db_admin.html")
 
+def access_student_submission(request):
+    return render(request, "db_view/access_student_submission.html")
+
 # JSON API: does not return html but JSON instead. used by the new admin page.
 # We need to make this secure later.
 @csrf_exempt
@@ -89,7 +92,6 @@ def submissionList(request):
         submissions = Submission.objects.select_related("student", "job", "line_manager")
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
-
     elif request.method == "POST":
         data = JSONParser().parse(request)
         if data["_action"] == "deleteMultiple":
@@ -117,6 +119,14 @@ def submissionList(request):
                 return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+@csrf_exempt
+def submissionListStudent(request):
+    if request.method == "GET":
+        submissions = Submission.objects.filter(student__user__id = request.user.id).select_related("student", "job", "line_manager")
+        submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
+        return JsonResponse(submissions_serialiser.data, safe=False)
+
 @csrf_exempt
 def jobList(request):
     if request.method == "GET":
