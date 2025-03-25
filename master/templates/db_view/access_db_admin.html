@@ -27,6 +27,8 @@
 		<button onclick="processStudentForm('create', 'add-student-form')">Add student</button>
 	</div>
 	<div id="job-form" class="Column2" style="display: none">
+		<label for="job_id">Job ID: </label>
+		<input type="number" id="job_id" name="id"><br>
 		<div id="job-form-status-indicator">No job selected.</div>
 		<input type="text" name="job_name" placeholder="Job name" style="display: none"><br>
 		<input type="text" name="cost_code" placeholder="Cost code" style="display: none"><br>
@@ -34,8 +36,8 @@
 		<div id="job_student-container" style="display: none"></div><br>
 		<button onclick="jobAddStudent()" id="job-add-student" disabled>Add student</button>
 		<button onclick="jobSubmitStudents()" id="job-submit-students" disabled>Submit</button>
-		<button onclick="processStudentForm('create', 'job-form')" disabled>Create job</button>
-		<button onclick="processStudentForm('update', 'job-form')" disabled>Update job</button>
+		<button onclick="processJobForm('create', 'job-form')">Create job</button>
+		<button onclick="processJobForm('update', 'job-form')">Update job</button>
 	</div>
 	<div id="add-sub-form" class="Column2" style="display: none">
 		<p>sub</p>
@@ -93,6 +95,7 @@
 	const job_add_student_button = document.getElementById("job-add-student");
 	const job_submit_students_button = document.getElementById("job-submit-students");
 	const job_form = {
+		id: job_form_container.querySelector("input[name=id]"),
 		job_name: job_form_container.querySelector("input[name=job_name]"),
 		cost_code: job_form_container.querySelector("input[name=cost_code]"),
 		pay_rate: job_form_container.querySelector("input[name=pay_rate]"),
@@ -113,6 +116,25 @@
 		// temp_student_element.textContent = student.user.username;
 		job_form.student_container.appendChild(temp_student_element);
 	}
+	async function processJobForm(action) {
+		let to_submit = {
+			_id: job_form.id.value,
+			_action: action,
+			job_name: job_form.job_name.value,
+			cost_code: job_form.cost_code.value,
+			pay_rate: job_form.pay_rate.value,
+			student: []
+		}
+		for (let student_entry of job_form.student_container.children) {
+			to_submit.student.push(student_entry.children[0].value);
+		}
+		console.log(to_submit);
+		// let url = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
+		let url = "{% url 'jobList' %}";
+		let response = await postJSON(url, to_submit);
+		console.log(response);
+	}
+
 	function setFormDisplay(set, display) {
 		for (let key of Object.keys(set)) {
 			set[key].style["display"] = display;
@@ -130,6 +152,7 @@
 			job_add_student_button.disabled = false;
 			job_submit_students_button.disabled = false;
 			setFormDisplay(job_form, "inline");
+			job_form.id.value = response_obj.id;
 			job_form.job_name.value = response_obj.job_name;
 			job_form.cost_code.value = response_obj.cost_code;
 			job_form.pay_rate.value = response_obj.pay_rate;

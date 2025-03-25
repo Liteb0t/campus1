@@ -91,7 +91,10 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
 
     def create(self, validated_data):
-        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=student)
+        # job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=validated_data.pop("student"))
+        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"))
+        for student_item in validated_data["student"]:
+            job.student.add(student_item)
         return job
 
     def update(self, instance, validated_data):
