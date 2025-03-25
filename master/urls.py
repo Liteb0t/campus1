@@ -16,5 +16,6 @@ urlpatterns = [
     path("api/submissions/", views.submissionList, name="submissionList"),
     path("api/submissionsStudent/", views.submissionListStudent, name="submissionListStudent"),
     path("api/jobs/", views.jobList, name="jobList"),
+    path("api/job/<int:pk>", views.jobDetail, name="jobDetail"),
     path("api/lineManagers/", views.lineManagerList, name="lineManagerList"),
 ]

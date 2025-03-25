@@ -6,6 +6,7 @@ class Table {
             ,json_url: null
             ,columns: {} // name, type, parent_object[]
 			,editable: false
+			,row_click_event: null
         }, options);
 		// Generating HTML
         this.container_element = document.getElementById(container_id);
@@ -279,9 +280,11 @@ class Table {
 					table_row_element.appendChild(delete_entry_td);
 				}
                 this.tbody_element.appendChild(table_row_element);
-                // table_row_element.onclick = () => {
-                //     console.log(`Username: be like ${json_row.username}`);
-                // }
+				if (this.row_click_event !== null) {
+					table_row_element.onclick = () => {
+						this.row_click_event(json_row.id);
+					}
+				}
             }
 			showing_indexes_string.push((start_index+1).toString());
 			showing_indexes_string.push("-");

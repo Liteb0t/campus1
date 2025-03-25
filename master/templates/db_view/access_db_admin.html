@@ -83,6 +83,14 @@
         }
     }
     let entries_per_page = 50;
+	const job_form = document.getElementById("add-job-form");
+	async function getJobDetails(job_id = 6) {
+		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
+		let response = await fetch(name);
+		let response_text = await response.json().toString()
+		job_form.textContent = response_text;
+		console.log(job_id);
+	}
 
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"
@@ -124,6 +132,7 @@
 			"Students": {name: "student", type: "array"}
 		}
 		,editable: true
+		,row_click_event: (id) => { getJobDetails(id); }
 	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"

@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminLineManagerSerialiser, UserSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, UserSerialiser
+from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
 # from django.template import loader
@@ -92,6 +94,7 @@ def submissionList(request):
         submissions = Submission.objects.select_related("student", "job", "line_manager")
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
+
     elif request.method == "POST":
         data = JSONParser().parse(request)
         if data["_action"] == "deleteMultiple":
@@ -151,6 +154,15 @@ def jobList(request):
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+@api_view(["GET", "PUT", "DELETE"])
+def jobDetail(request, pk):
+    job = Job.objects.get(id=pk)
+    if request.method == "GET":
+        job_serialiser = DBAdminJobDetailSerialiser(job);
+        return Response(job_serialiser.data)
+    # ad POST l8r
+
 @csrf_exempt
 def lineManagerList(request):
     if request.method == "GET":
