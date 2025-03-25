@@ -83,7 +83,8 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
 #         fields = '__all__'
 
 class DBAdminJobSerialiser(serializers.ModelSerializer):
-    student = DBAdminStudentSerialiser(many=True, required=True)
+    # student = DBAdminStudentSerialiser(many=True, required=True)
+    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
@@ -97,8 +98,10 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
         instance.job_name = validated_data["job_name"]
         instance.cost_code = validated_data["cost_code"]
         instance.pay_rate = validated_data["pay_rate"]
-        instance.student = validated_data["student"]
+        # instance.student = validated_data["student"]
         instance.save()
+        for student_item in validated_data["student"]:
+            instance.student.add(student_item)
         return instance
 
     def delete(self, instance):

@@ -32,7 +32,10 @@ class Table {
             header_row_element.appendChild(column_element);
 
 			// If a column is not explicitly set to be uneditable, the default is true
-			if (typeof this.columns[column_name].editable === "undefined") {
+			if (this.columns[column_name].type === "array") {
+				this.columns[column_name].editable = false;
+			}
+			else if (typeof this.columns[column_name].editable === "undefined") {
 				this.columns[column_name].editable = true;
 			}
         }
@@ -183,7 +186,12 @@ class Table {
 				table_row_element.id = this.container_element.id + "_row_" + i.toString();
                 for (let [column_name, column_attributes] of Object.entries(this.columns)) {
                     let cell_element = document.createElement("td");
-					cell_element.textContent = this.getNestedValueIfNested(json_row, column_name);
+					if (column_attributes.type === "array") {
+						cell_element.textContent = "[" + json_row[column_attributes.name].length + " entries]";
+					}
+					else {
+						cell_element.textContent = this.getNestedValueIfNested(json_row, column_name);
+					}
                     table_row_element.appendChild(cell_element);
                 }
 				if (this.editable) {
