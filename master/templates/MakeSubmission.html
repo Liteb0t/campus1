@@ -8,19 +8,19 @@
 <link rel="stylesheet" type="text/css" href="{% static 'registration_styles.css' %}" />
 <div class="Box width100" id="SubmissionTable">
   <div id="submission-form" class="Column2">
-	  <select style="margin: 10px" type="text" name="sub__job" placeholder="Job">
+	  <select style="margin: 10px" name="sub__job">
 		  {% for job in Jobs %}
 		  	<option value="{{ job.id }}">{{ job.job_name }}</option>
 		  {% endfor %}
 	  </select><br>
-	  <select style="margin: 10px" type="text" name="sub__manager" placeholder="Manager">
+	  <select style="margin: 10px" name="sub__manager">
 		  {% for man in Managers %}
 		  	<option value="{{ man.id }}">{{ man.user.get_full_name }}</option>
 		  {% endfor %}
 	  </select><br>
-	  <input type="number" style="margin: 10px" type="text" name="sub__hours" placeholder="Hours"><br>
-	  <input type="date" style="margin: 10px" type="text" name="sub__worked" placeholder="Date Worked"><br>
-	  <input type="date" style="margin: 10px" type="text" name="sub__submitted" placeholder="Date Submitted"><br>
+	  <input type="number" style="margin: 10px"  name="sub__hours" placeholder="Hours"><br>
+	  <input type="date" style="margin: 10px"  name="sub__worked" placeholder="Date Worked"><br>
+	  <input type="date" style="margin: 10px"  name="sub__submitted" placeholder="Date Submitted"><br>
 	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
   </div>
 </div>
