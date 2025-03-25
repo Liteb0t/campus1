@@ -98,6 +98,9 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted']
 
     def create(self, validated_data):
+        student = Student.objects.get(id=validated_data["student"])
+        job = Job.objects.get(id=validated_data["job"])
+        line_manager = LineManager.objects.get(id=validated_data["line_manager"])
         submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data.pop("hours"), date_worked=validated_data.pop("date_worked"), date_submitted=validated_data.pop("date_submitted"), accepted=validated_data.pop("accepted"))
         return submission
 
