@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, UserSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, UserSerialiser, RecruiterSubmissionSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -54,6 +54,9 @@ def access_db_admin(request):
 
 def access_student_submission(request):
     return render(request, "db_view/access_student_submission.html")
+
+def access_recruiter_submission(request):
+    return render(request, "db_view/access_recruiter_submission.html")
 
 # JSON API: does not return html but JSON instead. used by the new admin page.
 # We need to make this secure later.
@@ -136,6 +139,26 @@ def submissionListStudent(request):
             data["accepted"] = instance.accepted
             print(data)
             serialiser = DBAdminSubmissionSerialiser(data=data)
+            if serialiser.is_valid(raise_exception=ValueError):
+                serialiser.update(instance=instance, validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
+
+@csrf_exempt
+def submissionListRecruiter(request):
+    if request.method == "GET":
+        submissions = Recruiter_Submission.objects.filter(recruiter__user__id = request.user.id).select_related("recruiter_id")
+        submissions_serialiser = RecruiterSubmissionSerialiser(submissions, many=True)
+        return JsonResponse(submissions_serialiser.data, safe=False)
+
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        if data["_action"] == "update":
+            instance = Recruiter_Submission.objects.get(id=data["_id"])
+            data["accepted"] = instance.accepted
+            print(data)
+            serialiser = RecruiterSubmissionSerialiser(data=data)
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.update(instance=instance, validated_data=data)
                 return JsonResponse(serialiser.data, status=201)

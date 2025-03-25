@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}
+ View Tables
+{% endblock %}
+
+{% block content %}
+
+    <div id="submissions-table-container"></div>
+
+    <script src="{% static 'table.js' %}"></script>
+    <script>
+	"use strict";
+    let entries_per_page = 50;
+
+	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
+		json_url: "{% url 'submissionListRecruiter' %}"
+		,columns: {
+			"Hours": {name: "hours", type: "number"},
+			"student id": {name: "student", type: "number"},
+			"Accepted": {name: "accepted", type: "boolean", editable: false}
+			"recruiter id": {name: "recruiter_id", type: "number"},
+        }
+        ,editable: true
+	});
+
+    </script>
+{% endblock %}

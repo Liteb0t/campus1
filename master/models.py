@@ -31,4 +31,5 @@ class Recruiter(models.Model):
 class Recruiter_Submission(models.Model):
     hours = models.IntegerField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)
     accepted = models.BooleanField(null=True)
