@@ -23,6 +23,9 @@ def homepage(request):
 def logged_out(request):
     return render(request, "registration/logged_out.html")
 
+def deleted_account(request):
+    return render(request, "registration/deleted_account.html")
+
 @login_required
 def profile(request):
     return render(request, "profile.html")

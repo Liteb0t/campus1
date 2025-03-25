@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
+    path("deleted_account", views.deleted_account, name="deleted_account"),
     path("", views.homepage, name="homepage"),
     path("profile", views.profile, name="profile"),
     path("recruiter_profile", views.recruiter_profile, name="recruiter_profile"),
