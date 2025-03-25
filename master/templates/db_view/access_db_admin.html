@@ -8,7 +8,7 @@
 
     <button onclick="showTable('students-table-container', 'add-student-form')">Students</button>
     <button onclick="showTable('submissions-table-container', 'add-sub-form')">Submissions</button>
-    <button onclick="showTable('jobs-table-container', 'add-job-form')">Jobs</button>
+    <button onclick="showTable('jobs-table-container', 'job-form')">Jobs</button>
     <button onclick="showTable('linemanagers-table-container', 'add-man-form')">Line Managers</button>
 	<main class="DBView">
 	<div style="height: 800px" class="Column1" id="AccessDBAdminTables"> <!-- contains our four tables -->
@@ -22,20 +22,26 @@
 		<input type="text" name="user__first_name" placeholder="First name"><br>
 		<input type="text" name="user__last_name" placeholder="Last name"><br>
 		<input type="text" name="user__email" placeholder="Email address"><br>
+		<input type="text" name="user__password" placeholder="Password"><br>
 		<label for="student_on_visa">On visa?</label>
 		<input type="checkbox" name="on_visa" id="student_on_visa"><br>
 		<button onclick="processStudentForm('create', 'add-student-form')">Add student</button>
 	</div>
-	<div id="add-job-form" class="Column2" style="display: none">
-		<input type="text" name="user__username" placeholder="Username">
-		<p>job</p>
+	<div id="job-form" class="Column2" style="display: none">
+		<div id="job-form-status-indicator">No job selected.</div>
+		<input type="text" name="job_name" placeholder="Job name" style="display: none"><br>
+		<input type="text" name="cost_code" placeholder="Cost code" style="display: none"><br>
+		<input type="text" name="pay_rate" placeholder="Pay rate" style="display: none"><br>
+		<div id="job_student-container" style="display: none"></div><br>
+		<button onclick="jobAddStudent()" id="job-add-student" disabled>Add student</button>
+		<button onclick="jobSubmitStudents()" id="job-submit-students" disabled>Submit</button>
+		<button onclick="processStudentForm('create', 'job-form')" disabled>Create job</button>
+		<button onclick="processStudentForm('update', 'job-form')" disabled>Update job</button>
 	</div>
 	<div id="add-sub-form" class="Column2" style="display: none">
-		<input type="text" name="user__username" placeholder="Username">
 		<p>sub</p>
 	</div>
 	<div id="add-man-form" class="Column2" style="display: none">
-		<input type="text" name="user__username" placeholder="Username">
 		<p>man</p>
 	</div>
 	</main>
@@ -51,7 +57,8 @@
 				username: formElement.querySelector("input[name=user__username]").value,
 				first_name: formElement.querySelector("input[name=user__first_name]").value,
 				last_name: formElement.querySelector("input[name=user__last_name]").value,
-				email: formElement.querySelector("input[name=user__email]").value
+				email: formElement.querySelector("input[name=user__email]").value,
+				password: formElement.querySelector("input[name=user__password]").value
 			},
 			on_visa: formElement.querySelector("input[name=on_visa]").checked
 		};
@@ -66,7 +73,7 @@
         document.getElementById("linemanagers-table-container"),
         document.getElementById("add-student-form"),
         document.getElementById("add-sub-form"),
-        document.getElementById("add-job-form"),
+        document.getElementById("job-form"),
         document.getElementById("add-man-form")
     ];
     function showTable(container_id, form_id) {
@@ -82,15 +89,76 @@
             }
         }
     }
-    let entries_per_page = 50;
-	const job_form = document.getElementById("add-job-form");
-	async function getJobDetails(job_id = 6) {
+
+	const job_form_container = document.getElementById("job-form");
+	const job_form_status_indicator = document.getElementById("job-form-status-indicator");
+	const job_add_student_button = document.getElementById("job-add-student");
+	const job_submit_students_button = document.getElementById("job-submit-students");
+	const job_form = {
+		job_name: job_form_container.querySelector("input[name=job_name]"),
+		cost_code: job_form_container.querySelector("input[name=cost_code]"),
+		pay_rate: job_form_container.querySelector("input[name=pay_rate]"),
+		student_container: document.getElementById("job_student-container")
+	}
+	function jobAddStudent() {
+		let temp_student_element = document.createElement("div");
+		let student_id_input = document.createElement("input");
+		student_id_input.type = "number";
+		student_id_input.min = 0;
+		let student_delete_button = document.createElement("delete");
+		student_delete_button.textContent = "Delete";
+		student_delete_button.onclick = () => {
+			job_form.student_container.removeChild(temp_student_element);
+		}
+		temp_student_element.appendChild(student_id_input);
+		temp_student_element.appendChild(student_delete_button);
+		// temp_student_element.textContent = student.user.username;
+		job_form.student_container.appendChild(temp_student_element);
+	}
+	function setFormDisplay(set, display) {
+		for (let key of Object.keys(set)) {
+			set[key].style["display"] = display;
+		}
+	}
+
+	async function getJobDetails(job_id) {
 		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
+		setFormDisplay(job_form, "none");
+		job_form_status_indicator.textContent = "Loading job...";
 		let response = await fetch(name);
-		let response_text = await response.json().toString()
-		job_form.textContent = response_text;
+		await response.json().then(response_obj => {
+			console.log(response_obj);
+			job_form_status_indicator.textContent = "";
+			job_add_student_button.disabled = false;
+			job_submit_students_button.disabled = false;
+			setFormDisplay(job_form, "inline");
+			job_form.job_name.value = response_obj.job_name;
+			job_form.cost_code.value = response_obj.cost_code;
+			job_form.pay_rate.value = response_obj.pay_rate;
+			while (job_form.student_container.lastChild) {
+				job_form.student_container.removeChild(job_form.student_container.lastChild);
+			}
+			for (let student of response_obj.student) {
+				let temp_student_element = document.createElement("div");
+				let student_id_input = document.createElement("input");
+				student_id_input.type = "number";
+				student_id_input.value = student.id;
+				student_id_input.min = 0;
+				let student_delete_button = document.createElement("delete");
+				student_delete_button.textContent = "Delete";
+				student_delete_button.onclick = () => {
+					job_form.student_container.removeChild(temp_student_element);
+				}
+				temp_student_element.appendChild(student_id_input);
+				temp_student_element.appendChild(student_delete_button);
+				// temp_student_element.textContent = student.user.username;
+				job_form.student_container.appendChild(temp_student_element);
+			}
+		});
 		console.log(job_id);
 	}
+
+    let entries_per_page = 50;
 
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"
