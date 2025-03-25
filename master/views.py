@@ -63,7 +63,6 @@ def studentList(request):
         students = Student.objects.select_related("user")
         students_serialiser = DBAdminStudentSerialiser(students, many=True)
         return JsonResponse(students_serialiser.data, safe=False)
-
     elif request.method == "POST":
         data = JSONParser().parse(request)
         serialiser = DBAdminStudentSerialiser(data=data)
