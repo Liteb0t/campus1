@@ -1,0 +1,55 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}
+ Submit Working Hours
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'registration_styles.css' %}" />
+<div class="Box width100" id="SubmissionTable">
+  <div id="submission-form" class="Column2">
+	  <select style="margin: 10px" type="text" name="sub__job" placeholder="Job">
+		  {% for job in Jobs %}
+		  	<option value="{{ job.id }}">{{ job.job_name }}</option>
+		  {% endfor %}
+	  </select><br>
+	  <select style="margin: 10px" type="text" name="sub__manager" placeholder="Manager">
+		  {% for man in Managers %}
+		  	<option value="{{ man.id }}">{{ man.user.get_full_name }}</option>
+		  {% endfor %}
+	  </select><br>
+	  <input type="number" style="margin: 10px" type="text" name="sub__hours" placeholder="Hours"><br>
+	  <input type="date" style="margin: 10px" type="text" name="sub__worked" placeholder="Date Worked"><br>
+	  <input type="date" style="margin: 10px" type="text" name="sub__submitted" placeholder="Date Submitted"><br>
+	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
+  </div>
+</div>
+<script src="{% static 'table.js' %}"></script>
+<script>
+    async function processSubmissionForm(action, element_id) {
+	    const formElement = document.getElementById(element_id);
+	    let data = {
+	    	_action: action,
+	    	student: {{ StudentID }},
+	    	job: formElement.querySelector("select[name=sub__job]").value,
+	    	line_manager: formElement.querySelector("select[name=sub__manager]").value,
+		    hours: formElement.querySelector("input[name=sub__hours]").value,
+		    date_worked: formElement.querySelector("input[name=sub__worked]").value,
+		    date_submitted: formElement.querySelector("input[name=sub__submitted]").value,
+		    accepted: false
+	    };
+	    let response = await postJSON("{% url 'submissionList' %}", data);
+	    console.log(response);
+	}
+	async function postJSON(url, data) {
+		const fetch_response = fetch(url, {
+			method: "POST",
+			body: JSON.stringify(data),
+			headers: {
+				"Content-type": "application/json; charset=UTF-8"
+			}
+		});
+		return fetch_response;
+	}
+</script>
+{% endblock %}

@@ -18,7 +18,7 @@ def homepage(request):
     if request.user.is_superuser == 1:
         return render(request, "homepage.html")
     else:
-        return redirect("student")
+        return redirect("profile")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
@@ -28,7 +28,7 @@ def deleted_account(request):
 
 @login_required
 def profile(request):
-    return render(request, "profile.html")
+    return render(request, "homepage.html")
 
 @login_required
 def recruiter_profile(request):
@@ -38,6 +38,13 @@ def recruiter_profile(request):
 def user_profile(request):
     Users_JSON = UserSerialiser(User.objects.all(), many = True).data
     return render(request, "user_profile.html", { "UsersJSON": json.dumps(Users_JSON)})
+
+@login_required
+def makesubmissionpage(request):
+    student_id = Student.objects.get(user__id=request.user.id).id
+    jobs = Job.objects.all()
+    line_managers = LineManager.objects.all()
+    return render(request, "MakeSubmission.html", {"StudentID": student_id, "Jobs": jobs, "Managers": line_managers})
 
 @login_required
 def access_db_admin(request):
@@ -94,6 +101,7 @@ def submissionList(request):
             serialiser = DBAdminSubmissionSerialiser(data=data)
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
         elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
             print(data)

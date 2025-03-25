@@ -6,6 +6,7 @@ urlpatterns = [
     path("deleted_account", views.deleted_account, name="deleted_account"),
     path("", views.homepage, name="homepage"),
     path("profile", views.profile, name="profile"),
+    path("MakeSubmission", views.makesubmissionpage, name="makesubmission"),
     path("recruiter_profile", views.recruiter_profile, name="recruiter_profile"),
     path("user_profile", views.user_profile, name="user_profile"),
     path("access_db_admin", views.access_db_admin, name="access_db_admin"),
