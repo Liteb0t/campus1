@@ -57,10 +57,10 @@
 		<div id="linemanager-form" class="Form">
 			<label for="linemanager_id">Line manager ID: </label>
 			<input type="number" id="linemanager_id" name="id" readonly><br>
-			<label for="linemanager__username">Username: </label>
+			<label for="linemanager_username">Username: </label>
 			<input type="text" id="linemanager_username" name="linemanager__user__username" placeholder="username" ><br>
 			<label for="linemanager_first_name">First name: </label>
-			<input type="text" id="linemanager__first_name" name="linemanager__user__first_name" placeholder="First name" ><br>
+			<input type="text" id="linemanager_first_name" name="linemanager__user__first_name" placeholder="First name" ><br>
 			<label for="linemanager_last_name">Last name: </label>
 			<input type="text" id="linemanager_last_name" name="linemanager__user__last_name" placeholder="Last name" ><br>
 			<label for="linemanager_email">Email: </label>
@@ -125,6 +125,7 @@
         }
     }
 
+	/********************** JOB SIDEBAR **********************/
 	const job_form_container = document.getElementById("job-form");
 	const job_form_status_indicator = document.getElementById("job-form-status-indicator");
 	const job_add_student_button = document.getElementById("job-add-student");
@@ -153,8 +154,6 @@
 		}
 		temp_student_element.appendChild(student_id_input);
 		temp_student_element.appendChild(student_delete_button);
-		// temp_student_element.textContent = student.user.username;
-		// job_form.student_container.appendChild(temp_student_element);
 		job_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
 	}
 	async function processJobForm(action) {
@@ -176,31 +175,15 @@
 		console.log(response);
 	}
 
-	// function setFormDisplay(set, display) {
-	// 	for (let key of Object.keys(set)) {
-	// 		set[key].style["display"] = display;
-	// 	}
-	// }
-
 	async function getJobDetails(job_id) {
 		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
-		// setFormDisplay(job_form, "none");
-		// job_add_student_button.disabled = true;
-		// job_create_button.disabled = true;
 		job_update_button.disabled = true;
-		// job_form_container.style["display"] = "none";
-		// job_form_status_indicator.style["display"] = "block";
 		job_form_status_indicator.textContent = "Loading job...";
 		let response = await fetch(name);
 		await response.json().then(response_obj => {
 			console.log(response_obj);
 			job_form_status_indicator.textContent = `Selected Job ${response_obj.id}`;
-			// job_add_student_button.disabled = false;
-			// job_create_button.disabled = false;
 			job_update_button.disabled = false;
-			// setFormDisplay(job_form, "inline");
-			// job_form_status_indicator.style["display"] = "none";
-			// job_form_container.style["display"] = "block";
 			job_form.id.value = response_obj.id;
 			job_form.job_name.value = response_obj.job_name;
 			job_form.cost_code.value = response_obj.cost_code;
@@ -209,31 +192,14 @@
 			job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
 				element.parentNode.removeChild(element)
 			});
-			// while (job_form.student_container.childElementCount > 1) {
-			// 	job_form.student_container.removeChild(job_form.student_container.lastChild);
-			// }
 			for (let student of response_obj.student) {
 				jobAddStudent(student.id);
-				// let temp_student_element = document.createElement("div");
-				// temp_student_element.classList.add("ArrayItem");
-				// let student_id_input = document.createElement("input");
-				// student_id_input.type = "number";
-				// student_id_input.value = student.id;
-				// student_id_input.min = 0;
-				// let student_delete_button = document.createElement("button");
-				// student_delete_button.textContent = "Delete";
-				// student_delete_button.onclick = () => {
-				// 	job_form.student_container.removeChild(temp_student_element);
-				// }
-				// temp_student_element.appendChild(student_id_input);
-				// temp_student_element.appendChild(student_delete_button);
-				// // temp_student_element.textContent = student.user.username;
-				// // job_form.student_container.appendChild(temp_student_element);
-				// job_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
 			}
 		});
 		console.log(job_id);
 	}
+
+	/********************** LINE MANAGER SIDEBAR **********************/
 	const linemanager_form_container = document.getElementById("linemanager-form");
 	const linemanager_form_status_indicator = document.getElementById("linemanager-form-status-indicator");
 	const linemanager_add_student_button = document.getElementById("linemanager-add-student");
@@ -264,8 +230,6 @@
 		}
 		temp_student_element.appendChild(student_id_input);
 		temp_student_element.appendChild(student_delete_button);
-		// temp_student_element.textContent = student.user.username;
-		// linemanager_form.student_container.appendChild(temp_student_element);
 		linemanager_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
 	}
 	async function processLineManagerForm(action) {
@@ -291,23 +255,13 @@
 	}
 	async function getLineManagerDetails(linemanager_id) {
 		let name = "{% url 'lineManagerDetail' pk=0 %}".replace('0', linemanager_id);
-		// setFormDisplay(linemanager_form, "none");
-		// linemanager_add_student_button.disabled = true;
-		// linemanager_create_button.disabled = true;
 		linemanager_update_button.disabled = true;
-		// linemanager_form_container.style["display"] = "none";
-		// linemanager_form_status_indicator.style["display"] = "block";
 		linemanager_form_status_indicator.textContent = "Loading linemanager...";
 		let response = await fetch(name);
 		await response.json().then(response_obj => {
 			console.log(response_obj);
 			linemanager_form_status_indicator.textContent = `Selected LineManager ${response_obj.id}`;
-			// linemanager_add_student_button.disabled = false;
-			// linemanager_create_button.disabled = false;
 			linemanager_update_button.disabled = false;
-			// setFormDisplay(linemanager_form, "inline");
-			// linemanager_form_status_indicator.style["display"] = "none";
-			// linemanager_form_container.style["display"] = "block";
 			linemanager_form.id.value = response_obj.id;
 			linemanager_form.linemanager_username.value = response_obj.user.username;
 			linemanager_form.linemanager_first_name.value = response_obj.user.first_name;
@@ -336,19 +290,12 @@
             ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
             ,"On Visa?": {name: "on_visa", type: "boolean"}
             ,"Hours Worked": {name: "hours_worked", type:"number"}
-			// ,"ID": {name: "id", type: "number", parent_object: ["user"]}
         }
 		,editable: true
     })
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
 		,columns: {
-			// "student id": {name: "id", type: "number", "parent_object": ["student"]},
-			// "job id": {name: "id", type: "number", "parent_object": ["job"]},
-			// "line manager id": {name: "id", type: "number", "parent_object": ["line_manager"]},
-			// ,"Student": {name: "username", type: "string", "parent_object": ["student", "user"]}
-			// ,"Job": {name: "job_name", type: "string", parent_object: ["job"]}
-			// ,"Line Manager": {name: "username", type: "string", "parent_object": ["line_manager", "user"]}
 			"student id": {name: "student", type: "number"},
 			"job id": {name: "job", type: "number"},
 			"line manager id": {name: "line_manager", type: "number"},
