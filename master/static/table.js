@@ -405,8 +405,12 @@ class AdvancedSearchTable extends Table {
         }
     }
     linkToHTML() {
-        this.advanced_search_container_element = document.createElement("div");
+        this.advanced_search_container_element = document.createElement("fieldset");
         this.advanced_search_container_element.classList.add("AdvancedSearchContainer");
+
+		const advanced_search_legend = document.createElement("legend");
+		advanced_search_legend.textContent = "Advanced search";
+        this.advanced_search_container_element.appendChild(advanced_search_legend);
 
         this.add_parameter_button = document.createElement("button");
         this.add_parameter_button.classList.add("AddParameterButton");

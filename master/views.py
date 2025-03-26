@@ -91,6 +91,13 @@ def studentList(request):
         else:
             return JsonResponse(serialiser.errors, status=400)
 
+@api_view(["GET"])
+def studentDetail(request, pk):
+    if request.method == "GET":
+        student = Student.objects.get(id=pk)
+        student_serialiser = DBAdminStudentSerialiser(student, many=False)
+        return Response(student_serialiser.data)
+
 # investigate why submissions take much longer to load than the rest
 @csrf_exempt
 def submissionList(request):

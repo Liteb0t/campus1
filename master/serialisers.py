@@ -60,6 +60,15 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+# class DBAdminStudentDetailSerialiser(serializers.ModelSerializer):
+#     student = DBAdminStudentSerialiser(many=True, required=True)
+#     user = UserSerialiser(required=True)
+#     # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+#     # student_username = serializers.CharField(source='student.user.username', read_only=True)
+#     class Meta:
+#         model = LineManager
+#         fields = ['id', 'user']
+
 ## Dont delet because we might want this later
 # class DynamicFieldsModelSerialiser(serializers.ModelSerializer):
 #     """
