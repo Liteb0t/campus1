@@ -204,6 +204,32 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
+    user = UserSerialiser(required=True)
+    class Meta:
+        model = Recruiter
+        fields = ('id', 'user')
+
+    def create(self, validated_data):
+        user_data = validated_data.pop("user")
+        user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
+        recruiter = Recruiter.objects.create(user=user)
+        return recruiter
+
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user")
+        instance.user.username = user_data["username"]
+        instance.user.first_name = user_data["first_name"]
+        instance.user.last_name = user_data["last_name"]
+        instance.user.save()
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        instance.user.delete()
+        instance.delete()
+        return instance
+
 class RecruiterSubmissionSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
     recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)

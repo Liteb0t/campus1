@@ -9,13 +9,15 @@
     <button onclick="showTable('students-table-container', 'add-student-form')">Students</button>
     <button onclick="showTable('submissions-table-container', 'add-sub-form')">Submissions</button>
     <button onclick="showTable('jobs-table-container', 'job-form-container')">Jobs</button>
-    <button onclick="showTable('linemanagers-table-container', 'linemanager-form-container')">Line Managers</button>
+    <button onclick="showTable('linemanagers-table-container', 'add-man-form')">Line Managers</button>
+	<button onclick="showTable('recruiter-table-container', 'add-rec-form')">Recruiters</button>
 	<main class="DBView">
 	<div style="height: 800px" class="Column1" id="AccessDBAdminTables"> <!-- contains our four tables -->
 		<div id="students-table-container"></div>
     	<div id="submissions-table-container" style="display:none"></div>
     	<div id="jobs-table-container" style="display:none"></div>
     	<div id="linemanagers-table-container" style="display: none"></div>
+		<div id="recruiter-table-container" style="display: none"></div>
 	</div>
 	<div id="add-student-form" class="Column2">
 		<input type="text" name="user__username" placeholder="Username"><br>
@@ -103,6 +105,7 @@
         document.getElementById("submissions-table-container"),
         document.getElementById("jobs-table-container"),
         document.getElementById("linemanagers-table-container"),
+		document.getElementById("recruiter-table-container"),
         document.getElementById("add-student-form"),
         document.getElementById("add-sub-form"),
         document.getElementById("job-form-container"),
@@ -172,6 +175,13 @@
 		let response = await postJSON(url, to_submit);
 		console.log(response);
 	}
+
+	// function setFormDisplay(set, display) {
+	// 	for (let key of Object.keys(set)) {
+	// 		set[key].style["display"] = display;
+	// 	}
+	// }
+
 	async function getJobDetails(job_id) {
 		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
 		// setFormDisplay(job_form, "none");
@@ -199,8 +209,27 @@
 			job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
 				element.parentNode.removeChild(element)
 			});
+			// while (job_form.student_container.childElementCount > 1) {
+			// 	job_form.student_container.removeChild(job_form.student_container.lastChild);
+			// }
 			for (let student of response_obj.student) {
 				jobAddStudent(student.id);
+				// let temp_student_element = document.createElement("div");
+				// temp_student_element.classList.add("ArrayItem");
+				// let student_id_input = document.createElement("input");
+				// student_id_input.type = "number";
+				// student_id_input.value = student.id;
+				// student_id_input.min = 0;
+				// let student_delete_button = document.createElement("button");
+				// student_delete_button.textContent = "Delete";
+				// student_delete_button.onclick = () => {
+				// 	job_form.student_container.removeChild(temp_student_element);
+				// }
+				// temp_student_element.appendChild(student_id_input);
+				// temp_student_element.appendChild(student_delete_button);
+				// // temp_student_element.textContent = student.user.username;
+				// // job_form.student_container.appendChild(temp_student_element);
+				// job_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
 			}
 		});
 		console.log(job_id);
@@ -353,6 +382,17 @@
         }
 		,editable: true
 		,row_click_event: (id) => { getLineManagerDetails(id); }
+    })
+
+    const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
+        json_url: "{% url 'recruiterList' %}"
+        ,columns: {
+            "ID": {name: "id", type: "number"}
+            ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
+            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
+            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+        }
+		,editable: true
     })
 			
 	async function postJSON(url, data) {

@@ -17,6 +17,7 @@ urlpatterns = [
     path("api/students/", views.studentList, name="studentList"),
     path("api/users/", views.currentUser, name="userList"),
     path("api/submissions/", views.submissionList, name="submissionList"),
+    path("api/recruiters/", views.recruiterList, name="recruiterList"),
     path("api/submissionsStudent/", views.submissionListStudent, name="submissionListStudent"),
     path("api/submissionsRecruiter/", views.submissionListRecruiter, name="submissionListRecruiter"),
     path("api/jobs/", views.jobList, name="jobList"),

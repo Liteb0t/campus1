@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser, DBAdminRecruiterSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -122,6 +122,29 @@ def submissionList(request):
                 return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=400)
+        else:
+            return JsonResponse(serialiser.errors, status=400)
+
+def recruiterList(request):
+    if request.method == "GET":
+        recruiters = Recruiter.objects.select_related("user")
+        recruiters_serialiser = DBAdminRecruiterSerialiser(recruiters, many=True)
+        return JsonResponse(recruiters_serialiser.data, safe=False)
+    elif request.method == "POST":
+        data = JSONParser().parse(request)
+        serialiser = DBAdminRecruiterSerialiser(data=data)
+        if data["_action"] == "deleteMultiple":
+            for entry_id in data["to_delete"]:
+                instance = Recruiter.objects.get(id=entry_id)
+                instance.delete()
+            return JsonResponse(data={"message": "Deleted stuff"}, status=200)
+        elif serialiser.is_valid(raise_exception=ValueError):
+            if data["_action"] == "create":
+                serialiser.create(validated_data=data)
+            elif data["_action"] == "update":
+                instance = Recruiter.objects.get(id=data["_id"])
+                serialiser.update(instance=instance, validated_data=data)
+            return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
