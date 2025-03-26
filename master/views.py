@@ -52,9 +52,11 @@ def makesubmissionpage(request):
 def accessDataBrowser(request):
     return render(request, "db_view/access_data_browser.html")
 
+@login_required
 def accessStudentSubmission(request):
     return render(request, "db_view/access_student_submission.html")
 
+@login_required
 def accessRecruiterSubmission(request):
     return render(request, "db_view/access_recruiter_submission.html")
 
