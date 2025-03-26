@@ -38,7 +38,7 @@
 		    date_submitted: formElement.querySelector("input[name=sub__submitted]").value,
 		    accepted: false
 	    };
-	    let response = await postJSON("{% url 'submissionList' %}", data);
+	    let response = await postJSON("{% url 'submissionListStudent' %}", data);
 	    console.log(response);
 	}
 	async function postJSON(url, data) {

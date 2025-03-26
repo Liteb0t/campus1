@@ -136,10 +136,13 @@ def submissionListStudent(request):
         data = JSONParser().parse(request)
         if data["_action"] == "create":
             serialiser = DBAdminSubmissionSerialiser(data=data)
-            if Student.object.contains(user__id=request.user.id):
-                student = Student.object.get(user__id=request.user.id)
-                if student.hours_worked + Submission.hours <= 15:
+            if Student.objects.filter(user__id=request.user.id).exists():
+                student = Student.objects.get(user__id=request.user.id)
+                if student.hours_worked + int(data.get("hours")) <= 15 and serialiser.is_valid():
                     serialiser.create(validated_data=data)
+                    student.hours_worked += int(data.get("hours"))
+                    print(student.hours_worked)
+                    student.save()
                     return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=403)
