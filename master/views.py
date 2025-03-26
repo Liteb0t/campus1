@@ -124,7 +124,7 @@ def submissionList(request):
                 return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
-
+@csrf_exempt
 def recruiterList(request):
     if request.method == "GET":
         recruiters = Recruiter.objects.select_related("user")
@@ -268,14 +268,14 @@ def lineManagerList(request):
 def lineManagerDetail(request, pk):
     line_manager = LineManager.objects.get(id=pk)
     if request.method == "GET":
-        linemanager_serialiser = DBAdminLineManagerDetailSerialiser(line_manager);
+        linemanager_serialiser = DBAdminLineManagerDetailSerialiser(line_manager)
         return Response(linemanager_serialiser.data)
 
 @api_view(["GET"])
 def recruiterDetail(request, pk):
     recruiter = Recruiter.objects.get(id=pk)
     if request.method == "GET":
-        recruiter_serialiser = DBAdminRecruiterDetailSerialiser(recruiter);
+        recruiter_serialiser = DBAdminRecruiterDetailSerialiser(recruiter)
         return Response(recruiter_serialiser.data)
 
 @csrf_exempt
