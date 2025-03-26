@@ -1,13 +1,12 @@
 Admin
 username: admin
 password: str0ngpassword
-(id 1)
 
-LineManager
-username: lm
-password: test
+student
+username: DatabaseNuke7
+password: PassW0rd@4
 
 Recruiter
 username: recruiter
-Password: test
-(id 1001)
+Password: str0ngpassword
+
