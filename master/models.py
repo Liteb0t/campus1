@@ -29,7 +29,7 @@ class Submission(models.Model):
 class Recruiter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-class Recruiter_Submission(models.Model):
+class RecruiterSubmission(models.Model):
     hours = models.IntegerField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)

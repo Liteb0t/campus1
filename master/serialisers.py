@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from master.models import Student, Submission, Job, LineManager, Recruiter
+from master.models import Student, Submission, Job, LineManager, Recruiter, RecruiterSubmission
 from django.contrib.auth.models import User
 
 class UserSerialiser(serializers.ModelSerializer):
@@ -196,20 +196,19 @@ class RecruiterSubmissionSerialiser(serializers.ModelSerializer):
     recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
 
     class Meta:
-        model = Submission
-        fields = ['id', 'hours', 'student', 'accepted', 'recruiter_id']
+        model = RecruiterSubmission
+        fields = ['id', 'hours', 'student', 'accepted', 'recruiter']
 
     def create(self, validated_data):
         student = Student.objects.get(id=validated_data["student"])
-        recruiter = Recruiter.objects.get(id=validated_data["recruiter_id"])
-        submission = Submission.objects.create(student=student, hours=validated_data.pop("hours"), accepted=validated_data.pop("accepted"), recruiter_id=recruiter_id)
+        recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
+        submission = Submission.objects.create(student=student, hours=validated_data.pop("hours"), accepted=validated_data.pop("accepted"), recruiter=recruiter)
         return submission
 
     def update(self, instance, validated_data):
-        instance.recruiter_id = Recruiter.objects.get(id=validated_data["recruiter_id"])
+        instance.recruiter_id = Recruiter.objects.get(id=validated_data["recruiter"])
         instance.student = Student.objects.get(id=validated_data["student"])
         instance.accepted = validated_data["accepted"]
-        instance.recruiter_id = Recruiter.objects.get(id=validated_data["recruiter_id"])
         instance.save()
         return instance
 

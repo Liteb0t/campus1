@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
-from master.models import Job, LineManager, Submission, Student, Recruiter
+from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
 from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, UserSerialiser, RecruiterSubmissionSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
@@ -160,14 +160,15 @@ def submissionListStudent(request):
 @csrf_exempt
 def submissionListRecruiter(request):
     if request.method == "GET":
-        submissions = Recruiter_Submission.objects.filter(recruiter__user__id = request.user.id).select_related("recruiter_id")
+        submissions = RecruiterSubmission.objects.filter(recruiter_id__user__id=request.user.id).select_related("recruiter")
+        print(submissions)
         submissions_serialiser = RecruiterSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
 
     elif request.method == "POST":
         data = JSONParser().parse(request)
         if data["_action"] == "update":
-            instance = Recruiter_Submission.objects.get(id=data["_id"])
+            instance = RecruiterSubmission.objects.get(id=data["_id"])
             data["accepted"] = instance.accepted
             print(data)
             serialiser = RecruiterSubmissionSerialiser(data=data)
