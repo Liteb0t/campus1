@@ -48,6 +48,7 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
         # instance.user.last_name = validated_data.get("last_name")
+        instance.user.type = "Student"
         instance.on_visa = validated_data["on_visa"]
         instance.hours_worked = validated_data["hours_worked"]
         instance.user.save()
@@ -145,6 +146,7 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
+        instance.user.type = "LineManager"
         instance.user.save()
         instance.save()
         instance.student.set(validated_data["student"])
@@ -221,6 +223,7 @@ class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
+        instance.user.type = "Recruiter"
         instance.user.save()
         instance.save()
         return instance
