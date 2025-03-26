@@ -14,6 +14,7 @@ class UserSerialiser(serializers.ModelSerializer):
         }
     def create(self, validated_data):
         user = User.objects.create_user(username=validated_data["username"], first_name=validated_data["first_name"], last_name=validated_data["last_name"], email=validated_data["email"], password=validated_data["password"])
+        return user
     def update(self, instance, validated_data):
         instance.username = validated_data["username"]
         instance.first_name = validated_data["first_name"]
@@ -135,7 +136,9 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         user_data = validated_data.pop("user")
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
         # student = LineManager.objects.create(user=user)
-        return student
+        line_manager = LineManager.objects.create(user=user)
+        line_manager.student.set(validated_data["student"])
+        return line_manager
 
     def update(self, instance, validated_data):
         user_data = validated_data.pop("user")
@@ -144,14 +147,23 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         instance.user.last_name = user_data["last_name"]
         instance.user.save()
         instance.save()
-        for student_item in validated_data["student"]:
-            instance.student.add(student_item)
+        instance.student.set(validated_data["student"])
         return instance
 
     def delete(self, instance):
         instance.user.delete()
         instance.delete()
         return instance
+
+class DBAdminLineManagerDetailSerialiser(serializers.ModelSerializer):
+    student = DBAdminStudentSerialiser(many=True, required=True)
+    user = UserSerialiser(required=True)
+    # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+    # student_username = serializers.CharField(source='student.user.username', read_only=True)
+    class Meta:
+        model = LineManager
+        fields = ['id', 'user', 'student']
+
 
 class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)

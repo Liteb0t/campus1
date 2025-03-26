@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, UserSerialiser, RecruiterSubmissionSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -203,7 +203,7 @@ def jobList(request):
         else:
             return JsonResponse(serialiser.errors, status=400)
 
-@api_view(["GET", "PUT", "DELETE"])
+@api_view(["GET"])
 def jobDetail(request, pk):
     job = Job.objects.get(id=pk)
     if request.method == "GET":
@@ -240,6 +240,13 @@ def lineManagerList(request):
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+@api_view(["GET"])
+def lineManagerDetail(request, pk):
+    line_manager = LineManager.objects.get(id=pk)
+    if request.method == "GET":
+        linemanager_serialiser = DBAdminLineManagerDetailSerialiser(line_manager);
+        return Response(linemanager_serialiser.data)
 
 @csrf_exempt
 def currentUser(request):

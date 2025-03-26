@@ -9,7 +9,7 @@
     <button onclick="showTable('students-table-container', 'add-student-form')">Students</button>
     <button onclick="showTable('submissions-table-container', 'add-sub-form')">Submissions</button>
     <button onclick="showTable('jobs-table-container', 'job-form-container')">Jobs</button>
-    <button onclick="showTable('linemanagers-table-container', 'add-man-form')">Line Managers</button>
+    <button onclick="showTable('linemanagers-table-container', 'linemanager-form-container')">Line Managers</button>
 	<main class="DBView">
 	<div style="height: 800px" class="Column1" id="AccessDBAdminTables"> <!-- contains our four tables -->
 		<div id="students-table-container"></div>
@@ -50,8 +50,29 @@
 	<div id="add-sub-form" class="Column2" style="display: none">
 		<p>sub</p>
 	</div>
-	<div id="add-man-form" class="Column2" style="display: none">
-		<p>man</p>
+	<div id="linemanager-form-container" class="Column2" style="display: none">
+		<div id="linemanager-form-status-indicator">No linemanager selected.</div>
+		<div id="linemanager-form" class="Form">
+			<label for="linemanager_id">Line manager ID: </label>
+			<input type="number" id="linemanager_id" name="id" readonly><br>
+			<label for="linemanager__username">Username: </label>
+			<input type="text" id="linemanager_username" name="linemanager__user__username" placeholder="username" ><br>
+			<label for="linemanager_first_name">First name: </label>
+			<input type="text" id="linemanager__first_name" name="linemanager__user__first_name" placeholder="First name" ><br>
+			<label for="linemanager_last_name">Last name: </label>
+			<input type="text" id="linemanager_last_name" name="linemanager__user__last_name" placeholder="Last name" ><br>
+			<label for="linemanager_email">Email: </label>
+			<input type="text" id="linemanager_email" name="linemanager__user__email" placeholder="Email" ><br>
+			<label for="linemanager_password">Password: </label>
+			<input type="text" id="linemanager_password" name="linemanager__user__password" placeholder="Password" ><br>
+			<fieldset id="linemanager_student-container" class="ArrayField">
+				<legend>Students</legend>
+				<!--<div id="linemanager_student-container" class="ArrayItem" style="display: none"></div>-->
+				<button onclick="linemanagerAddStudent()" id="linemanager-add-student">Add student</button><br>
+			</fieldset>
+			<button onclick="processLineManagerForm('create', 'linemanager-form')" id="linemanager-create">Create</button>
+			<button onclick="processLineManagerForm('update', 'linemanager-form')" id="linemanager-update">Update</button>
+		</div>
 	</div>
 	</main>
 
@@ -85,7 +106,7 @@
         document.getElementById("add-student-form"),
         document.getElementById("add-sub-form"),
         document.getElementById("job-form-container"),
-        document.getElementById("add-man-form")
+        document.getElementById("linemanager-form-container")
     ];
     function showTable(container_id, form_id) {
         for (let table_container of swappable_table_containers) {
@@ -151,13 +172,6 @@
 		let response = await postJSON(url, to_submit);
 		console.log(response);
 	}
-
-	// function setFormDisplay(set, display) {
-	// 	for (let key of Object.keys(set)) {
-	// 		set[key].style["display"] = display;
-	// 	}
-	// }
-
 	async function getJobDetails(job_id) {
 		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
 		// setFormDisplay(job_form, "none");
@@ -185,30 +199,101 @@
 			job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
 				element.parentNode.removeChild(element)
 			});
-			// while (job_form.student_container.childElementCount > 1) {
-			// 	job_form.student_container.removeChild(job_form.student_container.lastChild);
-			// }
 			for (let student of response_obj.student) {
 				jobAddStudent(student.id);
-				// let temp_student_element = document.createElement("div");
-				// temp_student_element.classList.add("ArrayItem");
-				// let student_id_input = document.createElement("input");
-				// student_id_input.type = "number";
-				// student_id_input.value = student.id;
-				// student_id_input.min = 0;
-				// let student_delete_button = document.createElement("button");
-				// student_delete_button.textContent = "Delete";
-				// student_delete_button.onclick = () => {
-				// 	job_form.student_container.removeChild(temp_student_element);
-				// }
-				// temp_student_element.appendChild(student_id_input);
-				// temp_student_element.appendChild(student_delete_button);
-				// // temp_student_element.textContent = student.user.username;
-				// // job_form.student_container.appendChild(temp_student_element);
-				// job_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
 			}
 		});
 		console.log(job_id);
+	}
+	const linemanager_form_container = document.getElementById("linemanager-form");
+	const linemanager_form_status_indicator = document.getElementById("linemanager-form-status-indicator");
+	const linemanager_add_student_button = document.getElementById("linemanager-add-student");
+	const linemanager_create_button = document.getElementById("linemanager-create");
+	const linemanager_update_button = document.getElementById("linemanager-update");
+	const linemanager_form = {
+		id: linemanager_form_container.querySelector("input[name=id]"),
+		linemanager_username: linemanager_form_container.querySelector("input[name=linemanager__user__username]"),
+		linemanager_first_name: linemanager_form_container.querySelector("input[name=linemanager__user__first_name]"),
+		linemanager_last_name: linemanager_form_container.querySelector("input[name=linemanager__user__last_name]"),
+		linemanager_email: linemanager_form_container.querySelector("input[name=linemanager__user__email]"),
+		linemanager_password: linemanager_form_container.querySelector("input[name=linemanager__user__password]"),
+		student_container: document.getElementById("linemanager_student-container")
+	}
+	function linemanagerAddStudent(student_id = null) {
+		let temp_student_element = document.createElement("div");
+		temp_student_element.classList.add("ArrayItem");
+		let student_id_input = document.createElement("input");
+		student_id_input.type = "number";
+		if (student_id) {
+			student_id_input.value = student_id;
+		}
+		student_id_input.min = 0;
+		let student_delete_button = document.createElement("button");
+		student_delete_button.textContent = "Delete";
+		student_delete_button.onclick = () => {
+			linemanager_form.student_container.removeChild(temp_student_element);
+		}
+		temp_student_element.appendChild(student_id_input);
+		temp_student_element.appendChild(student_delete_button);
+		// temp_student_element.textContent = student.user.username;
+		// linemanager_form.student_container.appendChild(temp_student_element);
+		linemanager_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
+	}
+	async function processLineManagerForm(action) {
+		let to_submit = {
+			_id: linemanager_form.id.value,
+			_action: action,
+			user: {
+				username: linemanager_form.linemanager_username.value,
+				first_name: linemanager_form.linemanager_first_name.value,
+				last_name: linemanager_form.linemanager_last_name.value,
+				email: linemanager_form.linemanager_email.value,
+				password: linemanager_form.linemanager_password.value
+			},
+			student: []
+		}
+		for (let student_entry of linemanager_form.student_container.querySelectorAll(".ArrayItem")) {
+			to_submit.student.push(student_entry.children[0].value);
+		}
+		console.log(to_submit);
+		let url = "{% url 'lineManagerList' %}";
+		let response = await postJSON(url, to_submit);
+		console.log(response);
+	}
+	async function getLineManagerDetails(linemanager_id) {
+		let name = "{% url 'lineManagerDetail' pk=0 %}".replace('0', linemanager_id);
+		// setFormDisplay(linemanager_form, "none");
+		// linemanager_add_student_button.disabled = true;
+		// linemanager_create_button.disabled = true;
+		linemanager_update_button.disabled = true;
+		// linemanager_form_container.style["display"] = "none";
+		// linemanager_form_status_indicator.style["display"] = "block";
+		linemanager_form_status_indicator.textContent = "Loading linemanager...";
+		let response = await fetch(name);
+		await response.json().then(response_obj => {
+			console.log(response_obj);
+			linemanager_form_status_indicator.textContent = `Selected LineManager ${response_obj.id}`;
+			// linemanager_add_student_button.disabled = false;
+			// linemanager_create_button.disabled = false;
+			linemanager_update_button.disabled = false;
+			// setFormDisplay(linemanager_form, "inline");
+			// linemanager_form_status_indicator.style["display"] = "none";
+			// linemanager_form_container.style["display"] = "block";
+			linemanager_form.id.value = response_obj.id;
+			linemanager_form.linemanager_username.value = response_obj.user.username;
+			linemanager_form.linemanager_first_name.value = response_obj.user.first_name;
+			linemanager_form.linemanager_last_name.value = response_obj.user.last_name;
+			linemanager_form.linemanager_email.value = response_obj.user.email;
+			linemanager_form.linemanager_password.value = response_obj.user.password;
+			// Delete the student html entries
+			linemanager_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
+				element.parentNode.removeChild(element)
+			});
+			for (let student of response_obj.student) {
+				linemanagerAddStudent(student.id);
+			}
+		});
+		console.log(linemanager_id);
 	}
 
     let entries_per_page = 50;
@@ -216,7 +301,8 @@
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"
         ,columns: {
-            "Username": {name: "username", type: "string", "parent_object": ["user"]}
+            "ID": {name: "id", type: "number"}
+            ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
             ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
             ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
             ,"On Visa?": {name: "on_visa", type: "boolean"}
@@ -266,6 +352,7 @@
             "Students": {name: "student", type: "array"}
         }
 		,editable: true
+		,row_click_event: (id) => { getLineManagerDetails(id); }
     })
 			
 	async function postJSON(url, data) {
