@@ -68,7 +68,9 @@
 				last_name: formElement.querySelector("input[name=user__last_name]").value,
 				email: formElement.querySelector("input[name=user__email]").value,
 				password: formElement.querySelector("input[name=user__password]").value
+
 			},
+			hours_worked: 0,
 			on_visa: formElement.querySelector("input[name=on_visa]").checked
 		};
 		let response = await postJSON("{% url 'studentList' %}", data);
