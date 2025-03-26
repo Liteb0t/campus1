@@ -9,8 +9,8 @@
     <button onclick="showTable('students-table-container', 'add-student-form')">Students</button>
     <button onclick="showTable('submissions-table-container', 'add-sub-form')">Submissions</button>
     <button onclick="showTable('jobs-table-container', 'job-form-container')">Jobs</button>
-    <button onclick="showTable('linemanagers-table-container', 'add-man-form')">Line Managers</button>
-	<button onclick="showTable('recruiter-table-container', 'add-rec-form')">Recruiters</button>
+    <button onclick="showTable('linemanagers-table-container', 'linemanager-form-container')">Line Managers</button>
+	<button onclick="showTable('recruiter-table-container', 'recruiter-form-container')">Recruiters</button>
 	<main class="DBView">
 	<div style="height: 800px" class="Column1" id="AccessDBAdminTables"> <!-- contains our four tables -->
 		<div id="students-table-container"></div>
@@ -76,6 +76,25 @@
 			<button onclick="processLineManagerForm('update', 'linemanager-form')" id="linemanager-update">Update</button>
 		</div>
 	</div>
+	<div id="recruiter-form-container" class="Column2" style="display: none">
+		<div id="recruiter-form-status-indicator">No recruiter selected.</div>
+		<div id="recruiter-form" class="Form">
+			<label for="recruiter_id">Line manager ID: </label>
+			<input type="number" id="recruiter_id" name="id" readonly><br>
+			<label for="recruiter_username">Username: </label>
+			<input type="text" id="recruiter_username" name="recruiter__user__username" placeholder="username" ><br>
+			<label for="recruiter_first_name">First name: </label>
+			<input type="text" id="recruiter_first_name" name="recruiter__user__first_name" placeholder="First name" ><br>
+			<label for="recruiter_last_name">Last name: </label>
+			<input type="text" id="recruiter_last_name" name="recruiter__user__last_name" placeholder="Last name" ><br>
+			<label for="recruiter_email">Email: </label>
+			<input type="text" id="recruiter_email" name="recruiter__user__email" placeholder="Email" ><br>
+			<label for="recruiter_password">Password: </label>
+			<input type="text" id="recruiter_password" name="recruiter__user__password" placeholder="Password" ><br>
+			<button onclick="processRecruiterForm('create', 'recruiter-form')" id="recruiter-create">Create</button>
+			<button onclick="processRecruiterForm('update', 'recruiter-form')" id="recruiter-update">Update</button>
+		</div>
+	</div>
 	</main>
 
     <script src="{% static 'table.js' %}"></script>
@@ -109,7 +128,8 @@
         document.getElementById("add-student-form"),
         document.getElementById("add-sub-form"),
         document.getElementById("job-form-container"),
-        document.getElementById("linemanager-form-container")
+        document.getElementById("linemanager-form-container"),
+        document.getElementById("recruiter-form-container")
     ];
     function showTable(container_id, form_id) {
         for (let table_container of swappable_table_containers) {
@@ -280,6 +300,66 @@
 	}
 
     let entries_per_page = 50;
+
+	/********************** RECRUITER SIDEBAR **********************/
+	const recruiter_form_container = document.getElementById("recruiter-form");
+	const recruiter_form_status_indicator = document.getElementById("recruiter-form-status-indicator");
+	const recruiter_add_student_button = document.getElementById("recruiter-add-student");
+	const recruiter_create_button = document.getElementById("recruiter-create");
+	const recruiter_update_button = document.getElementById("recruiter-update");
+	const recruiter_form = {
+		id: recruiter_form_container.querySelector("input[name=id]"),
+		recruiter_username: recruiter_form_container.querySelector("input[name=recruiter__user__username]"),
+		recruiter_first_name: recruiter_form_container.querySelector("input[name=recruiter__user__first_name]"),
+		recruiter_last_name: recruiter_form_container.querySelector("input[name=recruiter__user__last_name]"),
+		recruiter_email: recruiter_form_container.querySelector("input[name=recruiter__user__email]"),
+		recruiter_password: recruiter_form_container.querySelector("input[name=recruiter__user__password]")
+	}
+
+	async function processRecruiterForm(action) {
+		let to_submit = {
+			_id: recruiter_form.id.value,
+			_action: action,
+			user: {
+				username: recruiter_form.recruiter_username.value,
+				first_name: recruiter_form.recruiter_first_name.value,
+				last_name: recruiter_form.recruiter_last_name.value,
+				email: recruiter_form.recruiter_email.value,
+				password: recruiter_form.recruiter_password.value
+			},
+		}
+		console.log(to_submit);
+		let url = "{% url 'recruiterList' %}";
+		let response = await postJSON(url, to_submit);
+		console.log(response);
+	}
+	
+	async function getRecruiterDetails(recruiter_id) {
+		let name = "{% url 'recruiterDetail' pk=0 %}".replace('0', recruiter_id);
+		recruiter_update_button.disabled = true;
+		recruiter_form_status_indicator.textContent = "Loading recruiter...";
+		let response = await fetch(name);
+		await response.json().then(response_obj => {
+			console.log(response_obj);
+			recruiter_form_status_indicator.textContent = `Selected recruiter ${response_obj.id}`;
+			recruiter_update_button.disabled = false;
+			recruiter_form.id.value = response_obj.id;
+			recruiter_form.recruiter_username.value = response_obj.user.username;
+			recruiter_form.recruiter_first_name.value = response_obj.user.first_name;
+			recruiter_form.recruiter_last_name.value = response_obj.user.last_name;
+			recruiter_form.recruiter_email.value = response_obj.user.email;
+			recruiter_form.recruiter_password.value = response_obj.user.password;
+			// Delete the student html entries
+			recruiter_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
+				element.parentNode.removeChild(element)
+			});
+			for (let student of response_obj.student) {
+				recruiterAddStudent(student.id);
+			}
+		});
+		console.log(recruiter_id);
+	}
+
 
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"

@@ -230,6 +230,12 @@ class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+class DBAdminRecruiterDetailSerialiser(serializers.ModelSerializer):
+    user = UserSerialiser(required=True)
+    class Meta:
+        model = LineManager
+        fields = ['id', 'user']
+
 class RecruiterSubmissionSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
     recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
