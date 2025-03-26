@@ -407,7 +407,7 @@ class AdvancedSearchTable extends Table {
 
         this.add_parameter_button = document.createElement("button");
         this.add_parameter_button.classList.add("AddParameterButton");
-        this.add_parameter_button.textContent = "Add parameter"
+        this.add_parameter_button.textContent = "Add Filter"
         this.add_parameter_button.type = "button";
         this.add_parameter_button.onclick = () => {
             console.log("Adding a search parameter!");

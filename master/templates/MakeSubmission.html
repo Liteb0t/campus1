@@ -18,7 +18,7 @@
 		  	<option value="{{ man.id }}">{{ man.user.get_full_name }}</option>
 		  {% endfor %}
 	  </select><br>
-	  <input type="number" style="margin: 10px"  name="sub__hours" placeholder="Hours"><br>
+	  <input type="number" style="margin: 10px" min="0" max="15" name="sub__hours" onkeyup="enforceMinMax(this)" placeholder="Hours"><br>
 	  <input type="date" style="margin: 10px"  name="sub__worked" placeholder="Date Worked"><br>
 	  <input type="date" style="margin: 10px"  name="sub__submitted" placeholder="Date Submitted"><br>
 	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
@@ -41,8 +41,21 @@
 	    let response = await postJSON("{% url 'submissionListStudent' %}", data);
 	    console.log(response);
 	}
+
+	function enforceMinMax(hours) {
+	  if (hours.value != "") {
+		if (parseInt(hours.value) < parseInt(hours.min)) {
+		  el.value = el.min;
+		}
+		if (parseInt(hours.value) > parseInt(hours.max)) {
+		  hours.value = hours.max;
+		}
+	  }
+	}
+
+
 	async function postJSON(url, data) {
-		const fetch_response = fetch(url, {
+		const fetch_response = await fetch(url, {
 			method: "POST",
 			body: JSON.stringify(data),
 			headers: {
