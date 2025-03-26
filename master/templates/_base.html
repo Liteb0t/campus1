@@ -12,11 +12,11 @@
     <nav class="Navbar">
         <a class="Navlink" href="{% url 'homepage' %}">Home</a>
         <a class="Navlink" href="{% url 'user_profile' %}">Profile</a>
-        {% if request.user.is_superuser == 1 %}
+        {% if request.campususer.user_type == 1 %}
             <a class="Navlink" href="{% url 'access_data_browser' %}">Data Browser</a>
             <a class="Navlink" href="admin/">Admin</a>
         {% endif %}
-        {% if request.user.is_superuser == 0 %}
+        {% if request.campususer.user_type == 0 %}
             <a class="Navlink" href="{% url 'make_submission' %}">Make Submission</a>
             <a class="Navlink" href="{% url 'access_student_submission' %}">View Submissions</a>
         {% endif %}

@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser, CampusUser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -253,7 +252,7 @@ def lineManagerList(request):
             if data["_action"] == "create":
                 serialiser.create(validated_data=data)
             elif data["_action"] == "update":
-                # instance = LineManager.objects.get(user=User.objects.get(id=data["_id"]))
+                # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))
                 instance = LineManager.objects.get(id=data["_id"])
                 serialiser.update(instance=instance, validated_data=data)
             # elif data["_action"] == "deleteMultiple":
@@ -292,10 +291,10 @@ def currentUser(request):
                 serialiser.create(validated_data=data)
             elif data["_action"] == "update":
                 # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
-                instance = User.objects.get(id=data["_id"])
+                instance = CampusUser.objects.get(id=data["_id"])
                 serialiser.update(instance=instance, validated_data=data)
             elif data["_action"] == "delete":
-                    serialiser.delete(instance=User.objects.get(id=data["_id"]))
+                    serialiser.delete(instance=CampusUser.objects.get(id=data["_id"]))
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)

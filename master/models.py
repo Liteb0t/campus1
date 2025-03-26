@@ -1,14 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
+
 # Create your models here.
+
+class CampusUser(AbstractUser):
+    user_type = models.CharField(max_length=32)
 class Student(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
     on_visa = models.BooleanField(default=False)
     visa_expiry = models.DateField(null=True)
     hours_worked = models.IntegerField(default=0)
 
 class LineManager(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
     student = models.ManyToManyField(Student)
 
 class Job(models.Model):
@@ -27,7 +31,7 @@ class Submission(models.Model):
     accepted = models.BooleanField(null=True)
 
 class Recruiter(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
 
 class RecruiterSubmission(models.Model):
     hours = models.IntegerField()
