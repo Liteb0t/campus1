@@ -438,8 +438,6 @@ class AdvancedSearchTable extends Table {
 
         let parameter_container = document.createElement("div");
         parameter_container.classList.add("SearchParameter");
-        // parameter_container.id = `${this.container_id}_${}`
-        // fragment.appendChild(parameter_container);
 
         // Drop down menu of what column to search
         let parameter_select = document.createElement("select");
@@ -487,14 +485,17 @@ class AdvancedSearchTable extends Table {
             }
             // parameter_select_2.value = this.date_delimiters[option];
             // parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
+			console.log(this.active_parameters);
+			console.log(input_element);
             if (this.columns[option].type === "boolean") {
                 parameter_select_2.onchange = () => {this.active_parameters[parameter_select_2.name].value = parameter_select_2.value}
                 this.active_parameters[parameter_select_2.name] = {value: parameter_select_2.value, delimiter: null}
             }
             else {
                 parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
-                this.active_parameters[input_element.name] = {value: input_element.value, delimiter: parameter_select_2.value}
+                this.active_parameters[option] = {value: input_element.value, delimiter: parameter_select_2.value}
             }
+			console.log(this.active_parameters);
             parameter_select.insertAdjacentElement("afterend", parameter_select_2);
         }
         else { // type is string
@@ -510,6 +511,7 @@ class AdvancedSearchTable extends Table {
             input_element.name = option;
             input_element.value = value;
         }
+		console.log(this.active_parameters);
         parameter_select.value = option;
         // if (value) {
         // }
@@ -526,6 +528,7 @@ class AdvancedSearchTable extends Table {
         if (this.columns[option].type !== "boolean") {
             parameter_container.appendChild(input_element);
         }
+		console.log(this.active_parameters);
 
         let delete_button = document.createElement("button");
         delete_button.classList.add("DeleteParameterButton")
