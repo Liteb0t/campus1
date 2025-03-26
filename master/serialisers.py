@@ -32,12 +32,12 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
     # last_name = serializers.CharField(source='user.last_name', read_only=True)
     class Meta:
         model = Student
-        fields = ('id', 'user', 'on_visa')
+        fields = ('id', 'user', 'on_visa', 'hours_worked')
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
-        student = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"))
+        student = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"), hours_worked=validated_data.pop("hours_worked"))
         return student
 
     def update(self, instance, validated_data):
@@ -47,6 +47,7 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.last_name = user_data["last_name"]
         # instance.user.last_name = validated_data.get("last_name")
         instance.on_visa = validated_data["on_visa"]
+        instance.hours_worked = validated_data["hours_worked"]
         instance.user.save()
         instance.save()
         return instance

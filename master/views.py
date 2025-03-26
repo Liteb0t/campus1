@@ -99,6 +99,7 @@ def submissionList(request):
 
     elif request.method == "POST":
         data = JSONParser().parse(request)
+        serialiser = DBAdminSubmissionSerialiser(data=data)
         if data["_action"] == "deleteMultiple":
             for entry_id in data["to_delete"]:
                 instance = Submission.objects.get(id=entry_id)
@@ -116,7 +117,6 @@ def submissionList(request):
             # data["student"] = Student.objects.get(id=data["student"]["id"]).__dict__
             # data["student"] = data["student"]["id"]
             print(data)
-            serialiser = DBAdminSubmissionSerialiser(data=data)
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.update(instance=instance, validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
@@ -134,7 +134,16 @@ def submissionListStudent(request):
 
     elif request.method == "POST":
         data = JSONParser().parse(request)
-        if data["_action"] == "update":
+        if data["_action"] == "create":
+            serialiser = DBAdminSubmissionSerialiser(data=data)
+            if Student.object.contains(user__id=request.user.id):
+                student = Student.object.get(user__id=request.user.id)
+                if student.hours_worked + Submission.hours <= 15:
+                    serialiser.create(validated_data=data)
+                    return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=403)
+        elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
             data["accepted"] = instance.accepted
             print(data)

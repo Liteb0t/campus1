@@ -5,6 +5,7 @@ class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     on_visa = models.BooleanField(default=False)
     visa_expiry = models.DateField(null=True)
+    hours_worked = models.IntegerField(default=0)
 
 class LineManager(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
