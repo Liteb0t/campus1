@@ -62,13 +62,13 @@
 		const formElement = document.getElementById(element_id);
 		let data = {
 			_action: action,
+			_id: 0,
 			user: {
 				username: formElement.querySelector("input[name=user__username]").value,
 				first_name: formElement.querySelector("input[name=user__first_name]").value,
 				last_name: formElement.querySelector("input[name=user__last_name]").value,
 				email: formElement.querySelector("input[name=user__email]").value,
 				password: formElement.querySelector("input[name=user__password]").value
-
 			},
 			hours_worked: 0,
 			on_visa: formElement.querySelector("input[name=on_visa]").checked

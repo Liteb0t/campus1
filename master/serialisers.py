@@ -12,7 +12,8 @@ class UserSerialiser(serializers.ModelSerializer):
                 'validators': [UnicodeUsernameValidator()],
             }
         }
-
+    def create(self, validated_data):
+        user = User.objects.create_user(username=validated_data["username"], first_name=validated_data["first_name"], last_name=validated_data["last_name"], email=validated_data["email"], password=validated_data["password"])
     def update(self, instance, validated_data):
         instance.username = validated_data["username"]
         instance.first_name = validated_data["first_name"]
