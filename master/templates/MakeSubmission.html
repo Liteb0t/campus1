@@ -49,6 +49,7 @@
 				"Content-type": "application/json; charset=UTF-8"
 			}
 		});
+		alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
 		return fetch_response;
 	}
 </script>
