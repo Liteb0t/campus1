@@ -30,23 +30,20 @@
 		<button onclick="processStudentForm('create', 'add-student-form')">Add student</button>
 	</div>
 	<div id="job-form-container" class="Column2" style="display: none">
-		<div id="job-form-status-indicator">No job selected.</div>
+		<div id="job-form-status-indicator" style="display: inline">No job selected.</div> <button id="job-deselect" onclick="clearJobForm()" disabled>Deselect</button>
 		<div id="job-form" class="Form">
-			<label for="job_id">Job ID: </label>
-			<input type="number" id="job_id" name="id" readonly><br>
 			<label for="job_name">Job name: </label>
 			<input type="text" id="job_name" name="job_name" placeholder="Job name" ><br>
-			<label for="cost_code">Cose code: </label>
+			<label for="cost_code">Cost code: </label>
 			<input type="text" id="cost_code" name="cost_code" placeholder="Cost code"><br>
 			<label for="pay_rate">Pay rate: </label>
 			<input type="text" id="pay_rate" name="pay_rate" placeholder="Pay rate"><br>
 			<fieldset id="job_student-container" class="ArrayField">
 				<legend>Students</legend>
-				<!--<div id="job_student-container" class="ArrayItem" style="display: none"></div>-->
 				<button onclick="jobAddStudent()" id="job-add-student">Add student</button><br>
 			</fieldset>
 			<button onclick="processJobForm('create', 'job-form')" id="job-create">Create job</button>
-			<button onclick="processJobForm('update', 'job-form')" id="job-update">Update job</button>
+			<button onclick="processJobForm('update', 'job-form')" id="job-update" disabled>Update job</button>
 		</div>
 	</div>
 	<div id="add-sub-form" class="Column2" style="display: none">
@@ -69,7 +66,6 @@
 			<input type="text" id="linemanager_password" name="linemanager__user__password" placeholder="Password" ><br>
 			<fieldset id="linemanager_student-container" class="ArrayField">
 				<legend>Students</legend>
-				<!--<div id="linemanager_student-container" class="ArrayItem" style="display: none"></div>-->
 				<button onclick="linemanagerAddStudent()" id="linemanager-add-student">Add student</button><br>
 			</fieldset>
 			<button onclick="processLineManagerForm('create', 'linemanager-form')" id="linemanager-create">Create</button>
@@ -150,8 +146,9 @@
 	const job_add_student_button = document.getElementById("job-add-student");
 	const job_create_button = document.getElementById("job-create");
 	const job_update_button = document.getElementById("job-update");
+	const job_deselect_button = document.getElementById("job-deselect");
 	const job_form = {
-		id: job_form_container.querySelector("input[name=id]"),
+		getID: () => { return job_form_status_indicator.querySelector("#job_id").textContent; },
 		job_name: job_form_container.querySelector("input[name=job_name]"),
 		cost_code: job_form_container.querySelector("input[name=cost_code]"),
 		pay_rate: job_form_container.querySelector("input[name=pay_rate]"),
@@ -177,7 +174,7 @@
 	}
 	async function processJobForm(action) {
 		let to_submit = {
-			_id: job_form.id.value,
+			_id: job_form.getID(),
 			_action: action,
 			job_name: job_form.job_name.value,
 			cost_code: job_form.cost_code.value,
@@ -197,13 +194,18 @@
 	async function getJobDetails(job_id) {
 		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
 		job_update_button.disabled = true;
+		job_deselect_button.disabled = true;
 		job_form_status_indicator.textContent = "Loading job...";
 		let response = await fetch(name);
 		await response.json().then(response_obj => {
 			console.log(response_obj);
-			job_form_status_indicator.textContent = `Selected Job ${response_obj.id}`;
+			job_form_status_indicator.textContent = `Selected Job: `;
+			let job_id_span = document.createElement("span");
+			job_id_span.id = "job_id";
+			job_id_span.textContent = response_obj.id;
+			job_form_status_indicator.appendChild(job_id_span);
 			job_update_button.disabled = false;
-			job_form.id.value = response_obj.id;
+			job_deselect_button.disabled = false;
 			job_form.job_name.value = response_obj.job_name;
 			job_form.cost_code.value = response_obj.cost_code;
 			job_form.pay_rate.value = response_obj.pay_rate;
@@ -216,6 +218,17 @@
 			}
 		});
 		console.log(job_id);
+	}
+	function clearJobForm() {
+		job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
+			element.parentNode.removeChild(element)
+		});
+		job_form_status_indicator.textContent = "No job selected.";
+		job_form.job_name.value = "";
+		job_form.cost_code.value = "";
+		job_form.pay_rate.value = "";
+		job_update_button.disabled = true;
+		job_deselect_button.disabled = true;
 	}
 	const linemanager_form_container = document.getElementById("linemanager-form");
 	const linemanager_form_status_indicator = document.getElementById("linemanager-form-status-indicator");
