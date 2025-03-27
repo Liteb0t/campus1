@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
@@ -49,7 +49,10 @@ def makesubmissionpage(request):
 
 @login_required
 def accessDataBrowser(request):
-    return render(request, "db_view/access_data_browser.html")
+    if (request.user.is_superuser):
+        return render(request, "db_view/access_data_browser.html")
+    else:
+        return HttpResponse("You need to be an admin to access this page.", status=403)
 
 @login_required
 def accessStudentSubmission(request):

@@ -56,6 +56,8 @@
 		<p>sub</p>
 	</div>
 	<div id="linemanager-form-container" class="Column2" style="display: none">
+	<!--
+	<div id="linemanager-form-container" class="Column2" style="display: none">
 		<div id="linemanager-form-status-indicator" style="display: inline">No linemanager selected.</div>
 		<div id="linemanager-form" class="Form">
 			<label for="linemanager_id">Line manager ID: </label>
@@ -78,6 +80,7 @@
 			<button onclick="processLineManagerForm('update', 'linemanager-form')" id="linemanager-update">Update</button>
 		</div>
 	</div>
+	-->
 	<div id="recruiter-form-container" class="Column2" style="display: none">
 		<div id="recruiter-form-status-indicator">No recruiter selected.</div>
 		<div id="recruiter-form" class="Form">
@@ -114,6 +117,7 @@
 			this.container_element = document.getElementById(container_id);
 			this.selected_indicator_element = document.createElement("b");
 			this.form_element = document.createElement("div");
+			this.form_element.classList.add("Form");
 
 			this.selected_indicator_element.textContent = `No ${this.name} selected.`;
 			this.container_element.appendChild(this.selected_indicator_element);
@@ -170,7 +174,7 @@
 					this.form_element.appendChild(input_element);
 					this.parameters[parameter_name]["input_element"] = input_element;
 				}
-				this.form_element.appendChild(document.createElement("br"));
+				// this.form_element.appendChild(document.createElement("br"));
 			}
 			this.create_button = document.createElement("button");
 			this.create_button.onclick = () => { this.submitForm("create") };
@@ -182,9 +186,9 @@
 			// this.deselect_button.onclick = () => { this.deselect() };
 			// this.deselect_button.textContent = "Deselect";
 			// this.selected_indicator_element.insertAdjacentElement("afterend", this.deselect_button);
-			this.form_element.appendChild(this.create_button);
-			this.form_element.appendChild(this.update_button);
 			this.container_element.appendChild(this.form_element);
+			this.container_element.appendChild(this.create_button);
+			this.container_element.appendChild(this.update_button);
 		}
 		addArrayEntry(parameter_name, array_item = null) {
 			let array_item_container_element = document.createElement("div");
@@ -347,6 +351,15 @@
 		"Pay Rate": {name: "pay_rate", type: "number"},
 		"Students": {name: "student", type: "array"}
 	};
+	let linemanager_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+        "Username": {name: "username", type: "string", "parent_object": ["user"]},
+        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+       	"Email": {name: "email", type: "string", "parent_object": ["user"]},
+       	"Password": {name: "password", type: "string", "parent_object": ["user"]},
+        "Students": {name: "student", type: "array"}
+    };
 	const student_form = new Form("student-form-container", {
 		parameters: student_parameters,
 		name: "student",
@@ -358,6 +371,12 @@
 		name: "job",
 		fetch_url: "{% url 'jobDetail' pk=0 %}",
 		post_url: "{% url 'jobList' %}"
+	});
+	const linemanager_form = new Form("linemanager-form-container", {
+		parameters: linemanager_parameters,
+		name: "line manager",
+		fetch_url: "{% url 'lineManagerDetail' pk=0 %}",
+		post_url: "{% url 'lineManagerList' %}"
 	});
 
     const swappable_table_containers = [
@@ -385,6 +404,7 @@
             }
         }
     }
+	/*
 
 	const linemanager_form_container = document.getElementById("linemanager-form");
 	const linemanager_form_status_indicator = document.getElementById("linemanager-form-status-indicator");
@@ -464,6 +484,7 @@
 		});
 		console.log(linemanager_id);
 	}
+	*/
 
     let entries_per_page = 50;
 
@@ -554,15 +575,9 @@
 	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"
-        ,columns: {
-			"ID": {name: "id", type: "number", editable: false},
-            "Username": {name: "username", type: "string", "parent_object": ["user"]},
-            "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-            "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
-            "Students": {name: "student", type: "array"}
-        }
+        ,columns: linemanager_parameters
 		,editable: true
-		,row_click_event: (id) => { getLineManagerDetails(id); }
+		,row_click_event: (id) => { linemanager_form.selectEntry(id); }
     })
 
     const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
