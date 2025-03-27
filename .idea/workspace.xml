@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="adjusting models to remake superuser functionality; WIP">
+      <change afterPath="$PROJECT_DIR$/master/migrations/0002_campususer_is_admin_alter_campususer_is_active_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/master/migrations/0003_remove_campususer_is_admin_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/master/migrations/0004_alter_campususer_is_staff_and_more.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/master/migrations/0005_alter_campususer_is_staff_and_more.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/master/templates/_base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +145,14 @@
       <option name="project" value="LOCAL" />
       <updated>1743075217668</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="adjusting models to remake superuser functionality; WIP">
+      <created>1743076884232</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1743076884232</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
