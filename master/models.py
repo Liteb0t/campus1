@@ -15,6 +15,7 @@ class CampusUserManager(BaseUserManager):
             last_name=last_name,
             is_staff=is_staff,
             is_superuser=is_superuser,
+            is_active=True,
         )
 
         user.set_password(password)
