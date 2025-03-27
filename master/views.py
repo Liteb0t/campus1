@@ -51,9 +51,11 @@ def makesubmissionpage(request):
 def accessDataBrowser(request):
     return render(request, "db_view/access_data_browser.html")
 
+@login_required
 def accessStudentSubmission(request):
     return render(request, "db_view/access_student_submission.html")
 
+@login_required
 def accessRecruiterSubmission(request):
     return render(request, "db_view/access_recruiter_submission.html")
 
@@ -87,6 +89,13 @@ def studentList(request):
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+@api_view(["GET"])
+def studentDetail(request, pk):
+    if request.method == "GET":
+        student = Student.objects.get(id=pk)
+        student_serialiser = DBAdminStudentSerialiser(student, many=False)
+        return Response(student_serialiser.data)
 
 # investigate why submissions take much longer to load than the rest
 @csrf_exempt

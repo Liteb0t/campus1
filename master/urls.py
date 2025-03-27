@@ -24,5 +24,6 @@ urlpatterns = [
     path("api/job/<int:pk>", views.jobDetail, name="jobDetail"),
     path("api/lineManagers/", views.lineManagerList, name="lineManagerList"),
     path("api/lineManager/<int:pk>", views.lineManagerDetail, name="lineManagerDetail"),
-    path("api/recruiter/<int:pk>", views.recruiterDetail, name="recruiterDetail")
+    path("api/recruiter/<int:pk>", views.recruiterDetail, name="recruiterDetail"),
+    path("api/student/<int:pk>", views.studentDetail, name="studentDetail"),
 ]

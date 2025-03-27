@@ -229,7 +229,7 @@ button:hover:not([disabled]) {
     cursor: pointer;
 }
 
-button:active {
+button:active:not([disabled]) {
 	border: 2px inset #ddd;
 }
 

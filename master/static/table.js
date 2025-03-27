@@ -322,7 +322,7 @@ class Table {
     }
 	// Sometimes a value is nested
 	// eg. the "username" attribute is under "sser" which is itself under a "Student"
-	getNestedValueIfNested(json_row, column_id) {
+	getNestedValueIfNested(json_row, column_id, return_number_if_number = false) {
 		let temp_json_value;
 		if (this.columns[column_id].type === "array") {
 			temp_json_value = "[" + json_row[this.columns[column_id].name].length + " entries]";
@@ -336,6 +336,9 @@ class Table {
 		}
 		else {
 			temp_json_value = json_row[this.columns[column_id].name];
+		}
+		if (this.columns[column_id].type === "number" && return_number_if_number) {
+			temp_json_value = Number(temp_json_value);
 		}
 		return temp_json_value;
 	}
@@ -402,8 +405,12 @@ class AdvancedSearchTable extends Table {
         }
     }
     linkToHTML() {
-        this.advanced_search_container_element = document.createElement("div");
+        this.advanced_search_container_element = document.createElement("fieldset");
         this.advanced_search_container_element.classList.add("AdvancedSearchContainer");
+
+		const advanced_search_legend = document.createElement("legend");
+		advanced_search_legend.textContent = "Advanced search";
+        this.advanced_search_container_element.appendChild(advanced_search_legend);
 
         this.add_parameter_button = document.createElement("button");
         this.add_parameter_button.classList.add("AddParameterButton");
@@ -441,12 +448,17 @@ class AdvancedSearchTable extends Table {
 
         // Drop down menu of what column to search
         let parameter_select = document.createElement("select");
-        for (const [parameter_option, type] of Object.entries(this.columns)) {
-            // console.log(`Parameter option: ${parameter_option}`);
-            let option_element = document.createElement("option");
-            option_element.value = parameter_option;
-            option_element.innerText = parameter_option;
-            parameter_select.appendChild(option_element);
+		for (let [column_name, column_attributes] of Object.entries(this.columns)) {
+			if (column_attributes.type === "array") {
+				continue;
+			}
+			else {
+				// console.log(`Parameter option: ${parameter_option}`);
+				let option_element = document.createElement("option");
+				option_element.value = column_name;
+				option_element.innerText = column_name;
+				parameter_select.appendChild(option_element);
+			}
         }
         parameter_container.appendChild(parameter_select);
         let parameter_select_2 = null;
@@ -458,6 +470,10 @@ class AdvancedSearchTable extends Table {
             if (this.columns[option].type !== "boolean") {
                 input_element = document.createElement("input");
                 input_element.type = this.columns[option].type;
+                input_element.onchange = () => {
+                    this.active_parameters[input_element.name].value = input_element.value;
+                    // this.doSearch();
+                };
             }
             // input_element.classList.add("ParameterDateBox");
             parameter_select_2 = document.createElement("select");
@@ -671,19 +687,20 @@ class AdvancedSearchTable extends Table {
                 });
             }
             else if (this.columns[parameter].type === "date" || this.columns[parameter].type === "number") {
+				// if (this.columns[parameter].type === "number"
                 if (value.delimiter === "At" || value.delimiter === "Equal_To") {
                     this.json = this.json.filter(json_row => {
-                        return this.getNestedValueIfNested(json_row, parameter) == value.value;
+                        return this.getNestedValueIfNested(json_row, parameter, true) == value.value;
                     });
                 }
                 else if (value.delimiter === "Before" || value.delimiter === "Lower_Than") {
                     this.json = this.json.filter(json_row => {
-                        return tthis.getNestedValueIfNested(json_row, parameter) < value.value;
+                        return this.getNestedValueIfNested(json_row, parameter, true) < value.value;
                     });
                 }
                 else { // After
                     this.json = this.json.filter(json_row => {
-                        return tthis.getNestedValueIfNested(json_row, parameter) > value.value;
+                        return this.getNestedValueIfNested(json_row, parameter, true) > value.value;
                     });
                 }
                 console.log(`Search column ${parameter} for ${value.delimiter} ${value.value}`);
