@@ -37,7 +37,7 @@ def recruiterProfile(request):
 
 @login_required
 def userProfile(request):
-    Users_JSON = UserSerialiser(User.objects.all(), many = True).data
+    Users_JSON = UserSerialiser(CampusUser.objects.all(), many = True).data
     return render(request, "user_profile.html", { "UsersJSON": json.dumps(Users_JSON)})
 
 @login_required
