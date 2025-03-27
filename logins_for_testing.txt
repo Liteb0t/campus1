@@ -1,10 +1,10 @@
 Admin
 username: admin
-password: str0ngpassword
+password: test
 
 student
-username: DatabaseNuke7
-password: PassW0rd@4
+username: testi
+password: cles
 
 Recruiter
 username: recruiter

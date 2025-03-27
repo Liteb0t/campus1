@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 class CampusUserManager(BaseUserManager):
 
-    def create_user(self, username, email, password=None,first_name=None, last_name=None, is_staff=False, is_superuser=False):
+    def create_user(self, username, email, password=None,first_name=None, last_name=None, is_staff=False, is_superuser=False, user_type="Default"):
         if not email:
             raise ValueError('Cannot create a user without an email address ')
 
@@ -16,6 +16,7 @@ class CampusUserManager(BaseUserManager):
             is_staff=is_staff,
             is_superuser=is_superuser,
             is_active=True,
+            user_type=user_type,
         )
 
         user.set_password(password)

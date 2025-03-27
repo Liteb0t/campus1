@@ -12,7 +12,7 @@ class UserSerialiser(serializers.ModelSerializer):
             }
         }
     def create(self, validated_data):
-        user = CampusUser.objects.create_user(username=validated_data["username"], first_name=validated_data["first_name"], last_name=validated_data["last_name"], email=validated_data["email"], password=validated_data["password"])
+        user = CampusUser.objects.create_user(username=validated_data["username"], first_name=validated_data["first_name"], last_name=validated_data["last_name"], email=validated_data["email"], password=validated_data["password"], user_type=validated_data["user_type"])
         return user
     def update(self, instance, validated_data):
         instance.username = validated_data["username"]
@@ -37,6 +37,7 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
+        user_data["user_type"] = "Student"
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
         student = Student.objects.create(user=user, on_visa=validated_data.pop("on_visa"), hours_worked=validated_data.pop("hours_worked"))
         return student
@@ -47,7 +48,6 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
         # instance.user.last_name = validated_data.get("last_name")
-        instance.user.type = "Student"
         instance.on_visa = validated_data["on_visa"]
         instance.hours_worked = validated_data["hours_worked"]
         instance.user.save()
@@ -143,6 +143,7 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
+        user_data["user_type"] = "LineManager"
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
         # student = LineManager.objects.create(user=user)
         line_manager = LineManager.objects.create(user=user)
@@ -154,7 +155,6 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
-        instance.user.type = "LineManager"
         instance.user.save()
         instance.save()
         instance.student.set(validated_data["student"])
@@ -222,6 +222,7 @@ class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
+        user_data["user_type"] = "Recruiter"
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
         recruiter = Recruiter.objects.create(user=user)
         return recruiter
@@ -231,7 +232,6 @@ class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
-        instance.user.type = "Recruiter"
         instance.user.save()
         instance.save()
         return instance
