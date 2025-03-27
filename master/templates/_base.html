@@ -21,7 +21,7 @@
         {% elif request.campususer.user_type == LineManager %}
 <!--        LM CONTENT HERE-->
         {% elif request.campususer.user_type == Recruiter %}
-<!--        REC CONTENT HERE-->
+        <a class="Navlink" href="{% url 'access_recruiter_submission' %}">View Submissions</a>
         {% endif %}
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
