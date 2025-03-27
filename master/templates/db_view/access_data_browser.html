@@ -32,6 +32,8 @@
 	</div>
 	-->
 	<div id="student-form-container" class="Column2"></div>
+	<!--
+	<div id="job-form-container" class="Column2" style="display: none"></div>-->
 	<div id="job-form-container" class="Column2" style="display: none">
 		<div id="job-form-status-indicator" style="display: inline">No job selected.</div> <button id="job-deselect" onclick="clearJobForm()" disabled>Deselect</button>
 		<div id="job-form" class="Form">
@@ -152,12 +154,15 @@
 			this.update_button = document.createElement("button");
 			this.update_button.onclick = () => { this.submitForm("update") };
 			this.update_button.textContent = "Update";
-			this.update_button.disabled = true;
+			this.deselect_button = document.createElement("button");
+			this.deselect_button.onclick = () => { this.deselect() };
+			this.deselect_button.textContent = "Deselect";
+			this.selected_indicator_element.insertAdjacentElement("beforebegin", this.deselect_button);
 			this.form_element.appendChild(this.create_button);
 			this.form_element.appendChild(this.update_button);
 			this.container_element.appendChild(this.form_element);
 		}
-		async fetchJSON(entry_id) {
+		async selectEntry(entry_id) {
 			this.selected_id = entry_id;
 			let url = this.fetch_url.replace('0', this.selected_id).replace("placeholdername", this.name);
 			this.update_button.disabled = true;
@@ -175,6 +180,37 @@
 				// job_form_status_indicator.appendChild(job_id_span);
 				this.update_button.disabled = false;
 				// this.deselect_button.disabled = false;
+
+				// Fill out the form
+				for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
+					let temp_json_value;
+					// if (parameter_properties.type === "array") {
+					// job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
+					// 	element.parentNode.removeChild(element)
+					// });
+					// 	temp_json_value = "[" + response_obj[parameter_properties.name].length + " entries]";
+					// }
+					// else 
+					if (typeof parameter_properties.parent_object !== "undefined") {
+						temp_json_value = response_obj;
+						for (let parent_key of parameter_properties.parent_object ) {
+							temp_json_value = temp_json_value[parent_key];	
+						}
+						temp_json_value = temp_json_value[parameter_properties.name];
+					}
+					else {
+						temp_json_value = response_obj[parameter_properties.name];
+					}
+					// if (parameter_properties.type === "number" && return_number_if_number) {
+					// 	temp_json_value = Number(temp_json_value);
+					// }
+					if (parameter_properties.type === "boolean") {
+						this.parameters[parameter_name].input_element.checked = temp_json_value;
+					}
+					else {
+						this.parameters[parameter_name].input_element.value = temp_json_value;
+					}
+				}
 			});
 		}
 		async submitForm(action) {
@@ -524,7 +560,7 @@
             ,"Hours Worked": {name: "hours_worked", type:"number"}
         }
 		,editable: true
-		,row_click_event: (id) => { student_form.fetchJSON(id); }
+		,row_click_event: (id) => { student_form.selectEntry(id); }
     })
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
