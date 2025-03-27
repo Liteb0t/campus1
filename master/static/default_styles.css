@@ -291,3 +291,11 @@ button:active:not([disabled]) {
 	grid-template-columns: max-content auto;
 	text-align: end;
 }
+
+.Form {
+	display: grid;
+	grid-template-columns: auto auto;
+	fieldset {
+		grid-column: 1 / span 2;
+	}
+}

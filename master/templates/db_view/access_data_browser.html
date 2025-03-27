@@ -32,8 +32,8 @@
 	</div>
 	-->
 	<div id="student-form-container" class="Column2"></div>
+	<div id="job-form-container" class="Column2" style="display: none"></div>
 	<!--
-	<div id="job-form-container" class="Column2" style="display: none"></div>-->
 	<div id="job-form-container" class="Column2" style="display: none">
 		<div id="job-form-status-indicator" style="display: inline">No job selected.</div> <button id="job-deselect" onclick="clearJobForm()" disabled>Deselect</button>
 		<div id="job-form" class="Form">
@@ -51,9 +51,12 @@
 			<button onclick="processJobForm('update', 'job-form')" id="job-update" disabled>Update job</button>
 		</div>
 	</div>
+	-->
 	<div id="add-sub-form" class="Column2" style="display: none">
 		<p>sub</p>
 	</div>
+	<div id="linemanager-form-container" class="Column2" style="display: none">
+	<!--
 	<div id="linemanager-form-container" class="Column2" style="display: none">
 		<div id="linemanager-form-status-indicator" style="display: inline">No linemanager selected.</div>
 		<div id="linemanager-form" class="Form">
@@ -77,6 +80,7 @@
 			<button onclick="processLineManagerForm('update', 'linemanager-form')" id="linemanager-update">Update</button>
 		</div>
 	</div>
+	-->
 	<div id="recruiter-form-container" class="Column2" style="display: none">
 		<div id="recruiter-form-status-indicator">No recruiter selected.</div>
 		<div id="recruiter-form" class="Form">
@@ -111,13 +115,17 @@
 				post_url: ""
 			}, options);
 			this.container_element = document.getElementById(container_id);
-			this.selected_indicator_element = document.createElement("h3");
+			this.selected_indicator_element = document.createElement("b");
 			this.form_element = document.createElement("div");
+			this.form_element.classList.add("Form");
 
 			this.selected_indicator_element.textContent = `No ${this.name} selected.`;
 			this.container_element.appendChild(this.selected_indicator_element);
 			console.log(this.parameters);
 			for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
+				if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
+					continue;
+				}
 				let id_stringbuilder = [this.name];
 				if (typeof parameter_properties.parent_object !== "undefined") {
 					for (const parent_object of parameter_properties.parent_object) {
@@ -128,25 +136,45 @@
 				id_stringbuilder.push("_");
 				id_stringbuilder.push(parameter_properties.name);
 				let input_id = id_stringbuilder.join("");
-				let label_element = document.createElement("label");
-				label_element.setAttribute("for", input_id);
-				label_element.textContent = parameter_name;
-				let input_element = document.createElement("input");
-				if (parameter_properties.type === "string") {
-					input_element.type = "text";
-				}
-				else if (parameter_properties.type === "boolean") {
-					input_element.type = "checkbox";
+				if (parameter_properties.type === "array") {
+					let fieldset_element = document.createElement("fieldset");
+					let legend_element = document.createElement("legend");
+					legend_element.textContent = parameter_name;
+					fieldset_element.appendChild(legend_element);
+					let add_button = document.createElement("button");
+					add_button.textContent = "Add";
+					add_button.onclick = () => {
+						this.addArrayEntry(parameter_name);
+					}
+					fieldset_element.appendChild(add_button);
+					this.parameters[parameter_name]["fieldset_element"] = fieldset_element;
+					this.parameters[parameter_name]["add_button"] = add_button;
+					this.form_element.appendChild(fieldset_element);
+					// for (array_item of parameter_properties.value) {
+					// 	this.addArrayItem(parameter_name);
+					// }
 				}
 				else {
-					input_element.type = parameter_properties.type;
+					let label_element = document.createElement("label");
+					label_element.setAttribute("for", input_id);
+					label_element.textContent = parameter_name;
+					let input_element = document.createElement("input");
+					if (parameter_properties.type === "string") {
+						input_element.type = "text";
+					}
+					else if (parameter_properties.type === "boolean") {
+						input_element.type = "checkbox";
+					}
+					else {
+						input_element.type = parameter_properties.type;
+					}
+					input_element.id = input_id;
+					input_element.name = input_id;
+					this.form_element.appendChild(label_element);
+					this.form_element.appendChild(input_element);
+					this.parameters[parameter_name]["input_element"] = input_element;
 				}
-				input_element.id = input_id;
-				input_element.name = input_id;
-				this.form_element.appendChild(label_element);
-				this.form_element.appendChild(input_element);
-				this.form_element.appendChild(document.createElement("br"));
-				this.parameters[parameter_name]["input_element"] = input_element;
+				// this.form_element.appendChild(document.createElement("br"));
 			}
 			this.create_button = document.createElement("button");
 			this.create_button.onclick = () => { this.submitForm("create") };
@@ -154,13 +182,31 @@
 			this.update_button = document.createElement("button");
 			this.update_button.onclick = () => { this.submitForm("update") };
 			this.update_button.textContent = "Update";
-			this.deselect_button = document.createElement("button");
-			this.deselect_button.onclick = () => { this.deselect() };
-			this.deselect_button.textContent = "Deselect";
-			this.selected_indicator_element.insertAdjacentElement("beforebegin", this.deselect_button);
-			this.form_element.appendChild(this.create_button);
-			this.form_element.appendChild(this.update_button);
+			// this.deselect_button = document.createElement("button");
+			// this.deselect_button.onclick = () => { this.deselect() };
+			// this.deselect_button.textContent = "Deselect";
+			// this.selected_indicator_element.insertAdjacentElement("afterend", this.deselect_button);
 			this.container_element.appendChild(this.form_element);
+			this.container_element.appendChild(this.create_button);
+			this.container_element.appendChild(this.update_button);
+		}
+		addArrayEntry(parameter_name, array_item = null) {
+			let array_item_container_element = document.createElement("div");
+			array_item_container_element.classList.add("ArrayItem");
+			let array_item_input_element = document.createElement("input");
+			array_item_input_element.type = "number";
+			array_item_input_element.setAttribute("min", 0);
+			if (array_item) {
+				array_item_input_element.value = array_item.id;
+			}
+			let array_item_delete_button = document.createElement("button");
+			array_item_delete_button.textContent = "delete";
+			array_item_delete_button.onclick = () => {
+				this.parameters[parameter_name].fieldset_element.removeChild(array_item_container_element);
+			}
+			array_item_container_element.appendChild(array_item_input_element);
+			array_item_container_element.appendChild(array_item_delete_button);
+			this.parameters[parameter_name].add_button.insertAdjacentElement("beforebegin", array_item_container_element);
 		}
 		async selectEntry(entry_id) {
 			this.selected_id = entry_id;
@@ -183,32 +229,51 @@
 
 				// Fill out the form
 				for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
+					if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
+						continue;
+					}
 					let temp_json_value;
-					// if (parameter_properties.type === "array") {
-					// job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
-					// 	element.parentNode.removeChild(element)
-					// });
-					// 	temp_json_value = "[" + response_obj[parameter_properties.name].length + " entries]";
-					// }
-					// else 
-					if (typeof parameter_properties.parent_object !== "undefined") {
-						temp_json_value = response_obj;
-						for (let parent_key of parameter_properties.parent_object ) {
-							temp_json_value = temp_json_value[parent_key];	
+					if (parameter_properties.type === "array") {
+						while (parameter_properties.fieldset_element.firstChild !== parameter_properties.add_button) {
+							parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[0]);
 						}
-						temp_json_value = temp_json_value[parameter_properties.name];
+						for (let array_item of response_obj[parameter_properties.name]) {
+							this.addArrayEntry(parameter_name, array_item);
+							// let array_item_container_element = document.createElement("div");
+							// array_item_container_element.classList.add("ArrayItem");
+							// let array_item_input_element = document.createElement("input");
+							// array_item_input_element.type = "number";
+							// array_item_input_element.setAttribute("min", 0);
+							// array_item_input_element.value = array_item;
+							// let array_item_delete_button = document.createElement("button");
+							// array_item_delete_button.textContent = "delete";
+							// array_item_delete_button.onclick = () => {
+							// 	parameter_properties.fieldset_element.removeChild(array_item_container_element);
+							// }
+							// array_item_container_element.appendChild(array_item_input_element);
+							// array_item_container_element.appendChild(array_item_delete_button);
+							// this.parameters[parameter_name].fieldset_element.appendChild(array_item_container_element);
+						}
 					}
 					else {
-						temp_json_value = response_obj[parameter_properties.name];
-					}
-					// if (parameter_properties.type === "number" && return_number_if_number) {
-					// 	temp_json_value = Number(temp_json_value);
-					// }
-					if (parameter_properties.type === "boolean") {
-						this.parameters[parameter_name].input_element.checked = temp_json_value;
-					}
-					else {
-						this.parameters[parameter_name].input_element.value = temp_json_value;
+						if (typeof parameter_properties.parent_object !== "undefined") {
+							temp_json_value = response_obj;
+							for (let parent_key of parameter_properties.parent_object ) {
+								temp_json_value = temp_json_value[parent_key];	
+							}
+							temp_json_value = temp_json_value[parameter_properties.name];
+						}
+						else {
+							temp_json_value = response_obj[parameter_properties.name];
+						}
+						if (parameter_properties.type === "boolean") {
+							this.parameters[parameter_name].input_element.checked = temp_json_value;
+						}
+						else if (parameter_properties.type === "array") {
+						}
+						else {
+							this.parameters[parameter_name].input_element.value = temp_json_value;
+						}
 					}
 				}
 			});
@@ -219,20 +284,32 @@
 				_action: action
 			}
 			for (let [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
-				let base_for_entry = form_data;
-				if (typeof parameter_properties.parent_object !== "undefined") {
-					for (let parent_object of parameter_properties.parent_object) {
-						if (typeof form_data[parent_object] === "undefined") {
-							form_data[parent_object] = {};
-						}
-						base_for_entry = form_data[parent_object];
+				if (parameter_properties.type === "array") {
+					let temp_array = [];
+					for (let array_entry of parameter_properties.fieldset_element.querySelectorAll(".ArrayItem")) {
+						temp_array.push(array_entry.children[0].value);
 					}
+					form_data[parameter_properties.name] = temp_array;
 				}
-				if (parameter_properties.type === "boolean") {
-					base_for_entry[parameter_properties.name] = parameter_properties.input_element.checked;
+				else if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable) {
+					continue;
 				}
 				else {
-					base_for_entry[parameter_properties.name] = parameter_properties.input_element.value;
+					let base_for_entry = form_data;
+					if (typeof parameter_properties.parent_object !== "undefined") {
+						for (let parent_object of parameter_properties.parent_object) {
+							if (typeof form_data[parent_object] === "undefined") {
+								form_data[parent_object] = {};
+							}
+							base_for_entry = form_data[parent_object];
+						}
+					}
+					if (parameter_properties.type === "boolean") {
+						base_for_entry[parameter_properties.name] = parameter_properties.input_element.checked;
+					}
+					else {
+						base_for_entry[parameter_properties.name] = parameter_properties.input_element.value;
+					}
 				}
 			}
 			console.log(form_data);
@@ -257,41 +334,50 @@
     	    return fetch_response;
     	}
 	}
+	let student_parameters = {
+       "ID": {name: "id", type: "number", editable: false}
+       ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
+       ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
+       ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+       ,"Email": {name: "email", type: "string", "parent_object": ["user"]}
+       ,"Password": {name: "password", type: "string", "parent_object": ["user"]}
+       ,"On Visa?": {name: "on_visa", type: "boolean"}
+       ,"Hours Worked": {name: "hours_worked", type:"number"}
+    };
+	let job_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+		"Job Name": {name: "job_name", type: "string"},
+		"Cost Code": {name: "cost_code", type: "string"},
+		"Pay Rate": {name: "pay_rate", type: "number"},
+		"Students": {name: "student", type: "array"}
+	};
+	let linemanager_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+        "Username": {name: "username", type: "string", "parent_object": ["user"]},
+        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+       	"Email": {name: "email", type: "string", "parent_object": ["user"]},
+       	"Password": {name: "password", type: "string", "parent_object": ["user"]},
+        "Students": {name: "student", type: "array"}
+    };
 	const student_form = new Form("student-form-container", {
-		parameters: {
-            "ID": {name: "id", type: "number"}
-            ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
-            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-            ,"Email": {name: "email", type: "string", "parent_object": ["user"]}
-            ,"Password": {name: "password", type: "string", "parent_object": ["user"]}
-            ,"On Visa?": {name: "on_visa", type: "boolean"}
-            ,"Hours Worked": {name: "hours_worked", type:"number"}
-        },
+		parameters: student_parameters,
 		name: "student",
 		fetch_url: "{% url 'studentDetail' pk=0 %}",
 		post_url: "{% url 'studentList' %}"
 	});
-	/*
-	async function processStudentForm(action, element_id) {
-		const formElement = document.getElementById(element_id);
-		let data = {
-			_action: action,
-			_id: 0,
-			user: {
-				username: formElement.querySelector("input[name=user__username]").value,
-				first_name: formElement.querySelector("input[name=user__first_name]").value,
-				last_name: formElement.querySelector("input[name=user__last_name]").value,
-				email: formElement.querySelector("input[name=user__email]").value,
-				password: formElement.querySelector("input[name=user__password]").value
-			},
-			hours_worked: 0,
-			on_visa: formElement.querySelector("input[name=on_visa]").checked
-		};
-		let response = await postJSON("{% url 'studentList' %}", data);
-		console.log(response);
-	}
-	*/
+	const job_form = new Form("job-form-container", {
+		parameters: job_parameters,
+		name: "job",
+		fetch_url: "{% url 'jobDetail' pk=0 %}",
+		post_url: "{% url 'jobList' %}"
+	});
+	const linemanager_form = new Form("linemanager-form-container", {
+		parameters: linemanager_parameters,
+		name: "line manager",
+		fetch_url: "{% url 'lineManagerDetail' pk=0 %}",
+		post_url: "{% url 'lineManagerList' %}"
+	});
 
     const swappable_table_containers = [
         document.getElementById("students-table-container"),
@@ -318,96 +404,8 @@
             }
         }
     }
+	/*
 
-	const job_form_container = document.getElementById("job-form");
-	const job_form_status_indicator = document.getElementById("job-form-status-indicator");
-	const job_add_student_button = document.getElementById("job-add-student");
-	const job_create_button = document.getElementById("job-create");
-	const job_update_button = document.getElementById("job-update");
-	const job_deselect_button = document.getElementById("job-deselect");
-	const job_form = {
-		getID: () => { return job_form_status_indicator.querySelector("#job_id").textContent; },
-		job_name: job_form_container.querySelector("input[name=job_name]"),
-		cost_code: job_form_container.querySelector("input[name=cost_code]"),
-		pay_rate: job_form_container.querySelector("input[name=pay_rate]"),
-		student_container: document.getElementById("job_student-container")
-	}
-	function jobAddStudent(student_id = null) {
-		let temp_student_element = document.createElement("div");
-		temp_student_element.classList.add("ArrayItem");
-		let student_id_input = document.createElement("input");
-		student_id_input.type = "number";
-		if (student_id) {
-			student_id_input.value = student_id;
-		}
-		student_id_input.min = 0;
-		let student_delete_button = document.createElement("button");
-		student_delete_button.textContent = "Delete";
-		student_delete_button.onclick = () => {
-			job_form.student_container.removeChild(temp_student_element);
-		}
-		temp_student_element.appendChild(student_id_input);
-		temp_student_element.appendChild(student_delete_button);
-		job_add_student_button.insertAdjacentElement("beforebegin", temp_student_element);
-	}
-	async function processJobForm(action) {
-		let to_submit = {
-			_id: job_form.getID(),
-			_action: action,
-			job_name: job_form.job_name.value,
-			cost_code: job_form.cost_code.value,
-			pay_rate: job_form.pay_rate.value,
-			student: []
-		}
-		for (let student_entry of job_form.student_container.querySelectorAll(".ArrayItem")) {
-			to_submit.student.push(student_entry.children[0].value);
-		}
-		console.log(to_submit);
-		// let url = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
-		let url = "{% url 'jobList' %}";
-		let response = await postJSON(url, to_submit);
-		console.log(response);
-	}
-
-	async function getJobDetails(job_id) {
-		let name = "{% url 'jobDetail' pk=0 %}".replace('0', job_id);
-		job_update_button.disabled = true;
-		job_deselect_button.disabled = true;
-		job_form_status_indicator.textContent = "Loading job...";
-		let response = await fetch(name);
-		await response.json().then(response_obj => {
-			console.log(response_obj);
-			job_form_status_indicator.textContent = `Selected Job: `;
-			let job_id_span = document.createElement("span");
-			job_id_span.id = "job_id";
-			job_id_span.textContent = response_obj.id;
-			job_form_status_indicator.appendChild(job_id_span);
-			job_update_button.disabled = false;
-			job_deselect_button.disabled = false;
-			job_form.job_name.value = response_obj.job_name;
-			job_form.cost_code.value = response_obj.cost_code;
-			job_form.pay_rate.value = response_obj.pay_rate;
-			// Delete the student html entries
-			job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
-				element.parentNode.removeChild(element)
-			});
-			for (let student of response_obj.student) {
-				jobAddStudent(student.id);
-			}
-		});
-		console.log(job_id);
-	}
-	function clearJobForm() {
-		job_form.student_container.querySelectorAll(".ArrayItem").forEach(element => {
-			element.parentNode.removeChild(element)
-		});
-		job_form_status_indicator.textContent = "No job selected.";
-		job_form.job_name.value = "";
-		job_form.cost_code.value = "";
-		job_form.pay_rate.value = "";
-		job_update_button.disabled = true;
-		job_deselect_button.disabled = true;
-	}
 	const linemanager_form_container = document.getElementById("linemanager-form");
 	const linemanager_form_status_indicator = document.getElementById("linemanager-form-status-indicator");
 	const linemanager_add_student_button = document.getElementById("linemanager-add-student");
@@ -486,6 +484,7 @@
 		});
 		console.log(linemanager_id);
 	}
+	*/
 
     let entries_per_page = 50;
 
@@ -551,14 +550,7 @@
 
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"
-        ,columns: {
-            "ID": {name: "id", type: "number"}
-            ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
-            ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-            ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-            ,"On Visa?": {name: "on_visa", type: "boolean"}
-            ,"Hours Worked": {name: "hours_worked", type:"number"}
-        }
+        ,columns: student_parameters
 		,editable: true
 		,row_click_event: (id) => { student_form.selectEntry(id); }
     })
@@ -577,27 +569,15 @@
 	});
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
 		json_url: "{% url 'jobList' %}"
-		,columns: {
-			"ID": {name: "id", type: "number", editable: false},
-			"Job Name": {name: "job_name", type: "string"},
-			"Cost Code": {name: "cost_code", type: "string"},
-			"Pay Rate": {name: "pay_rate", type: "number"},
-			"Students": {name: "student", type: "array"}
-		}
+		,columns: job_parameters
 		,editable: true
-		,row_click_event: (id) => { getJobDetails(id); }
+		,row_click_event: (id) => { job_form.selectEntry(id); }
 	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"
-        ,columns: {
-			"ID": {name: "id", type: "number", editable: false},
-            "Username": {name: "username", type: "string", "parent_object": ["user"]},
-            "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-            "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
-            "Students": {name: "student", type: "array"}
-        }
+        ,columns: linemanager_parameters
 		,editable: true
-		,row_click_event: (id) => { getLineManagerDetails(id); }
+		,row_click_event: (id) => { linemanager_form.selectEntry(id); }
     })
 
     const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
