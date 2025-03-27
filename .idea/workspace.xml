@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6f662407-723e-45ec-bcf5-1e93c52a696a" name="Changes" comment=":D">
+    <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="adjusting models to remake superuser functionality; WIP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/serialisers.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/serialisers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/templates/MakeSubmission.html" beforeDir="false" afterPath="$PROJECT_DIR$/master/templates/MakeSubmission.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/templates/db_view/access_data_browser.html" beforeDir="false" afterPath="$PROJECT_DIR$/master/templates/db_view/access_data_browser.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +36,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="6f662407-723e-45ec-bcf5-1e93c52a696a" name="Changes" comment="password on add student form" />
+      <changelist id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="new base in progress; just needs content and debug" />
       <created>1742924581171</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -110,8 +105,40 @@
       <option name="project" value="LOCAL" />
       <updated>1743004248414</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="new base in progress; just needs content and debug">
+      <created>1743010297370</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1743010297370</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added endif to base">
+      <created>1743066471835</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1743066471835</updated>
+    </task>
+    <task id="LOCAL-00012" summary="adjusting models to remake superuser functionality; WIP">
+      <created>1743074523903</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1743074523903</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -130,6 +157,9 @@
     <MESSAGE value="submission validation works" />
     <MESSAGE value="D:" />
     <MESSAGE value=":D" />
-    <option name="LAST_COMMIT_MESSAGE" value=":D" />
+    <MESSAGE value="new base in progress; just needs content and debug" />
+    <MESSAGE value="added endif to base" />
+    <MESSAGE value="adjusting models to remake superuser functionality; WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusting models to remake superuser functionality; WIP" />
   </component>
 </project>
