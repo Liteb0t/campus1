@@ -189,6 +189,11 @@ header {
 
 }
 
+.SHULogo{
+    float:left;
+    vertical-align: middle;
+}
+
 #AddStudent{
     z-index: 9;
     position: absolute;
