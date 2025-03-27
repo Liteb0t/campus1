@@ -394,15 +394,15 @@ class AdvancedSearchTable extends Table {
         //     }
         // }
         this.initial_json = this.json;
-        for (const [search_param_option, search_param_value] of this.url_search_params) {
-            if (search_param_option.endsWith("delimiter")) {
-                let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
-                // this.date_delimiters[search_param_option_truncated] = search_param_value;
-            }
-            else if (search_param_option !== "page") {
-                this.addSearchParameter(search_param_option, search_param_value);
-            }
-        }
+        // for (const [search_param_option, search_param_value] of this.url_search_params) {
+        //     if (search_param_option.endsWith("delimiter")) {
+        //         let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
+        //         // this.date_delimiters[search_param_option_truncated] = search_param_value;
+        //     }
+        //     else if (search_param_option !== "page") {
+        //         this.addSearchParameter(search_param_option, search_param_value);
+        //     }
+        // }
     }
     linkToHTML() {
         this.advanced_search_container_element = document.createElement("fieldset");
@@ -464,6 +464,7 @@ class AdvancedSearchTable extends Table {
         let parameter_select_2 = null;
 
         let input_element;
+		// console.log(option);
         // Generates one or two input elements depending on the parameter type.
         // strings use one text box, dates use a date picker and a drop-down "select" element
         if (this.columns[option].type === "date" || this.columns[option].type === "number" || this.columns[option].type === "boolean") {
@@ -501,8 +502,8 @@ class AdvancedSearchTable extends Table {
             }
             // parameter_select_2.value = this.date_delimiters[option];
             // parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
-			console.log(this.active_parameters);
-			console.log(input_element);
+			// console.log(this.active_parameters);
+			// console.log(input_element);
             if (this.columns[option].type === "boolean") {
                 parameter_select_2.onchange = () => {this.active_parameters[parameter_select_2.name].value = parameter_select_2.value}
                 this.active_parameters[parameter_select_2.name] = {value: parameter_select_2.value, delimiter: null}
@@ -511,7 +512,7 @@ class AdvancedSearchTable extends Table {
                 parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
                 this.active_parameters[option] = {value: input_element.value, delimiter: parameter_select_2.value}
             }
-			console.log(this.active_parameters);
+			// console.log(this.active_parameters);
             parameter_select.insertAdjacentElement("afterend", parameter_select_2);
         }
         else { // type is string
@@ -527,7 +528,7 @@ class AdvancedSearchTable extends Table {
             input_element.name = option;
             input_element.value = value;
         }
-		console.log(this.active_parameters);
+		// console.log(this.active_parameters);
         parameter_select.value = option;
         // if (value) {
         // }
@@ -544,7 +545,7 @@ class AdvancedSearchTable extends Table {
         if (this.columns[option].type !== "boolean") {
             parameter_container.appendChild(input_element);
         }
-		console.log(this.active_parameters);
+		// console.log(this.active_parameters);
 
         let delete_button = document.createElement("button");
         delete_button.classList.add("DeleteParameterButton")
@@ -553,7 +554,7 @@ class AdvancedSearchTable extends Table {
         if (this.columns[option].type === "boolean") {
             delete_button.onclick = (event) => {
                 this.parameter_container_container.removeChild(parameter_container);
-				console.log(parameter_select_2.name);
+				// console.log(parameter_select_2.name);
                 delete this.active_parameters[parameter_select_2.name];
                 // --this.number_of_parameters;
             }
@@ -581,7 +582,7 @@ class AdvancedSearchTable extends Table {
                         this.active_parameters[input_element.name].value = input_element.value;
                         // this.doSearch();
                     };
-                    console.log("there was no input element i hope");
+                    // console.log("there was no input element i hope");
                 }
                 input_element.type = new_type;
                 input_element.name = new_value;
@@ -590,7 +591,7 @@ class AdvancedSearchTable extends Table {
                 if (input_element && parameter_container.contains(input_element)) {
                     parameter_container.removeChild(input_element);
                 }
-                console.log("removing input element?");
+                // console.log("removing input element?");
             }
             if (new_type === "date" || new_type === "number" || new_type === "boolean") {
                 if (parameter_container.contains(parameter_select_2)) {
@@ -650,7 +651,7 @@ class AdvancedSearchTable extends Table {
 			if (new_type === "boolean") {
         	    delete_button.onclick = (event) => {
         	        this.parameter_container_container.removeChild(parameter_container);
-					console.log(parameter_select_2.name);
+					// console.log(parameter_select_2.name);
         	        delete this.active_parameters[parameter_select_2.name];
         	        // --this.number_of_parameters;
         	    }

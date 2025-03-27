@@ -110,7 +110,7 @@
 			}, options);
 			this.container_element = document.getElementById(container_id);
 			this.selected_indicator_element = document.createElement("h3");
-			this.form_element = document.createElement("form");
+			this.form_element = document.createElement("div");
 
 			this.selected_indicator_element.textContent = `No ${this.name} selected.`;
 			this.container_element.appendChild(this.selected_indicator_element);
@@ -147,10 +147,10 @@
 				this.parameters[parameter_name]["input_element"] = input_element;
 			}
 			this.create_button = document.createElement("button");
-			this.create_button.onclick = () => this.submitForm("create");
+			this.create_button.onclick = () => { this.submitForm("create") };
 			this.create_button.textContent = "Create";
 			this.update_button = document.createElement("button");
-			this.update_button.onclick = () => this.submitForm("update");
+			this.update_button.onclick = () => { this.submitForm("update") };
 			this.update_button.textContent = "Update";
 			this.update_button.disabled = true;
 			this.form_element.appendChild(this.create_button);
