@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'default_styles.css' %}" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 	<meta name="viewport" content="width=device-width, initial-scale=0.75">
 </head>
 <body>
 <header>
     <nav class="Navbar">
+        <img id="imgLogo" style="float:left" class="img-fluid" src="/static/logo-shu-white.svg">
         <a class="Navlink" href="{% url 'homepage' %}">Home</a>
         <a class="Navlink" href="{% url 'user_profile' %}">Profile</a>
         {% if request.user.user_type == 'Admin' %}

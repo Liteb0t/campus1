@@ -156,9 +156,9 @@ header {
 .Navlink{
     color: #f2f2f2;
     text-align: center;
-    padding: 20px 24px;
+    padding: 24px 24px;
     text-decoration: none;
-    font-size: 22px;
+    font-size: 24px;
     float: left;
 }
 
@@ -173,7 +173,7 @@ header {
     outline: none;
     font: inherit;
     color: #f2f2f2;
-    font-size: 22px;
+    font-size: 24px;
     background-color: transparent;
     float: right;
 }
