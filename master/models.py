@@ -39,6 +39,9 @@ class CampusUser(AbstractUser):
     email = models.CharField(max_length=255)
     first_name = models.CharField(max_length=32)
     last_name = models.CharField(max_length=32)
+    is_active = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     user_type = models.CharField(max_length=32)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','first_name','last_name','user_type']

@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="adjusting models to remake superuser functionality; WIP">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -135,7 +134,14 @@
       <option name="project" value="LOCAL" />
       <updated>1743074997163</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="adjusting models to remake superuser functionality; WIP">
+      <created>1743075217668</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1743075217668</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
