@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 # Create your models here.
 class CampusUserManager(BaseUserManager):
 
-    def create_user(self, username, email, password=None,first_name=None, last_name=None):
+    def create_user(self, username, email, password=None,first_name=None, last_name=None, is_staff=False, is_superuser=False):
         if not email:
             raise ValueError('Cannot create a user without an email address ')
 
@@ -12,7 +12,9 @@ class CampusUserManager(BaseUserManager):
             email=self.normalize_email(email),
             username=username,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
+            is_staff=is_staff,
+            is_superuser=is_superuser,
         )
 
         user.set_password(password)
@@ -25,10 +27,12 @@ class CampusUserManager(BaseUserManager):
             email,
             password=password,
             first_name=first_name,
-            last_name=last_name
+            last_name=last_name,
+            is_staff=True,
+            is_superuser=True,
         )
-        user.staff = True
-        user.admin = True
+        # user.staff = True
+        # user.admin = True
         user.user_type = user_type
         user.save(using=self._db)
         return user
