@@ -1,10 +1,45 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # Create your models here.
+class CampusUserManager(BaseUserManager):
+
+    def create_user(self, username, email, password=None,first_name=None, last_name=None):
+        if not email:
+            raise ValueError('Cannot create a user without an email address ')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username,email, password, first_name, last_name, user_type):
+        user = self.create_user(
+            username,
+            email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name
+        )
+        user.staff = True
+        user.admin = True
+        user.user_type = user_type
+        user.save(using=self._db)
+        return user
 
 class CampusUser(AbstractUser):
+    objects = CampusUserManager()
+    username = models.CharField(max_length=255, unique=True, null=True, default=None)
+    email = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=32)
+    last_name = models.CharField(max_length=32)
     user_type = models.CharField(max_length=32)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email','first_name','last_name','user_type']
+
 class Student(models.Model):
     user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
     on_visa = models.BooleanField(default=False)
