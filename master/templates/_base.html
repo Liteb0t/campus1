@@ -22,6 +22,7 @@
 <!--        LM CONTENT HERE-->
         {% elif request.campususer.user_type == "Recruiter" %}
 <!--        REC CONTENT HERE-->
+        {% endif %}
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button class="Navlink OverrideButton" type="submit">Logout</button>
