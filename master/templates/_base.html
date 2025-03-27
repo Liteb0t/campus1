@@ -12,15 +12,15 @@
     <nav class="Navbar">
         <a class="Navlink" href="{% url 'homepage' %}">Home</a>
         <a class="Navlink" href="{% url 'user_profile' %}">Profile</a>
-        {% if request.campususer.user_type == Admin %}
+        {% if request.user.user_type == "Admin" %}
             <a class="Navlink" href="{% url 'access_data_browser' %}">Data Browser</a>
             <a class="Navlink" href="admin/">Admin</a>
-        {% elif request.campususer.user_type == Student %}
+        {% elif request.user.user_type == "Student" %}
             <a class="Navlink" href="{% url 'make_submission' %}">Make Submission</a>
             <a class="Navlink" href="{% url 'access_student_submission' %}">View Submissions</a>
-        {% elif request.campususer.user_type == LineManager %}
+        {% elif request.user.user_type == "LineManager" %}
 <!--        LM CONTENT HERE-->
-        {% elif request.campususer.user_type == Recruiter %}
+        {% elif request.user.user_type == "Recruiter" %}
 <!--        REC CONTENT HERE-->
         {% endif %}
         <form action="{% url 'logout' %}" method="post">

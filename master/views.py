@@ -174,6 +174,7 @@ def submissionListStudent(request):
                     student.hours_worked += int(data.get("hours"))
                     print(student.hours_worked)
                     student.save()
+                    data["message"] = "Success"
                     return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=403)
