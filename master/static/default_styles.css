@@ -191,7 +191,7 @@ header {
 
 .SHULogo{
     float:left;
-    vertical-align: middle;
+	padding: 3px 0;
 }
 
 #AddStudent{
@@ -303,4 +303,13 @@ button:active:not([disabled]) {
 	fieldset {
 		grid-column: 1 / span 2;
 	}
+}
+
+footer {
+	color: #000;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+    opacity: 0.70;
+    background: #eee;
 }

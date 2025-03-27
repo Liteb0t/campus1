@@ -12,7 +12,7 @@
 <header>
     <nav class="Navbar">
         <a href="https://www.shu.ac.uk/">
-            <img id="imgLogo" class="SHULogo" class="img-fluid" src="/static/logo-shu-white.svg">
+           	<img id="imgLogo" class="SHULogo" class="img-fluid" src="/static/logo-shu-white.svg">
         </a>
         <a class="Navlink" href="{% url 'homepage' %}">Home</a>
         <a class="Navlink" href="{% url 'user_profile' %}">Profile</a>
@@ -37,11 +37,10 @@
     </nav>
 </header>
 
-<footer>
-  <p>© Copyright 2025 Sheffield Hallam University</p>
-</footer>
-
 {% block content %}
 {% endblock %}
+<footer>
+  <span>© Copyright 2025 Sheffield Hallam University AND FUZE DOT PAGE</span>
+</footer>
 </body>
 </html>

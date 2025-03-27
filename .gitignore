@@ -1,11 +1,11 @@
 # Pycharm project files
 .idea/campus1.iml
 .idea/misc.xml
+__pycache__/
+.idea/
+.idea/*
+workspace.xml
 
 # Vim swap files
 *.swp
 
-# Pycharm fix
-__pycache__/
-.idea/
-workspace.xml
