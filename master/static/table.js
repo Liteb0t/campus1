@@ -346,7 +346,7 @@ class Table {
     async refresh() {
         this.tbody_element.textContent = "Fetching data...";
         const response = await fetch(this.json_url);
-        console.log(response);
+        // console.log(response);
         if (!response.ok) {
             this.tbody_element.textContent = "There was a problem fetching the data";
         }
@@ -373,6 +373,7 @@ class Table {
         });
 		// console.log(fetch_response);
 		const json = await fetch_response.json();
+		console.log(json);
 		alert(`Status: ${fetch_response.status}\nMessage: ${json.message}`);
 		// alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
         return fetch_response;

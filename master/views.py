@@ -71,6 +71,7 @@ def studentList(request):
         students = Student.objects.select_related("user")
         students_serialiser = DBAdminStudentSerialiser(students, many=True)
         return JsonResponse(students_serialiser.data, safe=False)
+
     elif request.method == "POST":
         data = JSONParser().parse(request)
         serialiser = DBAdminStudentSerialiser(data=data)
@@ -89,16 +90,20 @@ def studentList(request):
             instance = Student.objects.get(id=data["_id"])
             if "password" not in data["user"]:
                 data["user"]["password"] = instance.user.password
-            # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
-            # if serialiser.is_valid(raise_exception=ValueError):
-            if serialiser.is_valid():
+            username_equivalent = Student.objects.filter(user__username=data["user"]["username"])
+            if (username_equivalent.exists() and username_equivalent != instance):
+                # return_data = serialiser.errors
+                return_data = {}
+                return_data["message"] = "epic duplicate username fail"
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
                 return_data = serialiser.data
                 return_data["message"] = "success"
                 return JsonResponse(return_data, status=201)
             else:
                 return_data = serialiser.errors
-                return_data["message"] = "epic fail"
+                return_data["message"] = "epic validation fail"
                 return JsonResponse(return_data, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
@@ -177,11 +182,21 @@ def recruiterList(request):
             instance = Recruiter.objects.get(id=data["_id"])
             if "password" not in data["user"]:
                 data["user"]["password"] = instance.user.password
-            if serialiser.is_valid(raise_exception=ValueError):
+            username_equivalent = Recruiter.objects.filter(user__username=data["user"]["username"])
+            if (username_equivalent.exists() and username_equivalent != instance):
+                # return_data = serialiser.errors
+                return_data = {}
+                return_data["message"] = "epic duplicate username fail"
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-                return JsonResponse(serialiser.data, status=201)
+                return_data = serialiser.data
+                return_data["message"] = "success"
+                return JsonResponse(return_data, status=201)
             else:
-                return JsonResponse(serialiser.errors, status=400)
+                return_data = serialiser.errors
+                return_data["message"] = "epic validation fail"
+                return JsonResponse(return_data, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
@@ -296,14 +311,24 @@ def lineManagerList(request):
             else:
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
-            # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))
             instance = LineManager.objects.get(id=data["_id"])
-            serialiser.update(instance=instance, validated_data=data)
-            # elif data["_action"] == "deleteMultiple":
-            #     for entry_id in data["to_delete"]:
-            #         instance = LineManager.objects.get(id=entry_id)
-            #         serialiser.delete(instance=instance)
-            return JsonResponse(serialiser.data, status=201)
+            if "password" not in data["user"]:
+                data["user"]["password"] = instance.user.password
+            username_equivalent = LineManager.objects.filter(user__username=data["user"]["username"])
+            if (username_equivalent.exists() and username_equivalent != instance):
+                # return_data = serialiser.errors
+                return_data = {}
+                return_data["message"] = "epic duplicate username fail"
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
+                serialiser.update(instance=instance, validated_data=data)
+                return_data = serialiser.data
+                return_data["message"] = "success"
+                return JsonResponse(return_data, status=201)
+            else:
+                return_data = serialiser.errors
+                return_data["message"] = "epic validation fail"
+                return JsonResponse(return_data, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
