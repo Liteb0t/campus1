@@ -92,7 +92,6 @@ def studentList(request):
                 data["user"]["password"] = instance.user.password
             username_equivalent = Student.objects.filter(user__username=data["user"]["username"])
             if (username_equivalent.exists() and username_equivalent != instance):
-                # return_data = serialiser.errors
                 return_data = {}
                 return_data["message"] = "epic duplicate username fail"
                 return JsonResponse(return_data, status=400)

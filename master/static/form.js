@@ -9,12 +9,16 @@ class Form {
 		}, options);
 		this.container_element = document.getElementById(container_id);
 		this.container_element.classList.add("FormContainer");
+		this.topbar_element = document.createElement("div");
+		this.topbar_element.classList.add("Topbar");
 		this.selected_indicator_element = document.createElement("b");
+		this.selected_indicator_element.classList.add("SelectedIndicator");
 		this.form_element = document.createElement("div");
 		this.form_element.classList.add("Form");
 
 		this.selected_indicator_element.textContent = `No ${this.name} selected.`;
-		this.container_element.appendChild(this.selected_indicator_element);
+		this.topbar_element.appendChild(this.selected_indicator_element);
+		this.container_element.appendChild(this.topbar_element);
 		console.log(this.parameters);
 		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
 			if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
@@ -77,8 +81,9 @@ class Form {
 		this.deselect_button = document.createElement("button");
 		this.deselect_button.onclick = () => { this.deselect() };
 		this.deselect_button.textContent = "Deselect";
+		this.deselect_button.classList.add("DeselectButton");
 		this.deselect_button.disabled = true;
-		this.selected_indicator_element.insertAdjacentElement("afterend", this.deselect_button);
+		this.topbar_element.appendChild(this.deselect_button);
 		this.container_element.appendChild(this.form_element);
 		this.container_element.appendChild(this.create_button);
 		this.container_element.appendChild(this.update_button);
@@ -101,6 +106,7 @@ class Form {
 				this.parameters[parameter_name].input_element.value = "";
 			}
 		}
+		this.deselect_button.disabled = true;
 	}
 
 	addArrayEntry(parameter_name, array_item = null) {

@@ -240,10 +240,13 @@ header {
     color: black;
     cursor: pointer;
 } */
-button, .button {
+button {
     font: inherit;
     background-color: #f2f2f2;
 	border: 2px outset #ddd;
+}
+button:is([disabled]) {
+	opacity: 0.75;
 }
 
 button:hover:not([disabled]) {
@@ -379,18 +382,33 @@ ul{
 
 .FormContainer {
 	width: fit-content;
+	.Topbar {
+		margin: 3px 0;
+		display: flow-root;
+	}
+	.SelectedIndicator {
+		vertical-align: middle;
+	}
+	.DeselectButton {
+		float: right;
+	}
 }
 .Form {
+	margin: 3px 0;
 	display: grid;
 	grid-template-columns: auto auto;
 	grid-gap: 3px;
 	fieldset {
 		grid-column: 1 / span 2;
 	}
+	input {
+		height: fit-content;
+	}
 }
 
 main {
 	flex: 0 0 auto;
+	padding: 0px 5px;
 }
 
 .Separator {
@@ -408,7 +426,9 @@ footer {
 	flex: 0 0 auto;
     text-align: center;
     /*background: #eee;*/
-    opacity: 0.70;
     /*font-family: Sans-serif;*/
     background-color: #BF0167;
+}
+.FileInput {
+	font-size: inherit;
 }
