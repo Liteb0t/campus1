@@ -291,10 +291,10 @@ def lineManagerList(request):
                 serialiser.create(validated_data=data)
             else:
                 return JsonResponse(serialiser.errors, status=400)
-            elif data["_action"] == "update":
-                # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))
-                instance = LineManager.objects.get(id=data["_id"])
-                serialiser.update(instance=instance, validated_data=data)
+        elif data["_action"] == "update":
+            # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))
+            instance = LineManager.objects.get(id=data["_id"])
+            serialiser.update(instance=instance, validated_data=data)
             # elif data["_action"] == "deleteMultiple":
             #     for entry_id in data["to_delete"]:
             #         instance = LineManager.objects.get(id=entry_id)
