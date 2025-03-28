@@ -72,14 +72,35 @@ class Form {
 		this.update_button = document.createElement("button");
 		this.update_button.onclick = () => { this.submitForm("update") };
 		this.update_button.textContent = "Update";
-		// this.deselect_button = document.createElement("button");
-		// this.deselect_button.onclick = () => { this.deselect() };
-		// this.deselect_button.textContent = "Deselect";
-		// this.selected_indicator_element.insertAdjacentElement("afterend", this.deselect_button);
+		this.update_button.disabled = true;
+		this.deselect_button = document.createElement("button");
+		this.deselect_button.onclick = () => { this.deselect() };
+		this.deselect_button.textContent = "Deselect";
+		this.deselect_button.disabled = true;
+		this.selected_indicator_element.insertAdjacentElement("afterend", this.deselect_button);
 		this.container_element.appendChild(this.form_element);
 		this.container_element.appendChild(this.create_button);
 		this.container_element.appendChild(this.update_button);
 	}
+	deselect() {
+		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
+			if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
+				continue;
+			}
+			if (parameter_properties.type === "array") {
+				while (parameter_properties.fieldset_element.firstChild !== parameter_properties.add_button) {
+					parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[0]);
+				}
+			}
+			else if (parameter_properties.type === "boolean") {
+				this.parameters[parameter_name].input_element.checked = false;
+			}
+			else {
+				this.parameters[parameter_name].input_element.value = "";
+			}
+		}
+	}
+
 	addArrayEntry(parameter_name, array_item = null) {
 		let array_item_container_element = document.createElement("div");
 		array_item_container_element.classList.add("ArrayItem");
@@ -102,7 +123,7 @@ class Form {
 		this.selected_id = entry_id;
 		let url = this.fetch_url.replace('0', this.selected_id).replace("placeholdername", this.name);
 		this.update_button.disabled = true;
-		// this.deselect_button.disabled = true;
+		this.deselect_button.disabled = true;
 		this.selected_indicator_element.textContent = `Loading ${this.name}...`;
 		let response = await fetch(url);
 		await response.json().then(response_obj => {
@@ -111,7 +132,7 @@ class Form {
 			// this.selected_indicator_element.removeChild(this.selected_indicator_element.lastChild);
 			this.selected_indicator_element.textContent = `Selected ${this.name}: ${this.selected_id}`;
 			this.update_button.disabled = false;
-			// this.deselect_button.disabled = false;
+			this.deselect_button.disabled = false;
 
 			// Fill out the form
 			for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
