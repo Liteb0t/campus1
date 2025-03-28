@@ -54,13 +54,13 @@ body {
 	.EntryDeleteCheckbox {
 		appearance: none; /* Hide the broswer's default checkmark */
 		cursor: pointer;
-		background-color: #fcc;
+		background-color: #f88;
 		border: 2px outset #ddd;
 		&:hover {
-			background-color: #ebb;
+			background-color: #d66;
 		}
 		&:checked {
-			background-color: #ebb;
+			background-color: #f88;
 			border-style: inset;
 			&::before {
 				content: url("/static/trashbin-icon-x24.png") / "Select for deletion";
