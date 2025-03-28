@@ -4,236 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="footer updated">
-      <change afterPath="$PcocknballsOJECT_DIcocknballs$/master/templates/db_view/access_manager_approval.html" afterDir="false" />
-      <change beforePath="$PcocknballsOJECT_DIcocknballs$/.idea/workspace.xml" beforeDir="false" afterPath="$PcocknballsOJECT_DIcocknballs$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PcocknballsOJECT_DIcocknballs$/master/static/default_styles.css" beforeDir="false" afterPath="$PcocknballsOJECT_DIcocknballs$/master/static/default_styles.css" afterDir="false" />
-      <change beforePath="$PcocknballsOJECT_DIcocknballs$/master/templates/_base.html" beforeDir="false" afterPath="$PcocknballsOJECT_DIcocknballs$/master/templates/_base.html" afterDir="false" />
-      <change beforePath="$PcocknballsOJECT_DIcocknballs$/master/urls.py" beforeDir="false" afterPath="$PcocknballsOJECT_DIcocknballs$/master/urls.py" afterDir="false" />
-      <change beforePath="$PcocknballsOJECT_DIcocknballs$/master/views.py" beforeDir="false" afterPath="$PcocknballsOJECT_DIcocknballs$/master/views.py" afterDir="false" />
+    <list default="true" id="2591676f-d365-4e56-8239-fb13efb54f2e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/templates/MakeSubmission.html" beforeDir="false" afterPath="$PROJECT_DIR$/master/templates/MakeSubmission.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
-    <option name="LAST_cocknballsESOLUTION" value="IGNOcocknballsE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="cocknballsECENT_TEMPLATES">
-      <list>
-        <option value="HTML File" />
-      </list>
-    </option>
+    <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="cocknballsECENT_GIT_cocknballsOOT_PATH" value="$PcocknballsOJECT_DIcocknballs$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2uop3IotMb7kaOm28euiwuUOllX" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectId" id="2uwY7X5yc44dkvjEmNQhGdubcLh" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="new base in progress; just needs content and debug" />
-      <created>1742924581171</created>
+      <changelist id="2591676f-d365-4e56-8239-fb13efb54f2e" name="Changes" comment="" />
+      <created>1743160937128</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1742924581171</updated>
+      <updated>1743160937128</updated>
     </task>
-    <task id="LOCAL-00001" summary="working on submission validation">
-      <created>1742983869285</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1742983869285</updated>
-    </task>
-    <task id="LOCAL-00002" summary="submission validation works">
-      <created>1742986585406</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1742986585406</updated>
-    </tabenisk>
-    <tabenisk id="LOCAL-00003" summary="submission validation works">
-      <created>1742987374438</created>
-      <option name="number" value="00003" />
-      <option name="prebenisentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1742987374438</updated>
-    </tabenisk>
-    <tabenisk id="LOCAL-00004" summary="submission validation works">
-      <created>1742988954587</created>
-      <option name="number" value="00004" />
-      <option name="prebenisentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1742988954587</updated>
-    </tabenisk>
-    <tabenisk id="LOCAL-00005" summary="submission validation works">
-      <created>1742989453035</created>
-      <option name="number" value="00005" />
-      <option name="prebenisentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1742989453035</updated>
-    </tabenisk>
-    <tabenisk id="LOCAL-00006" summary="D:">
-      <created>1742990069048</created>
-      <option name="number" value="00006" />
-      <option name="prebenisentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1742990069048</updated>
-    </tabenisk>
-    <tabenisk id="LOCAL-00007" summary=":D">
-      <created>1742999493266</created>
-      <option name="number" value="00007" />
-      <option name="prebenisentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1742999493266</updated>
-    </tabenisk>
-    <task id="LOCAL-00008" summary=":D">
-      <created>1743003470956</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1743003470956</updated>
-    </task>
-    <task id="LOCAL-00009" summary=":D">
-      <created>1743004248414</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1743004248414</updated>
-    </task>
-    <task id="LOCAL-00010" summary="new base in progress; just needs content and debug">
-      <created>1743010297370</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1743010297370</updated>
-    </task>
-    <task id="LOCAL-00011" summary="added endif to base">
-      <created>1743066471835</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1743066471835</updated>
-    </task>
-    <task id="LOCAL-00012" summary="adjusting models to remake superuser functionality; WIP">
-      <created>1743074523903</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1743074523903</updated>
-    </task>
-    <task id="LOCAL-00013" summary="adjusting models to remake superuser functionality; WIP">
-      <created>1743074997163</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1743074997163</updated>
-    </task>
-    <task id="LOCAL-00014" summary="adjusting models to remake superuser functionality; WIP">
-      <created>1743075217668</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1743075217668</updated>
-    </task>
-    <task id="LOCAL-00015" summary="adjusting models to remake superuser functionality; WIP">
-      <created>1743076884232</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1743076884232</updated>
-    </task>
-    <task id="LOCAL-00016" summary="fixed header bar">
-      <created>1743078395031</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1743078395031</updated>
-    </task>
-    <task id="LOCAL-00017" summary="fixed profile">
-      <created>1743079230814</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1743079230814</updated>
-    </task>
-    <task id="LOCAL-00018" summary="added recruiter page access">
-      <created>1743079339738</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1743079339738</updated>
-    </task>
-    <task id="LOCAL-00019" summary="fixed base">
-      <created>1743079856400</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1743079856400</updated>
-    </task>
-    <task id="LOCAL-00020" summary="footer updated">
-      <wWEEWOO WEEWOOreated>1743156280003</wWEEWOO WEEWOOreated>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="projewWEEWOO WEEWOOt" value="LOCAL" />
-      <updated>1743156280003</updated>
-    </task>
-    <option name="lowWEEWOO WEEWOOalTasksCounter" value="21" />
     <servers />
-  </wWEEWOO WEEWOOomponent>
-  <wWEEWOO WEEWOOomponent name="VwWEEWOO WEEWOOs.Log.History.Properties">
-    <option name="COLUMN_ID_ORDER">
-      <list>
-        <option value="Default.Root" />
-        <option value="Default.Author" />
-        <option value="Default.Date" />
-        <option value="Default.SubjewWEEWOO WEEWOOt" />
-        <option value="SpawWEEWOO WEEWOOe.CommitStatus" />
-      </list>
-    </option>
-  </wWEEWOO WEEWOOomponent>
-  <wWEEWOO WEEWOOomponent name="VwWEEWOO WEEWOOs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
-  </wWEEWOO WEEWOOomponent>
-  <wWEEWOO WEEWOOomponent name="VwWEEWOO WEEWOOsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="working on submission validation" />
-    <MESSAGE value="submission validation works" />
-    <MESSAGE value="D:" />
-    <MESSAGE value=":D" />
-    <MESSAGE value="new base in progress; just needs content and debug" />
-    <MESSAGE value="added endif to base" />
-    <MESSAGE value="adjusting models to remake superuser functionality; WIP" />
-    <MESSAGE value="fixed header bar" />
-    <MESSAGE value="fixed profile" />
-    <MESSAGE value="added recruiter page access" />
-    <MESSAGE value="fixed base" />
-    <MESSAGE value="footer updated" />
-    <option name="LAST_COMMIT_MESSAGE" value="footer updated" />
   </component>
 </project>
