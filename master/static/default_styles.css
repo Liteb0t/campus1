@@ -240,7 +240,7 @@ header {
     color: black;
     cursor: pointer;
 } */
-button {
+button, .button {
     font: inherit;
     background-color: #f2f2f2;
 	border: 2px outset #ddd;

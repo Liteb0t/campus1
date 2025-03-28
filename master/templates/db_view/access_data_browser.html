@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    <button onclick="showTable('students-table-container', 'student-form-container')">Students</button>
+    <button onclick="showTable('students-table-container', 'student-sidebar')">Students</button>
     <button onclick="showTable('submissions-table-container', 'submission-form-container')">Submissions</button>
     <button onclick="showTable('jobs-table-container', 'job-form-container')">Jobs</button>
     <button onclick="showTable('linemanagers-table-container', 'linemanager-form-container')">Line Managers</button>
@@ -20,13 +20,15 @@
 		<div id="recruiter-table-container" style="display: none"></div>
 	</div>
 	<div id="student-sidebar" class="Column2">
+		<input class="button" type="file" id="fileInput" accept=".csv" />
+		<pre id="output"></pre>
 		<div id="student-form-container"></div>
 		<!-- ARTICLE TESTING -->
 		<details class="HelpDetails">
 			<summary>Usage Guide</summary>
   			<div>
 				<h3>Details test contents:</h3>
-				<p>Lorum ipsum sit amet, ah whatever i dont care enough to type all this out</p>
+				<p>ryan smells</p>
 			</div>
 		</details>
 		<!-- END OF DETAIL TESTING-->
@@ -39,6 +41,7 @@
 
     <script src="{% static 'table.js' %}"></script>
 	<script src="{% static 'form.js' %}"></script>
+	<script src="{% static 'CSVReader.js' %}"></script>
     <script>
 	"use strict";
 
@@ -49,7 +52,7 @@
         document.getElementById("jobs-table-container"),
         document.getElementById("linemanagers-table-container"),
 		document.getElementById("recruiter-table-container"),
-        document.getElementById("student-form-container"),
+        document.getElementById("student-sidebar"),
         document.getElementById("submission-form-container"),
         document.getElementById("job-form-container"),
         document.getElementById("linemanager-form-container"),
