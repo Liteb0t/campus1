@@ -178,10 +178,12 @@ def submissionListStudent(request):
                 if student.hours_worked + int(data.get("hours")) <= 15 and serialiser.is_valid():
                     serialiser.create(validated_data=data)
                     student.hours_worked += int(data.get("hours"))
-                    print(student.hours_worked)
                     student.save()
-                    data["message"] = "Success"
+                    print(serialiser.data)
                     return JsonResponse(serialiser.data, status=201)
+                else:
+                    print(serialiser.errors)
+                    return JsonResponse(serialiser.errors, status=403)
             else:
                 return JsonResponse(serialiser.errors, status=403)
         elif data["_action"] == "update":

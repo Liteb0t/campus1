@@ -59,9 +59,14 @@
 			body: JSON.stringify(data),
 			headers: {
 				"Content-type": "application/json; charset=UTF-8"
-			}
+			},
 		});
-		alert(fetch_response.message);
+		if (fetch_response.status == 201){
+			alert("Success")
+		}
+		else{
+			alert(fetch_response.error)
+		}
 		return fetch_response;
 	}
 </script>
