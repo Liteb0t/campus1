@@ -193,9 +193,9 @@ def submissionListStudent(request):
         data = JSONParser().parse(request)
         if data["_action"] == "create":
             serialiser = DBAdminSubmissionSerialiser(data=data)
-            if Student.objects.filter(user__id=request.user.id).exists():
+            if Student.objects.filter(user__id=request.user.id).exists() and serialiser.is_valid():
                 student = Student.objects.get(user__id=request.user.id)
-                if student.hours_worked + int(data.get("hours")) <= 15 and serialiser.is_valid():
+                if student.hours_worked + int(data.get("hours")) <= 15:
                     serialiser.create(validated_data=data)
                     student.hours_worked += int(data.get("hours"))
                     student.save()
@@ -203,9 +203,10 @@ def submissionListStudent(request):
                     return JsonResponse(serialiser.data, status=201)
                 else:
                     print(serialiser.errors)
-                    return JsonResponse(serialiser.errors, status=403)
+                    return JsonResponse({"message": "Please select both dates"}, status=403)
             else:
-                return JsonResponse(serialiser.errors, status=403)
+                print(serialiser.errors)
+                return JsonResponse({"message": "Please enter the hours you will be working"}, status=403)
         elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
             data["accepted"] = instance.accepted
@@ -338,3 +339,7 @@ def currentUser(request):
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+class HttpResponseInternalServerError(JsonResponse):
+  def __init__(self, message):
+    super().__init__({'message' : message}, status=503)
