@@ -127,7 +127,6 @@ def submissionList(request):
             # if data["student"]["id"] != instance.student.id:
             # data["student"] = Student.objects.get(id=data["student"]["id"]).__dict__
             # data["student"] = data["student"]["id"]
-            print(data)
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.update(instance=instance, validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
@@ -135,6 +134,14 @@ def submissionList(request):
                 return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
+
+@api_view(["GET"])
+def submissionDetail(request, pk):
+    submission = Submission.objects.get(id=pk)
+    if request.method == "GET":
+        submission_serialiser = DBAdminSubmissionSerialiser(submission);
+        return Response(submission_serialiser.data)
+
 @csrf_exempt
 def recruiterList(request):
     if request.method == "GET":
