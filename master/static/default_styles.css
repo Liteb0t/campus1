@@ -1,4 +1,11 @@
+html {
+	height: 100vh;
+}
+
 body {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
     font-family: sans-serif;
     background-color: #621b40;
     margin: 0;
@@ -142,6 +149,7 @@ body {
 /*navbar*/
 
 header {
+	flex: 0 0 auto;
 	position: sticky;
 	top: 0;
 	z-index: 1;
@@ -305,21 +313,26 @@ button:active:not([disabled]) {
 	}
 }
 
+main {
+	flex: 0 0 auto;
+}
+
+.Separator {
+	flex: 1 1 auto;
+}
+
 footer {
     /*TEXT*/
-	color: #f2f2f2;
+	color: #fff;
 	padding: 7px 7px;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 14px;
 
     /*POSITION AND BG*/
-    position: fixed;
+	flex: 0 0 auto;
     text-align: center;
-    width: 100%;
-	bottom: 0;
+    /*background: #eee;*/
     opacity: 0.70;
-    background: #eee;
-    display: flow-root;
     /*font-family: Sans-serif;*/
     background-color: #BF0167;
 }
