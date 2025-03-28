@@ -283,40 +283,17 @@ button:active:not([disabled]) {
 	display: flex;
 	flex-wrap: wrap;
 	.Column1 {
-		flex: 5 1 auto;
+		flex: 1 1 auto;
 		width: min-content;
 		max-width: fit-content;
 	}
 	.Column2 {
-		flex: 1 3 min-content;
+		flex: 1 1 min-content;
 		padding-left: 5px;
 		margin-left: 5px;
 		border-left: 5px solid #a58;
 		/* min-width: 300px; */
-		/* max-width: max-content */
-	}
-	.HelpDetails {
-		max-width: fit-content;
-
-		summary {
-		  padding: 4px;
-		  width: 200px;
-		  background-color: #BF0167;
-		  border: none;
-		  box-shadow: 1px 1px 2px #bbbbbb;
-		  cursor: pointer;
-		}
-		
-		>div {
-		  position: relative;
-		  bottom: -5px;
-		  background-color: #ddd;
-		  border: outset;
-		  border-color: #BF0167;
-		  padding: 4px;
-		  margin: 0;
-		  box-shadow: 1px 1px 2px #bbbbbb;
-		}
+		max-width: max-content
 	}
 }
 
@@ -328,9 +305,6 @@ button:active:not([disabled]) {
 	text-align: end;
 }
 
-.FormContainer {
-	width: fit-content;
-}
 .Form {
 	display: grid;
 	grid-template-columns: auto auto;
@@ -362,4 +336,24 @@ footer {
     opacity: 0.70;
     /*font-family: Sans-serif;*/
     background-color: #BF0167;
+}
+
+details > summary {
+  padding: 4px;
+  width: 200px;
+  background-color: #BF0167;
+  border: none;
+  box-shadow: 1px 1px 2px #bbbbbb;
+  cursor: pointer;
+}
+
+details > div {
+  position: relative;
+  bottom: -5px;
+  background-color: #ddd;
+  border: outset;
+  border-color: #BF0167;
+  padding: 4px;
+  margin: 0;
+  box-shadow: 1px 1px 2px #bbbbbb;
 }
