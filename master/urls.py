@@ -7,7 +7,6 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("deleted_account", views.deletedAccount, name="deleted_account"),
     path("", views.homepage, name="homepage"),
-    path("profile", views.profile, name="profile"),
     path("make_submission", views.makesubmissionpage, name="make_submission"),
     path("recruiter_profile", views.recruiterProfile, name="recruiter_profile"),
     path("user_profile", views.userProfile, name="user_profile"),

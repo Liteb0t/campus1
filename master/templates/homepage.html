@@ -3,5 +3,49 @@
  Home
 {% endblock %}
 {% block content %}
-This is the homepage
+<div class="DashboardGrid">
+        <!-- Welcome box to show key details of student -->
+        <div class="HomeBox center-text">
+            <h2>Welcome, {{ request.user.get_full_name }}</h2>
+            <p>Status: <strong>On a Visa</strong></p>
+            <p>Week: <strong>Term 2 - Week 12</strong></p>
+        </div>
+
+        <!-- Weekly Hours Tracker. Falls in line with UKVI laws -->
+        {% if request.user.user_type == "Student" %}
+            <div class="HomeBox">
+                <h3>Weekly Work Hours</h3>
+                <p><strong>{{ student.hours_worked }} / 15 hours worked</strong></p>
+                <progress class="progress-bar" value="{{ student.hours_worked }}" max="15">{{ student.hours_worked }}/15</progress>
+            </div>
+        {% endif %}
+        <!-- Timesheet Summary. space to put excel import -->
+        <div class="HomeBox">
+            <h3>Timesheet Summary</h3>
+            <p>Last Submitted: <strong>March 22, 2025</strong></p>
+            <p>Status: <strong>Approved</strong></p>
+            <button class="SearchButton">View Timesheet History</button>
+        </div>
+
+        <!-- Notifications. Act as a reminder for example if the student forgets to submit their hours -->
+        <div class="HomeBox">
+            <h3>Notifications</h3>
+            <ul style="text-align: left;">
+
+            </ul>
+        </div>
+
+        <!--Quick actions that client can implement external applications into the we eg excel, handshake, core? j'suis pas sur -->
+        <div class="HomeBox">
+            <h3>Quick Actions</h3>
+            <button>Submit Timesheet</button>
+            <button>View Jobs</button>
+            <button>My Schedule</button>
+        </div>
+
+        <!-- GDPR Notice for student reminder to not work over 15h -->
+        <div class="HomeBox center-text" style="grid-column: span 2; font-size: 0.9em;">
+            <p><em>Your working hours are monitored to ensure compliance with UKVI regulations. Data is protected under GDPR.</em></p>
+        </div>
+    </div>
 {% endblock %}

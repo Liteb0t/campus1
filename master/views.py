@@ -16,10 +16,11 @@ import json
 
 @login_required
 def homepage(request):
-    if request.user.is_superuser == 1:
-        return render(request, "homepage.html")
+    if request.user.user_type == "Student":
+        student = Student.objects.get(user__id=request.user.id)
+        return render(request, "homepage.html", {"student": student})
     else:
-        return redirect("profile")
+        return render(request, "homepage.html")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
@@ -27,9 +28,6 @@ def logged_out(request):
 def deletedAccount(request):
     return render(request, "registration/deleted_account.html")
 
-@login_required
-def profile(request):
-    return render(request, "homepage.html")
 
 @login_required
 def recruiterProfile(request):
