@@ -84,6 +84,9 @@ def studentList(request):
         elif data["_action"] == "create":
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Student.objects.get(id=data["_id"])
             if "password" not in data["user"]:
@@ -125,6 +128,8 @@ def submissionList(request):
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
             print(data)
@@ -163,12 +168,17 @@ def recruiterList(request):
         elif data["_action"] == "create":
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
+            instance = Recruiter.objects.get(id=data["_id"])
             if "password" not in data["user"]:
                 data["user"]["password"] = instance.user.password
-            instance = Recruiter.objects.get(id=data["_id"])
-            serialiser.update(instance=instance, validated_data=data)
-            return JsonResponse(serialiser.data, status=201)
+            if serialiser.is_valid(raise_exception=ValueError):
+                serialiser.update(instance=instance, validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
@@ -279,6 +289,8 @@ def lineManagerList(request):
         elif data["_action"] == "create":
             if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
             elif data["_action"] == "update":
                 # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))
                 instance = LineManager.objects.get(id=data["_id"])
