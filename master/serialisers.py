@@ -214,6 +214,14 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+# class DBAdminSubmissionDetailSerialiser(serializers.ModelSerializer):
+#     student = DBAdminStudentSerialiser(many=True, required=True)
+#     # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+#     # student_username = serializers.CharField(source='student.user.username', read_only=True)
+#     class Meta:
+#         model = Submission
+#         fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
+
 class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
     class Meta:

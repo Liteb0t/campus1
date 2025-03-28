@@ -1,4 +1,5 @@
 class Table {
+	static entries_per_page = 50;
     constructor(container_id, options = {}) {
         Object.assign(this, {
             page: 1
@@ -71,7 +72,7 @@ class Table {
         this.next_page_button.onclick = () => {this.setPage(this.page + 1)};
         this.last_page_button = document.createElement("button");
         this.last_page_button.textContent = "Last";
-        this.last_page_button.onclick = () => {this.setPage(Math.ceil(this.json.length / entries_per_page))};
+        this.last_page_button.onclick = () => {this.setPage(Math.ceil(this.json.length / Table.entries_per_page))};
         this.updatePageButtons();
         this.toolbar_element.appendChild(this.first_page_button);
         this.toolbar_element.appendChild(this.previous_page_button);
@@ -165,14 +166,14 @@ class Table {
         while (this.tbody_element.lastChild) {
             this.tbody_element.removeChild(this.tbody_element.lastChild);
         }
-        let start_index = (this.page - 1) * entries_per_page;
-        let until_index = this.page * entries_per_page;
+        let start_index = (this.page - 1) * Table.entries_per_page;
+        let until_index = this.page * Table.entries_per_page;
 
 		let showing_indexes_string = ["Page "]; // Its like a stringbuilder
 		showing_indexes_string.push(this.page.toString());
 		showing_indexes_string.push(" | Showing ");
 
-        if ((this.page - 1) * entries_per_page >= this.json.length) {
+        if ((this.page - 1) * Table.entries_per_page >= this.json.length) {
 			if (this.json.length === 0) {
 	            this.tbody_element.textContent = "No data found.";
 			}
@@ -317,8 +318,8 @@ class Table {
     updatePageButtons() {
         this.first_page_button.disabled = this.page === 1;
         this.previous_page_button.disabled = this.page === 1;
-        this.next_page_button.disabled = this.page * entries_per_page >= this.json.length;
-		this.last_page_button.disabled = this.next_page_button.disabled && this.page * entries_per_page < this.json.length + entries_per_page || this.json.length === 0;
+        this.next_page_button.disabled = this.page * Table.entries_per_page >= this.json.length;
+		this.last_page_button.disabled = this.next_page_button.disabled && this.page * Table.entries_per_page < this.json.length + Table.entries_per_page || this.json.length === 0;
     }
 	// Sometimes a value is nested
 	// eg. the "username" attribute is under "sser" which is itself under a "Student"
