@@ -14,6 +14,7 @@ urlpatterns = [
     path("access_data_browser", views.accessDataBrowser, name="access_data_browser"),
     path("access_student_submission", views.accessStudentSubmission, name="access_student_submission"),
     path("access_recruiter_submission", views.accessRecruiterSubmission, name="access_recruiter_submission"),
+    path("access_manager_approval", views.accessRecruiterSubmission, name="access_manager_approval"),
     path("api/students/", views.studentList, name="studentList"),
     path("api/users/", views.currentUser, name="userList"),
     path("api/submissions/", views.submissionList, name="submissionList"),

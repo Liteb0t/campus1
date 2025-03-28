@@ -4,15 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="fixed base">
+    <list default="true" id="686626af-99ee-47e9-b4f6-27066eb73550" name="Changes" comment="footer updated">
+      <change afterPath="$PROJECT_DIR$/master/templates/db_view/access_manager_approval.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master/static/default_styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/master/static/default_styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master/templates/_base.html" beforeDir="false" afterPath="$PROJECT_DIR$/master/templates/_base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -28,13 +38,14 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true"
   }
-}</component>
+}]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -177,7 +188,14 @@
       <option name="project" value="LOCAL" />
       <updated>1743079856400</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="footer updated">
+      <created>1743156280003</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1743156280003</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -215,6 +233,7 @@
     <MESSAGE value="fixed profile" />
     <MESSAGE value="added recruiter page access" />
     <MESSAGE value="fixed base" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed base" />
+    <MESSAGE value="footer updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="footer updated" />
   </component>
 </project>

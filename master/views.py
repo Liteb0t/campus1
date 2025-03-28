@@ -62,6 +62,9 @@ def accessStudentSubmission(request):
 def accessRecruiterSubmission(request):
     return render(request, "db_view/access_recruiter_submission.html")
 
+def accessManagerApproval(request):
+    return render(request, "db_view/access_recruiter_submission.html")
+
 # JSON API: does not return html but JSON instead. used by the new admin page.
 # We need to make this secure later.
 @csrf_exempt

@@ -311,9 +311,11 @@ footer {
 	padding: 7px 7px;
     text-decoration: none;
     font-size: 12px;
+
     /*POSITION AND BG*/
-	text-align: center;
-	right: 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
 	bottom: 0;
     opacity: 0.70;
     background: #eee;
