@@ -8,6 +8,7 @@ class Form {
 			post_url: ""
 		}, options);
 		this.container_element = document.getElementById(container_id);
+		this.container_element.classList.add("FormContainer");
 		this.selected_indicator_element = document.createElement("b");
 		this.form_element = document.createElement("div");
 		this.form_element.classList.add("Form");
