@@ -81,18 +81,19 @@ def studentList(request):
                 instance = Student.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid(raise_exception=ValueError):
-            if data["_action"] == "create":
+        elif data["_action"] == "create":
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
-            elif data["_action"] == "update":
-                # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
-                instance = Student.objects.get(id=data["_id"])
+        elif data["_action"] == "update":
+            instance = Student.objects.get(id=data["_id"])
+            if "password" not in data["user"]:
+                data["user"]["password"] = instance.user.password
+            # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.update(instance=instance, validated_data=data)
-            # elif data["_action"] == "deleteMultiple":
-            #     for entry_id in data["to_delete"]:
-            #         instance = Student.objects.get(id=entry_id)
-            #         serialiser.delete(instance=instance)
-            return JsonResponse(serialiser.data, status=201)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
@@ -159,12 +160,14 @@ def recruiterList(request):
                 instance = Recruiter.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid(raise_exception=ValueError):
-            if data["_action"] == "create":
+        elif data["_action"] == "create":
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
-            elif data["_action"] == "update":
-                instance = Recruiter.objects.get(id=data["_id"])
-                serialiser.update(instance=instance, validated_data=data)
+        elif data["_action"] == "update":
+            if "password" not in data["user"]:
+                data["user"]["password"] = instance.user.password
+            instance = Recruiter.objects.get(id=data["_id"])
+            serialiser.update(instance=instance, validated_data=data)
             return JsonResponse(serialiser.data, status=201)
         else:
             return JsonResponse(serialiser.errors, status=400)
@@ -273,8 +276,8 @@ def lineManagerList(request):
                 instance = LineManager.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid(raise_exception=ValueError):
-            if data["_action"] == "create":
+        elif data["_action"] == "create":
+            if serialiser.is_valid(raise_exception=ValueError):
                 serialiser.create(validated_data=data)
             elif data["_action"] == "update":
                 # instance = LineManager.objects.get(user=CampusUser.objects.get(id=data["_id"]))

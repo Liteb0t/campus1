@@ -127,6 +127,14 @@ class Form {
 						this.addArrayEntry(parameter_name, array_item);
 					}
 				}
+				else if (parameter_properties.blank) {
+					if (parameter_properties.type === "boolean") {
+						this.parameters[parameter_name].input_element.checked = false;
+					}
+					else {
+						this.parameters[parameter_name].input_element.value = "";
+					}
+				}
 				else {
 					if (typeof parameter_properties.parent_object !== "undefined") {
 						temp_json_value = response_obj;
@@ -140,8 +148,6 @@ class Form {
 					}
 					if (parameter_properties.type === "boolean") {
 						this.parameters[parameter_name].input_element.checked = temp_json_value;
-					}
-					else if (parameter_properties.type === "array") {
 					}
 					else {
 						this.parameters[parameter_name].input_element.value = temp_json_value;

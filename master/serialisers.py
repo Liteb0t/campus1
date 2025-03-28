@@ -5,7 +5,7 @@ from master.models import Student, Submission, Job, LineManager, Recruiter, Recr
 class UserSerialiser(serializers.ModelSerializer):
     class Meta:
         model = CampusUser
-        fields = ('id', 'username', 'first_name', 'last_name', 'email')
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
         extra_kwargs = {
             'username': {
                 'validators': [UnicodeUsernameValidator()],
@@ -47,6 +47,7 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
+        instance.user.password = user_data["password"]
         # instance.user.last_name = validated_data.get("last_name")
         instance.on_visa = validated_data["on_visa"]
         instance.hours_worked = validated_data["hours_worked"]

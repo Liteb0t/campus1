@@ -308,6 +308,7 @@ button:active:not([disabled]) {
 .Form {
 	display: grid;
 	grid-template-columns: auto auto;
+	grid-gap: 3px;
 	fieldset {
 		grid-column: 1 / span 2;
 	}
