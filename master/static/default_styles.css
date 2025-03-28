@@ -306,10 +306,18 @@ button:active:not([disabled]) {
 }
 
 footer {
-	color: #000;
-	position: fixed;
+    /*TEXT*/
+	color: #f2f2f2;
+	padding: 7px 7px;
+    text-decoration: none;
+    font-size: 12px;
+    /*POSITION AND BG*/
+	text-align: center;
 	right: 0;
 	bottom: 0;
     opacity: 0.70;
     background: #eee;
+    display: flow-root;
+    /*font-family: Sans-serif;*/
+    background-color: #BF0167;
 }
