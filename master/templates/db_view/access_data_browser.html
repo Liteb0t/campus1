@@ -30,78 +30,8 @@
 	<script src="{% static 'form.js' %}"></script>
     <script>
 	"use strict";
-	const student_parameters = {
-       "ID": {name: "id", type: "number", editable: false}
-       ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
-       ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-       ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-       ,"Email": {name: "email", type: "string", "parent_object": ["user"]}
-       ,"Password": {name: "password", type: "string", "parent_object": ["user"]}
-       ,"On Visa?": {name: "on_visa", type: "boolean"}
-       ,"Hours Worked": {name: "hours_worked", type:"number"}
-    };
-	let submission_parameters = {
-		"student id": {name: "student", type: "number"},
-		"job id": {name: "job", type: "number"},
-		"line manager id": {name: "line_manager", type: "number"},
-		"Hours": {name: "hours", type: "number"},
-		"Date worked": {name: "date_worked", type: "date"},
-		"Date submitted": {name: "date_submitted", type: "date"},
-		"Accepted": {name: "accepted", type: "boolean"}
-    };
-	let job_parameters = {
-		"ID": {name: "id", type: "number", editable: false},
-		"Job Name": {name: "job_name", type: "string"},
-		"Cost Code": {name: "cost_code", type: "string"},
-		"Pay Rate": {name: "pay_rate", type: "number"},
-		"Students": {name: "student", type: "array"}
-	};
-	let linemanager_parameters = {
-		"ID": {name: "id", type: "number", editable: false},
-        "Username": {name: "username", type: "string", "parent_object": ["user"]},
-        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
-       	"Email": {name: "email", type: "string", "parent_object": ["user"]},
-       	"Password": {name: "password", type: "string", "parent_object": ["user"]},
-        "Students": {name: "student", type: "array"}
-    };
-	let recruiter_parameters = {
-        "ID": {name: "id", type: "number", editable: false},
-        "Username": {name: "username", type: "string", "parent_object": ["user"]},
-        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
-    };
-	const student_form = new Form("student-form-container", {
-		parameters: student_parameters,
-		name: "student",
-		fetch_url: "{% url 'studentDetail' pk=0 %}",
-		post_url: "{% url 'studentList' %}"
-	});
-	const submission_form = new Form("submission-form-container", {
-		parameters: submission_parameters,
-		name: "submission",
-		fetch_url: "{% url 'submissionDetail' pk=0 %}",
-		post_url: "{% url 'submissionList' %}"
-	});
-	const job_form = new Form("job-form-container", {
-		parameters: job_parameters,
-		name: "job",
-		fetch_url: "{% url 'jobDetail' pk=0 %}",
-		post_url: "{% url 'jobList' %}"
-	});
-	const linemanager_form = new Form("linemanager-form-container", {
-		parameters: linemanager_parameters,
-		name: "line manager",
-		fetch_url: "{% url 'lineManagerDetail' pk=0 %}",
-		post_url: "{% url 'lineManagerList' %}"
-	});
-	const recruiter_form = new Form("recruiter-form-container", {
-		parameters: recruiter_parameters,
-		name: "recruiter",
-		fetch_url: "{% url 'recruiterDetail' pk=0 %}",
-		post_url: "{% url 'recruiterList' %}"
-	});
 
+	// For changing visible table and sidebar using the buttons
     const swappable_table_containers = [
         document.getElementById("students-table-container"),
         document.getElementById("submissions-table-container"),
@@ -128,17 +58,67 @@
         }
     }
 
+	// Student
+	const student_parameters = {
+       "ID": {name: "id", type: "number", editable: false}
+       ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
+       ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
+       ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+       ,"Email": {name: "email", type: "string", "parent_object": ["user"]}
+       // ,"Password": {name: "password", type: "string", "parent_object": ["user"]}
+       ,"On Visa?": {name: "on_visa", type: "boolean"}
+       ,"Hours Worked": {name: "hours_worked", type:"number"}
+    };
+	const student_form = new Form("student-form-container", {
+		parameters: {
+			...student_parameters,
+			"Password": {name: "password", type: "password", "parent_object": ["user"], blank: true}
+		},
+		name: "student",
+		fetch_url: "{% url 'studentDetail' pk=0 %}",
+		post_url: "{% url 'studentList' %}"
+	});
     const students_table = new AdvancedSearchTable("students-table-container", {
         json_url: "{% url 'studentList' %}"
         ,columns: student_parameters
 		,editable: true
 		,row_click_event: (id) => { student_form.selectEntry(id); }
     })
+	// Submission
+	const submission_parameters = {
+		"student id": {name: "student", type: "number"},
+		"job id": {name: "job", type: "number"},
+		"line manager id": {name: "line_manager", type: "number"},
+		"Hours": {name: "hours", type: "number"},
+		"Date worked": {name: "date_worked", type: "date"},
+		"Date submitted": {name: "date_submitted", type: "date"},
+		"Accepted": {name: "accepted", type: "boolean"}
+    };
+	const submission_form = new Form("submission-form-container", {
+		parameters: submission_parameters,
+		name: "submission",
+		fetch_url: "{% url 'submissionDetail' pk=0 %}",
+		post_url: "{% url 'submissionList' %}"
+	});
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
 		,columns: submission_parameters
         ,editable: true
 		,row_click_event: (id) => { submission_form.selectEntry(id); }
+	});
+	// Job
+	const job_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+		"Job Name": {name: "job_name", type: "string"},
+		"Cost Code": {name: "cost_code", type: "string"},
+		"Pay Rate": {name: "pay_rate", type: "number"},
+		"Students": {name: "student", type: "array"}
+	};
+	const job_form = new Form("job-form-container", {
+		parameters: job_parameters,
+		name: "job",
+		fetch_url: "{% url 'jobDetail' pk=0 %}",
+		post_url: "{% url 'jobList' %}"
 	});
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
 		json_url: "{% url 'jobList' %}"
@@ -146,13 +126,46 @@
 		,editable: true
 		,row_click_event: (id) => { job_form.selectEntry(id); }
 	});
+	// Line Manager
+	const linemanager_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+        "Username": {name: "username", type: "string", "parent_object": ["user"]},
+        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+       	"Email": {name: "email", type: "string", "parent_object": ["user"]},
+        "Students": {name: "student", type: "array"}
+    };
+	const linemanager_form = new Form("linemanager-form-container", {
+		parameters: {
+			...linemanager_parameters,
+			"Password": {name: "password", type: "password", "parent_object": ["user"], blank: true}
+		},
+		name: "line manager",
+		fetch_url: "{% url 'lineManagerDetail' pk=0 %}",
+		post_url: "{% url 'lineManagerList' %}"
+	});
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"
         ,columns: linemanager_parameters
 		,editable: true
 		,row_click_event: (id) => { linemanager_form.selectEntry(id); }
     })
-
+	// Recruiter
+	const recruiter_parameters = {
+        "ID": {name: "id", type: "number", editable: false},
+        "Username": {name: "username", type: "string", "parent_object": ["user"]},
+        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+    };
+	const recruiter_form = new Form("recruiter-form-container", {
+		parameters: {
+			...recruiter_parameters,
+			"Password": {name: "password", type: "password", "parent_object": ["user"], blank: true}
+		},
+		name: "recruiter",
+		fetch_url: "{% url 'recruiterDetail' pk=0 %}",
+		post_url: "{% url 'recruiterList' %}"
+	});
     const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
         json_url: "{% url 'recruiterList' %}"
         ,columns: recruiter_parameters
