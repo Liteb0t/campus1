@@ -90,11 +90,16 @@ def studentList(request):
             if "password" not in data["user"]:
                 data["user"]["password"] = instance.user.password
             # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
-            if serialiser.is_valid(raise_exception=ValueError):
+            # if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-                return JsonResponse(serialiser.data, status=201)
+                return_data = serialiser.data
+                return_data["message"] = "success"
+                return JsonResponse(return_data, status=201)
             else:
-                return JsonResponse(serialiser.errors, status=400)
+                return_data = serialiser.errors
+                return_data["message"] = "epic fail"
+                return JsonResponse(return_data, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 

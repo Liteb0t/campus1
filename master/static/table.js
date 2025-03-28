@@ -371,8 +371,10 @@ class Table {
                 "Content-type": "application/json; charset=UTF-8"
             }
         });
-		console.log(fetch_response);
-		alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
+		// console.log(fetch_response);
+		const json = await fetch_response.json();
+		alert(`Status: ${fetch_response.status}\nMessage: ${json.message}`);
+		// alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
         return fetch_response;
     }
 }

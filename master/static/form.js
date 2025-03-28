@@ -82,6 +82,7 @@ class Form {
 		this.container_element.appendChild(this.form_element);
 		this.container_element.appendChild(this.create_button);
 		this.container_element.appendChild(this.update_button);
+		this.last_fetch_response = "test";
 	}
 	deselect() {
 		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
@@ -213,7 +214,9 @@ class Form {
 			}
 		}
 		console.log(form_data);
-		await Form.postJSON(this.post_url, form_data);
+		let response = await Form.postJSON(this.post_url, form_data);
+		console.log(response);
+		this.last_fetch_response = response;
 	}
 	// sends JSON to the server. the form handling is in our views.py
 	static async postJSON(url, data) {
@@ -224,13 +227,8 @@ class Form {
 	            "Content-type": "application/json; charset=UTF-8"
 	        }
 	    });
-		console.log(fetch_response);
-		if(fetch_response.ok){
-			alert("Successfully created student account");
-		}
-		else{
-			alert("Please fill out every field");
-		}
-	    return fetch_response;
+		const json = await fetch_response.json();
+		alert(`Status: ${fetch_response.status}\nMessage: ${json.message}`);
+	    return json;
 	}
 }
