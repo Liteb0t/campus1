@@ -19,6 +19,7 @@ class Form {
 		this.selected_indicator_element.textContent = `No ${this.name} selected.`;
 		this.topbar_element.appendChild(this.selected_indicator_element);
 		this.container_element.appendChild(this.topbar_element);
+		this.first_input_element = null;
 		console.log(this.parameters);
 		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
 			if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
@@ -65,9 +66,15 @@ class Form {
 				}
 				input_element.id = input_id;
 				input_element.name = input_id;
+				if (typeof parameter_properties.default !== "undefined") {
+					input_element.value = parameter_properties.default;
+				}
 				this.form_element.appendChild(label_element);
 				this.form_element.appendChild(input_element);
 				this.parameters[parameter_name]["input_element"] = input_element;
+				if (!this.first_input_element) {
+					this.first_input_element = input_element;
+				}
 			}
 			// this.form_element.appendChild(document.createElement("br"));
 		}
@@ -103,9 +110,15 @@ class Form {
 				this.parameters[parameter_name].input_element.checked = false;
 			}
 			else {
-				this.parameters[parameter_name].input_element.value = "";
+				if (typeof parameter_properties.default !== "undefined") {
+					this.parameters[parameter_name].input_element.value = parameter_properties.default;
+				}
+				else {
+					this.parameters[parameter_name].input_element.value = "";
+				}
 			}
 		}
+		this.selected_indicator_element.textContent = `No ${this.name} selected.`;
 		this.deselect_button.disabled = true;
 	}
 
@@ -223,6 +236,24 @@ class Form {
 		let response = await Form.postJSON(this.post_url, form_data);
 		console.log(response);
 		this.last_fetch_response = response;
+		if (response.status === 201) {
+			let response_json = await response.json();
+			console.log(response_json);
+			// success
+			this.deselect();
+		}
+		else if (response.status === 400) { // The form was probably invalid. The serialiser says what things are
+			let response_json = await response.json();
+			this.showErrors(response_json);
+			alert("the thing failed. damn that sucks");
+		}
+		else if (response.status === 500) {
+			alert("server error. yikes that's rough");
+		}
+		else {
+			alert(`Status: ${response.status} (${response.statusText})\nsomething weird happened`);
+		}
+		this.first_input_element.focus();
 	}
 	// sends JSON to the server. the form handling is in our views.py
 	static async postJSON(url, data) {
@@ -233,8 +264,11 @@ class Form {
 	            "Content-type": "application/json; charset=UTF-8"
 	        }
 	    });
-		const json = await fetch_response.json();
-		alert(`Status: ${fetch_response.status}\nMessage: ${json.message}`);
-	    return json;
+		console.log(fetch_response);
+		// const json = await fetch_response.json();
+	    // return json;
+		return fetch_response;
+	}
+	showErrors(errors_json) {
 	}
 }

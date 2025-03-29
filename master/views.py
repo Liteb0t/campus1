@@ -90,8 +90,8 @@ def studentList(request):
             instance = Student.objects.get(id=data["_id"])
             if "password" not in data["user"]:
                 data["user"]["password"] = instance.user.password
-            username_equivalent = Student.objects.filter(user__username=data["user"]["username"])
-            if (username_equivalent.exists() and username_equivalent != instance):
+            username_equivalent = CampusUser.objects.filter(username=data["user"]["username"])
+            if (username_equivalent.exists() and username_equivalent[0].id != instance.user.id):
                 return_data = {}
                 return_data["message"] = "epic duplicate username fail"
                 return JsonResponse(return_data, status=400)
