@@ -76,12 +76,13 @@
 	const student_parameters = {
        "ID": {name: "id", type: "number", editable: false}
        ,"Username": {name: "username", type: "string", "parent_object": ["user"]}
-       ,"First Name": {name: "first_name", type: "string", "parent_object": ["user"]}
-       ,"Last Name": {name: "last_name", type: "string", "parent_object": ["user"]}
+       ,"First name": {name: "first_name", type: "string", "parent_object": ["user"]}
+       ,"Last name": {name: "last_name", type: "string", "parent_object": ["user"]}
        ,"Email": {name: "email", type: "string", "parent_object": ["user"]}
        // ,"Password": {name: "password", type: "string", "parent_object": ["user"]}
        ,"On Visa?": {name: "on_visa", type: "boolean"}
-       ,"Hours Worked": {name: "hours_worked", type:"number", default: 0}
+       ,"Elibible to work?": {name: "eligible_to_work", type: "boolean"}
+       ,"Hours worked": {name: "hours_worked", type:"number", default: 0}
     };
 	const student_form = new Form("student-form-container", {
 		parameters: {
@@ -100,9 +101,9 @@
     })
 	// Submission
 	const submission_parameters = {
-		"student id": {name: "student", type: "number"},
-		"job id": {name: "job", type: "number"},
-		"line manager id": {name: "line_manager", type: "number"},
+		"Student ID": {name: "student", type: "number"},
+		"Job ID": {name: "job", type: "number"},
+		"Line manager ID": {name: "line_manager", type: "number"},
 		"Hours": {name: "hours", type: "number"},
 		"Date worked": {name: "date_worked", type: "date"},
 		"Date submitted": {name: "date_submitted", type: "date"},
@@ -123,9 +124,9 @@
 	// Job
 	const job_parameters = {
 		"ID": {name: "id", type: "number", editable: false},
-		"Job Name": {name: "job_name", type: "string"},
-		"Cost Code": {name: "cost_code", type: "string"},
-		"Pay Rate": {name: "pay_rate", type: "number"},
+		"Job name": {name: "job_name", type: "string"},
+		"Cost code": {name: "cost_code", type: "string"},
+		"Pay rate": {name: "pay_rate", type: "number"},
 		"Students": {name: "student", type: "array"}
 	};
 	const job_form = new Form("job-form-container", {
@@ -144,8 +145,8 @@
 	const linemanager_parameters = {
 		"ID": {name: "id", type: "number", editable: false},
         "Username": {name: "username", type: "string", "parent_object": ["user"]},
-        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+        "First name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last name": {name: "last_name", type: "string", "parent_object": ["user"]},
        	"Email": {name: "email", type: "string", "parent_object": ["user"]},
         "Students": {name: "student", type: "array"}
     };
@@ -168,8 +169,8 @@
 	const recruiter_parameters = {
         "ID": {name: "id", type: "number", editable: false},
         "Username": {name: "username", type: "string", "parent_object": ["user"]},
-        "First Name": {name: "first_name", type: "string", "parent_object": ["user"]},
-        "Last Name": {name: "last_name", type: "string", "parent_object": ["user"]},
+        "First name": {name: "first_name", type: "string", "parent_object": ["user"]},
+        "Last name": {name: "last_name", type: "string", "parent_object": ["user"]},
        	"Email": {name: "email", type: "string", "parent_object": ["user"]}
     };
 	const recruiter_form = new Form("recruiter-form-container", {

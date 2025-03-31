@@ -41,20 +41,21 @@ class CampusUserManager(BaseUserManager):
 
 class CampusUser(AbstractUser):
     objects = CampusUserManager()
-    username = models.CharField(max_length=255, unique=True, null=True, default=None)
-    email = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
+    username = models.CharField(max_length=64, unique=True, null=True, default=None)
+    email = models.CharField(max_length=64)
+    first_name = models.CharField(max_length=64)
+    last_name = models.CharField(max_length=64)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    user_type = models.CharField(max_length=32)
+    user_type = models.CharField(max_length=16)
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','first_name','last_name','user_type']
 
 class Student(models.Model):
     user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
     on_visa = models.BooleanField(default=False)
+    eligible_to_work = models.BooleanField(default=False)
     visa_expiry = models.DateField(null=True)
     hours_worked = models.IntegerField(default=0)
 
