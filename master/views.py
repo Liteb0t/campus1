@@ -14,6 +14,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 import json
 
+duplicate_username_message = "epic duplicate username fail"
+
 @login_required
 def homepage(request):
     if request.user.user_type == "Student":
@@ -88,22 +90,24 @@ def studentList(request):
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Student.objects.get(id=data["_id"])
-            if "password" not in data["user"]:
+            if "password" not in data["user"] or data["user"]["password"] == "":
                 data["user"]["password"] = instance.user.password
             username_equivalent = CampusUser.objects.filter(username=data["user"]["username"])
             if (username_equivalent.exists() and username_equivalent[0].id != instance.user.id):
-                return_data = {}
-                return_data["message"] = "epic duplicate username fail"
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                if "user" not in return_data:
+                    return_data["user"] = None
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
                 return JsonResponse(return_data, status=400)
             elif serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-                return_data = serialiser.data
-                return_data["message"] = "success"
-                return JsonResponse(return_data, status=201)
+                return JsonResponse(serialiser.data, status=201)
             else:
-                return_data = serialiser.errors
-                return_data["message"] = "epic validation fail"
-                return JsonResponse(return_data, status=400)
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
@@ -131,19 +135,14 @@ def submissionList(request):
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         if data["_action"] == "create":
-            serialiser = DBAdminSubmissionSerialiser(data=data)
-            if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
-            print(data)
-            # if data["student"]["id"] != instance.student.id:
-            # data["student"] = Student.objects.get(id=data["student"]["id"]).__dict__
-            # data["student"] = data["student"]["id"]
-            if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
@@ -173,29 +172,34 @@ def recruiterList(request):
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.create(validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Recruiter.objects.get(id=data["_id"])
-            if "password" not in data["user"]:
+            if "password" not in data["user"] or data["user"]["password"] == "":
                 data["user"]["password"] = instance.user.password
             username_equivalent = Recruiter.objects.filter(user__username=data["user"]["username"])
-            if (username_equivalent.exists() and username_equivalent != instance):
+            if (username_equivalent.exists() and username_equivalent[0].id != instance.user.id):
                 # return_data = serialiser.errors
-                return_data = {}
-                return_data["message"] = "epic duplicate username fail"
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                # duplicate_username_message = "epic duplicate username fail"
+                # return_data = {user: {username: ["username must be unique"]}
+                if "user" not in return_data:
+                    return_data["user"] = None
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
                 return JsonResponse(return_data, status=400)
             elif serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-                return_data = serialiser.data
-                return_data["message"] = "success"
-                return JsonResponse(return_data, status=201)
+                return JsonResponse(serialiser.data, status=201)
             else:
-                return_data = serialiser.errors
-                return_data["message"] = "epic validation fail"
-                return JsonResponse(return_data, status=400)
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
@@ -271,7 +275,7 @@ def jobList(request):
                 instance = Job.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid(raise_exception=ValueError):
+        elif serialiser.is_valid():
             if data["_action"] == "create":
                 serialiser.create(validated_data=data)
             elif data["_action"] == "update":
@@ -305,29 +309,30 @@ def lineManagerList(request):
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.create(validated_data=data)
             else:
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = LineManager.objects.get(id=data["_id"])
-            if "password" not in data["user"]:
+            if "password" not in data["user"] or data["user"]["password"] == "":
                 data["user"]["password"] = instance.user.password
-            username_equivalent = LineManager.objects.filter(user__username=data["user"]["username"])
-            if (username_equivalent.exists() and username_equivalent != instance):
-                # return_data = serialiser.errors
-                return_data = {}
-                return_data["message"] = "epic duplicate username fail"
+            username_equivalent = CampusUser.objects.filter(username=data["user"]["username"])
+            if (username_equivalent.exists() and username_equivalent[0].id != instance.user.id):
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                if "user" not in return_data:
+                    return_data["user"] = None
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
                 return JsonResponse(return_data, status=400)
             elif serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-                return_data = serialiser.data
-                return_data["message"] = "success"
-                return JsonResponse(return_data, status=201)
+                return JsonResponse(serialiser.data, status=201)
             else:
-                return_data = serialiser.errors
-                return_data["message"] = "epic validation fail"
-                return JsonResponse(return_data, status=400)
+                return JsonResponse(serialiser.errors, status=400)
         else:
             return JsonResponse(serialiser.errors, status=400)
 
