@@ -20,6 +20,7 @@ class Form {
 		this.topbar_element.appendChild(this.selected_indicator_element);
 		this.container_element.appendChild(this.topbar_element);
 		this.first_input_element = null;
+		this.reverse_accessor = {};
 		console.log(this.parameters);
 		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
 			if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
@@ -77,6 +78,16 @@ class Form {
 				}
 			}
 			// this.form_element.appendChild(document.createElement("br"));
+			let base_for_entry = this.reverse_accessor;
+			if (typeof parameter_properties.parent_object !== "undefined") {
+				for (let parent_object of parameter_properties.parent_object) {
+					if (typeof base_for_entry[parent_object] === "undefined") {
+						base_for_entry[parent_object] = {};
+					}
+					base_for_entry = base_for_entry[parent_object];
+				}
+			}
+			base_for_entry[parameter_properties.name] = parameter_name;
 		}
 		this.create_button = document.createElement("button");
 		this.create_button.onclick = () => { this.submitForm("create") };
@@ -234,17 +245,18 @@ class Form {
 		}
 		console.log(form_data);
 		let response = await Form.postJSON(this.post_url, form_data);
+		let response_json = await response.json();
 		console.log(response);
 		this.last_fetch_response = response;
 		if (response.status === 201) {
-			let response_json = await response.json();
-			console.log(response_json);
 			// success
 			this.deselect();
 		}
-		else if (response.status === 400) { // The form was probably invalid. The serialiser says what things are
-			let response_json = await response.json();
-			this.showErrors(response_json);
+		else if (response.status === 400) { // The form was probably invalid.
+			let out = [];
+			this.getErrors(response_json, out);
+			this.showErrors(out);
+			console.log(out);
 			alert("the thing failed. damn that sucks");
 		}
 		else if (response.status === 500) {
@@ -253,6 +265,7 @@ class Form {
 		else {
 			alert(`Status: ${response.status} (${response.statusText})\nsomething weird happened`);
 		}
+		console.log(response_json);
 		this.first_input_element.focus();
 	}
 	// sends JSON to the server. the form handling is in our views.py
@@ -269,6 +282,44 @@ class Form {
 	    // return json;
 		return fetch_response;
 	}
-	showErrors(errors_json) {
+	getErrors(errors_json, out = [], reverse_accessor_path = this.reverse_accessor) {
+		for (let [key, value] of Object.entries(errors_json)) {
+			if (Object.prototype.toString.call(value) === "[object Array]") {
+				out.push({name: key, parameter: reverse_accessor_path[key], errors: value});
+			}
+			else if (typeof value === "object") {
+				// parent_objects.push(key);
+				this.getErrors(value, out, reverse_accessor_path[key]);
+			}
+			// else {
+			// 	out.push({name: key, parent_object: parent_objects});
+			// }
+		}
 	}
+	showErrors(processed_errors) {
+		for (let error_element of this.form_element.querySelectorAll(".FormError")) {
+			this.form_element.removeChild(error_element);
+		}
+		for (let i = 0; i < processed_errors.length; ++i) {
+			let error_element = document.createElement("div");
+			error_element.textContent = processed_errors[i].errors.join("\n");
+			error_element.classList.add("FormError");
+			this.parameters[processed_errors[i].parameter].input_element.insertAdjacentElement("afterend", error_element);
+		}
+	}
+
+	// getErrors(errors_json, out = [], parent_objects = []) {
+	// 	for (let [key, value] of Object.entries(errors_json)) {
+	// 		if (Object.prototype.toString.call(value) === "[object Array]") {
+	// 			out.push({name: key, errors: value, parent_object: parent_objects});
+	// 		}
+	// 		else if (typeof value === "object") {
+	// 			// parent_objects.push(key);
+	// 			this.getErrors(value, out, [ ...parent_objects, key]);
+	// 		}
+	// 		// else {
+	// 		// 	out.push({name: key, parent_object: parent_objects});
+	// 		// }
+	// 	}
+	// }
 }

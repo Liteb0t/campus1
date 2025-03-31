@@ -81,7 +81,7 @@ def studentList(request):
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid(raise_exception=ValueError):
+            if serialiser.is_valid():
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
