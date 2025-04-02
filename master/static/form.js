@@ -248,6 +248,7 @@ class Form {
 		let response_json = await response.json();
 		console.log(response);
 		this.last_fetch_response = response;
+		this.clearErrors();
 		if (response.status === 201) {
 			// success
 			this.deselect();
@@ -257,7 +258,7 @@ class Form {
 			this.getErrors(response_json, out);
 			this.showErrors(out);
 			console.log(out);
-			// alert("the thing failed. damn that sucks");
+			alert("the thing failed. damn that sucks");
 		}
 		else if (response.status === 500) {
 			alert("server error. yikes that's rough");
@@ -297,14 +298,17 @@ class Form {
 		}
 	}
 	showErrors(processed_errors) {
-		for (let error_element of this.form_element.querySelectorAll(".FormError")) {
-			this.form_element.removeChild(error_element);
-		}
+		// this.clearErrors();
 		for (let i = 0; i < processed_errors.length; ++i) {
 			let error_element = document.createElement("div");
 			error_element.textContent = processed_errors[i].errors.join("\n");
 			error_element.classList.add("FormError");
 			this.parameters[processed_errors[i].parameter].input_element.insertAdjacentElement("afterend", error_element);
+		}
+	}
+	clearErrors() {
+		for (let error_element of this.form_element.querySelectorAll(".FormError")) {
+			this.form_element.removeChild(error_element);
 		}
 	}
 

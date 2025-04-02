@@ -81,10 +81,22 @@ def studentList(request):
         if data["_action"] == "deleteMultiple":
             for entry_id in data["to_delete"]:
                 instance = Student.objects.get(id=entry_id)
+                instance.user.delete()
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid():
+            username_equivalent = Student.objects.filter(user__username=data["user"]["username"])
+            if username_equivalent.exists():
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                if "user" not in return_data:
+                    return_data["user"] = {}
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
@@ -170,10 +182,22 @@ def recruiterList(request):
         if data["_action"] == "deleteMultiple":
             for entry_id in data["to_delete"]:
                 instance = Recruiter.objects.get(id=entry_id)
+                instance.user.delete()
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid():
+            username_equivalent = Recruiter.objects.filter(user__username=data["user"]["username"])
+            if username_equivalent.exists():
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                if "user" not in return_data:
+                    return_data["user"] = {}
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
@@ -183,14 +207,11 @@ def recruiterList(request):
             if "password" not in data["user"] or data["user"]["password"] == "":
                 data["user"]["password"] = instance.user.password
             username_equivalent = Recruiter.objects.filter(user__username=data["user"]["username"])
-            if (username_equivalent.exists() and username_equivalent[0].id != instance.user.id):
-                # return_data = serialiser.errors
+            if username_equivalent.exists() and username_equivalent[0].user.id != instance.user.id:
                 serialiser.is_valid()
                 return_data = serialiser.errors
-                # duplicate_username_message = "epic duplicate username fail"
-                # return_data = {user: {username: ["username must be unique"]}
                 if "user" not in return_data:
-                    return_data["user"] = None
+                    return_data["user"] = {}
                 if "username" not in return_data["user"]:
                     return_data["user"]["username"] = [duplicate_username_message]
                 else:
@@ -307,10 +328,22 @@ def lineManagerList(request):
         if data["_action"] == "deleteMultiple":
             for entry_id in data["to_delete"]:
                 instance = LineManager.objects.get(id=entry_id)
+                instance.user.delete()
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
         elif data["_action"] == "create":
-            if serialiser.is_valid():
+            username_equivalent = LineManager.objects.filter(user__username=data["user"]["username"])
+            if username_equivalent.exists():
+                serialiser.is_valid()
+                return_data = serialiser.errors
+                if "user" not in return_data:
+                    return_data["user"] = {}
+                if "username" not in return_data["user"]:
+                    return_data["user"]["username"] = [duplicate_username_message]
+                else:
+                    return_data["user"]["username"].append(duplicate_username_message)
+                return JsonResponse(return_data, status=400)
+            elif serialiser.is_valid():
                 serialiser.create(validated_data=data)
             else:
                 return JsonResponse(serialiser.errors, status=400)
