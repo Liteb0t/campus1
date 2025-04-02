@@ -65,10 +65,11 @@ def accessRecruiterSubmission(request):
 def accessManagerApproval(request):
     return render(request, "db_view/access_recruiter_submission.html")
 
-# JSON API: does not return html but JSON instead. used by the new admin page.
-# We need to make this secure later.
+# JSON API: does not return html but JSON instead. used by the data browser.
 @csrf_exempt
 def studentList(request):
+    if request.user.user_type not in ["Admin", "LineManager", "Recruiter"]: # only these user types can get a list of all students
+        return JsonResponse({"message": "Not authorised"}, status=401)
     if request.method == "GET":
         students = Student.objects.select_related("user")
         students_serialiser = DBAdminStudentSerialiser(students, many=True)

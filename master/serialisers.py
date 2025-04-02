@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from master.models import Student, Submission, Job, LineManager, Recruiter, RecruiterSubmission, CampusUser
 
@@ -7,12 +8,14 @@ class UserSerialiser(serializers.ModelSerializer):
         model = CampusUser
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
         extra_kwargs = {
+            # Overrides the check for username, because the built-in duplicate username checker was causing problems
             'username': {
                 'validators': [UnicodeUsernameValidator()],
             }
         }
     def create(self, validated_data):
         user = CampusUser.objects.create_user(username=validated_data["username"], first_name=validated_data["first_name"], last_name=validated_data["last_name"], email=validated_data["email"], password=validated_data["password"], user_type=validated_data["user_type"])
+        Token.objects.create(user=user)
         return user
     def update(self, instance, validated_data):
         instance.username = validated_data["username"]
@@ -23,6 +26,7 @@ class UserSerialiser(serializers.ModelSerializer):
         return instance
 
     def delete(self, instance):
+        token_to_delete = Token.objects.get(user=instance)
         instance.delete()
         return instance
 
