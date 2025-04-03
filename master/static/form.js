@@ -5,7 +5,8 @@ class Form {
 			name: "defaultname",
 			selected_id: null,
 			fetch_url: "",
-			post_url: ""
+			post_url: "",
+			create_update_event: null
 		}, options);
 		this.container_element = document.getElementById(container_id);
 		this.container_element.classList.add("FormContainer");
@@ -252,6 +253,9 @@ class Form {
 		if (response.status === 201) {
 			// success
 			this.deselect();
+			if (this.create_update_event) {
+				this.create_update_event();
+			}
 		}
 		else if (response.status === 400) { // The form was probably invalid.
 			let out = [];

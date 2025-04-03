@@ -84,6 +84,12 @@
        ,"Elibible to work?": {name: "eligible_to_work", type: "boolean"}
        ,"Hours worked": {name: "hours_worked", type:"number", default: 0}
     };
+    const students_table = new AdvancedSearchTable("students-table-container", {
+        json_url: "{% url 'studentList' %}"
+        ,columns: student_parameters
+		,editable: true
+		,row_click_event: (id) => { student_form.selectEntry(id); }
+    })
 	const student_form = new Form("student-form-container", {
 		parameters: {
 			...student_parameters,
@@ -91,14 +97,9 @@
 		},
 		name: "student",
 		fetch_url: "{% url 'studentDetail' pk=0 %}",
-		post_url: "{% url 'studentList' %}"
+		post_url: "{% url 'studentList' %}",
+		create_update_event: () => { students_table.refresh() }
 	});
-    const students_table = new AdvancedSearchTable("students-table-container", {
-        json_url: "{% url 'studentList' %}"
-        ,columns: student_parameters
-		,editable: true
-		,row_click_event: (id) => { student_form.selectEntry(id); }
-    })
 	// Submission
 	const submission_parameters = {
 		"Student ID": {name: "student", type: "number"},
@@ -109,17 +110,18 @@
 		"Date submitted": {name: "date_submitted", type: "date"},
 		"Accepted": {name: "accepted", type: "boolean"}
     };
-	const submission_form = new Form("submission-form-container", {
-		parameters: submission_parameters,
-		name: "submission",
-		fetch_url: "{% url 'submissionDetail' pk=0 %}",
-		post_url: "{% url 'submissionList' %}"
-	});
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
 		,columns: submission_parameters
         ,editable: true
 		,row_click_event: (id) => { submission_form.selectEntry(id); }
+	});
+	const submission_form = new Form("submission-form-container", {
+		parameters: submission_parameters,
+		name: "submission",
+		fetch_url: "{% url 'submissionDetail' pk=0 %}",
+		post_url: "{% url 'submissionList' %}",
+		create_update_event: () => { submissions_table.refresh() }
 	});
 	// Job
 	const job_parameters = {
@@ -129,17 +131,18 @@
 		"Pay rate": {name: "pay_rate", type: "number"},
 		"Students": {name: "student", type: "array"}
 	};
-	const job_form = new Form("job-form-container", {
-		parameters: job_parameters,
-		name: "job",
-		fetch_url: "{% url 'jobDetail' pk=0 %}",
-		post_url: "{% url 'jobList' %}"
-	});
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
 		json_url: "{% url 'jobList' %}"
 		,columns: job_parameters
 		,editable: true
 		,row_click_event: (id) => { job_form.selectEntry(id); }
+	});
+	const job_form = new Form("job-form-container", {
+		parameters: job_parameters,
+		name: "job",
+		fetch_url: "{% url 'jobDetail' pk=0 %}",
+		post_url: "{% url 'jobList' %}",
+		create_update_event: () => { jobs_table.refresh() }
 	});
 	// Line Manager
 	const linemanager_parameters = {
@@ -150,6 +153,12 @@
        	"Email": {name: "email", type: "string", "parent_object": ["user"]},
         "Students": {name: "student", type: "array"}
     };
+    const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
+        json_url: "{% url 'lineManagerList' %}"
+        ,columns: linemanager_parameters
+		,editable: true
+		,row_click_event: (id) => { linemanager_form.selectEntry(id); }
+    })
 	const linemanager_form = new Form("linemanager-form-container", {
 		parameters: {
 			...linemanager_parameters,
@@ -157,14 +166,9 @@
 		},
 		name: "line manager",
 		fetch_url: "{% url 'lineManagerDetail' pk=0 %}",
-		post_url: "{% url 'lineManagerList' %}"
+		post_url: "{% url 'lineManagerList' %}",
+		create_update_event: () => { linemanagers_table.refresh() }
 	});
-    const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
-        json_url: "{% url 'lineManagerList' %}"
-        ,columns: linemanager_parameters
-		,editable: true
-		,row_click_event: (id) => { linemanager_form.selectEntry(id); }
-    })
 	// Recruiter
 	const recruiter_parameters = {
         "ID": {name: "id", type: "number", editable: false},
@@ -173,6 +177,12 @@
         "Last name": {name: "last_name", type: "string", "parent_object": ["user"]},
        	"Email": {name: "email", type: "string", "parent_object": ["user"]}
     };
+    const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
+        json_url: "{% url 'recruiterList' %}"
+        ,columns: recruiter_parameters
+		,editable: true
+		,row_click_event: (id) => { recruiter_form.selectEntry(id); }
+    })
 	const recruiter_form = new Form("recruiter-form-container", {
 		parameters: {
 			...recruiter_parameters,
@@ -181,13 +191,8 @@
 		name: "recruiter",
 		fetch_url: "{% url 'recruiterDetail' pk=0 %}",
 		post_url: "{% url 'recruiterList' %}"
+		create_update_event: () => { recruiters_table.refresh() }
 	});
-    const recruiters_table = new AdvancedSearchTable("recruiter-table-container", {
-        json_url: "{% url 'recruiterList' %}"
-        ,columns: recruiter_parameters
-		,editable: true
-		,row_click_event: (id) => { recruiter_form.selectEntry(id); }
-    })
     </script>
 {% endblock %}
 
