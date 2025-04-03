@@ -190,7 +190,7 @@
 		},
 		name: "recruiter",
 		fetch_url: "{% url 'recruiterDetail' pk=0 %}",
-		post_url: "{% url 'recruiterList' %}"
+		post_url: "{% url 'recruiterList' %}",
 		create_update_event: () => { recruiters_table.refresh() }
 	});
     </script>
