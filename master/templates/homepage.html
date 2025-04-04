@@ -16,17 +16,16 @@
             <div class="HomeBox">
                 <h3>Weekly Work Hours</h3>
                 <p><strong>{{ student.hours_worked }} / 15 hours worked</strong></p>
-                <progress class="progress-bar" value="{{ student.hours_worked }}" max="15">{{ student.hours_worked }}/15</progress>
+                <progress class="progress-bar" value="{{ student.hours_worked }}" max="15"></progress>
+            </div>
+        <!-- Timesheet Summary. space to put excel import -->
+            <div class="HomeBox">
+                <h3>Timesheet Summary</h3>
+                <p>Last Submitted: <strong>March 22, 2025</strong></p>
+                <p>Status: <strong>Approved</strong></p>
+                <button class="SearchButton">View Timesheet History</button>
             </div>
         {% endif %}
-        <!-- Timesheet Summary. space to put excel import -->
-        <div class="HomeBox">
-            <h3>Timesheet Summary</h3>
-            <p>Last Submitted: <strong>March 22, 2025</strong></p>
-            <p>Status: <strong>Approved</strong></p>
-            <button class="SearchButton">View Timesheet History</button>
-        </div>
-
         <!-- Notifications. Act as a reminder for example if the student forgets to submit their hours -->
         <div class="HomeBox">
             <h3>Notifications</h3>
