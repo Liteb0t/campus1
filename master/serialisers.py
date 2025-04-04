@@ -22,6 +22,7 @@ class UserSerialiser(serializers.ModelSerializer):
         instance.first_name = validated_data["first_name"]
         instance.last_name = validated_data["last_name"]
         instance.email = validated_data["email"]
+        instance.set_password(validated_data["password"])
         instance.save()
         return instance
 
@@ -51,8 +52,8 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.username = user_data["username"]
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
-        instance.user.password = user_data["password"]
         instance.user.email = user_data["email"]
+        instance.user.set_password(user_data["password"])
         # instance.user.last_name = validated_data.get("last_name")
         instance.on_visa = validated_data["on_visa"]
         instance.hours_worked = validated_data["hours_worked"]
