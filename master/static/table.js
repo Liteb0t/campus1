@@ -357,7 +357,7 @@ class Table {
 				this.delete_button.disabled = true;
 			}
             this.populate();
-			if (students_table.constructor.name === "AdvancedSearchTable") {
+			if (this.constructor.name === "AdvancedSearchTable") {
 				this.initial_json = this.json;
 			}
         }

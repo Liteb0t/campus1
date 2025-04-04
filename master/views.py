@@ -76,6 +76,8 @@ def studentList(request):
         return JsonResponse(students_serialiser.data, safe=False)
 
     elif request.method == "POST":
+        if request.user.user_type != "Admin": # only Admin can edit students
+            return JsonResponse({"message": "Not authorised"}, status=401)
         data = JSONParser().parse(request)
         serialiser = DBAdminStudentSerialiser(data=data)
         if data["_action"] == "deleteMultiple":

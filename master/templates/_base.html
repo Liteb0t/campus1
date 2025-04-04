@@ -32,7 +32,7 @@
         {% endif %}
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
-            <button class="Navlink OverrideButton" type="submit">Logout</button>
+            <button class="Navlink OverrideButton" style="border: none" type="submit">Logout</button>
         </form>
     </nav>
 </header>

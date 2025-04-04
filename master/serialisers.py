@@ -53,7 +53,8 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
         instance.user.email = user_data["email"]
-        instance.user.set_password(user_data["password"])
+        if user_data["password"] != instance.user.password:
+            instance.user.set_password(user_data["password"])
         # instance.user.last_name = validated_data.get("last_name")
         instance.on_visa = validated_data["on_visa"]
         instance.hours_worked = validated_data["hours_worked"]
@@ -164,6 +165,8 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
         instance.user.email = user_data["email"]
+        if user_data["password"] != instance.user.password:
+            instance.user.set_password(user_data["password"])
         instance.user.save()
         instance.save()
         instance.student.set(validated_data["student"])
@@ -250,6 +253,8 @@ class DBAdminRecruiterSerialiser(serializers.ModelSerializer):
         instance.user.first_name = user_data["first_name"]
         instance.user.last_name = user_data["last_name"]
         instance.user.email = user_data["email"]
+        if user_data["password"] != instance.user.password:
+            instance.user.set_password(user_data["password"])
         instance.user.save()
         instance.save()
         return instance

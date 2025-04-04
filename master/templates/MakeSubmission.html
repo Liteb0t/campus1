@@ -6,25 +6,29 @@
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'registration_styles.css' %}" />
-<div class="Box width100" id="SubmissionTable">
-  <div id="submission-form" class="Column2">
-	  <select style="margin: 10px" name="sub__job">
+<div class="Box" id="SubmissionTable">
+  <div id="submission-form" class="EditGrid">
+	  <label for="hours">Job:</label>
+	  <select id="job-select" name="sub__job">
 		  {% for job in Jobs %}
 		  	<option value="{{ job.id }}">{{ job.job_name }}</option>
 		  {% endfor %}
-	  </select><br>
-	  <select style="margin: 10px" name="sub__manager">
+	  </select>
+	  <label for="hours">Line manager:</label>
+	  <select id="linemanager-select" name="sub__manager">
 		  {% for man in Managers %}
 		  	<option value="{{ man.id }}">{{ man.user.get_full_name }}</option>
 		  {% endfor %}
-	  </select><br>
-	  <input type="number" style="margin: 10px" min="0" max="15" name="sub__hours" onkeyup="enforceMinMax(this)" placeholder="Hours"><br>
-	  <input type="date" style="margin: 10px"  name="sub__worked" placeholder="Date Worked"><br>
-	  <input type="date" style="margin: 10px"  name="sub__submitted" placeholder="Date Submitted"><br>
-	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
+	  </select>
+	  <label for="hours">Hours:</label>
+	  <input id="hours" type="number" min="0" max="15" name="sub__hours" onkeyup="enforceMinMax(this)">
+	  <label for="date-worked">Date worked:</label>
+	  <input id="date-worked" type="date"  name="sub__worked">
+	  <label for="date-submitted">Date submitted:</label>
+	  <input id="date-submitted" type="date"  name="sub__submitted">
   </div>
+	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
 </div>
-<script src="{% static 'table.js' %}"></script>
 <script>
     async function processSubmissionForm(action, element_id) {
 	    const formElement = document.getElementById(element_id);

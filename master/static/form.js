@@ -114,8 +114,8 @@ class Form {
 				continue;
 			}
 			if (parameter_properties.type === "array") {
-				while (parameter_properties.fieldset_element.firstChild !== parameter_properties.add_button) {
-					parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[0]);
+				while (parameter_properties.fieldset_element.children[1] !== parameter_properties.add_button) {
+					parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[1]);
 				}
 			}
 			else if (parameter_properties.type === "boolean") {
