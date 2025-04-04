@@ -174,8 +174,8 @@ class Form {
 				}
 				let temp_json_value;
 				if (parameter_properties.type === "array") {
-					while (parameter_properties.fieldset_element.firstChild !== parameter_properties.add_button) {
-						parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[0]);
+					while (parameter_properties.fieldset_element.children[1] !== parameter_properties.add_button) {
+						parameter_properties.fieldset_element.removeChild(parameter_properties.fieldset_element.children[1]);
 					}
 					for (let array_item of response_obj[parameter_properties.name]) {
 						this.addArrayEntry(parameter_name, array_item);
