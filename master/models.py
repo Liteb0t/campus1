@@ -86,3 +86,5 @@ class RecruiterSubmission(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)
     accepted = models.BooleanField(null=True)
+    date_worked = models.DateField()
+    date_submitted = models.DateField()
