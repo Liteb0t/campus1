@@ -25,15 +25,10 @@
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionListStudent' %}"
 		,columns: {
-			// "student id": {name: "id", type: "number", "parent_object": ["student"]},
-			// "job id": {name: "id", type: "number", "parent_object": ["job"]},
-			// "line manager id": {name: "id", type: "number", "parent_object": ["line_manager"]},
-			// ,"Student": {name: "username", type: "string", "parent_object": ["student", "user"]}
-			// ,"Job": {name: "job_name", type: "string", parent_object: ["job"]}
-			// ,"Line Manager": {name: "username", type: "string", "parent_object": ["line_manager", "user"]}
-			"student id": {name: "student", type: "number"},
-			"job id": {name: "job", type: "number"},
-			"line manager id": {name: "line_manager", type: "number"},
+			"Job": {name: "job_name", type: "string", parent_object: ["job"]},
+			"Line Manager": {name: "username", type: "string", "parent_object": ["line_manager", "user"]},
+			// "job id": {name: "job", type: "number"},
+			// "line manager id": {name: "line_manager", type: "number"},
 			"Hours": {name: "hours", type: "number"},
 			"Date worked": {name: "date_worked", type: "date"},
 			"Date submitted": {name: "date_submitted", type: "date"},

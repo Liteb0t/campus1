@@ -232,6 +232,15 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.delete()
         return instance
 
+# For students viewing, not editing, their own submissions
+class DBAdminSubmissionStudentSerialiser(serializers.ModelSerializer):
+    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
+    job = DBAdminJobSerialiser(required=True)
+    line_manager = DBAdminLineManagerSerialiser(required=True)
+    class Meta:
+        model = Submission
+        fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted', 'reviewed', 'archived']
+
 # class DBAdminSubmissionDetailSerialiser(serializers.ModelSerializer):
 #     student = DBAdminStudentSerialiser(many=True, required=True)
 #     # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)

@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter # , RecruiterSubmission
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser, CampusUser # , RecruiterSubmissionSerialiser
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser, CampusUser, DBAdminSubmissionStudentSerialiser # , RecruiterSubmissionSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -19,11 +19,12 @@ duplicate_username_message = "epic duplicate username fail"
 
 @login_required
 def homepage(request):
-    if request.user.user_type == "Student":
-        student = Student.objects.get(user__id=request.user.id)
-        return render(request, "homepage.html", {"student": student})
-    else:
-        return render(request, "homepage.html")
+    return HttpResponse("By decree of the Department Of Campusjobs Efficiency (DOCE), the homepage has been axed.")
+#     if request.user.user_type == "Student":
+#         student = Student.objects.get(user__id=request.user.id)
+#         return render(request, "homepage.html", {"student": student})
+#     else:
+#         return render(request, "homepage.html")
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
@@ -135,7 +136,6 @@ def studentDetail(request, pk):
         student_serialiser = DBAdminStudentSerialiser(student, many=False)
         return Response(student_serialiser.data)
 
-# investigate why submissions take much longer to load than the rest
 @csrf_exempt
 def submissionList(request):
     if request.method == "GET":
@@ -234,8 +234,8 @@ def recruiterList(request):
 @csrf_exempt
 def submissionListStudent(request):
     if request.method == "GET":
-        submissions = Submission.objects.filter(student__user__id = request.user.id).select_related("student", "job", "line_manager")
-        submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
+        submissions = Submission.objects.filter(student__user = request.user).select_related("student", "job", "line_manager")
+        submissions_serialiser = DBAdminSubmissionStudentSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
 
     elif request.method == "POST":

@@ -181,6 +181,7 @@ class Table {
 				this.tbody_element.textContent = "No data on this page.";
 			}
 			showing_indexes_string.push("nothing");
+			this.showing_indexes_element.textContent = showing_indexes_string.join("");
         }
         else {
             for (let i = start_index; i < until_index && i < this.json.length; i++) {
