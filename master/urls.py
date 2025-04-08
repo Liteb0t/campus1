@@ -26,5 +26,5 @@ urlpatterns = [
     path("api/lineManagers/", views.lineManagerList, name="lineManagerList"),
     path("api/lineManager/<int:pk>", views.lineManagerDetail, name="lineManagerDetail"),
     path("api/submissionsStudent/", views.submissionListStudent, name="submissionListStudent"),
-    path("api/submissionsRecruiter/", views.submissionListRecruiter, name="submissionListRecruiter"),
+    # path("api/submissionsRecruiter/", views.submissionListRecruiter, name="submissionListRecruiter"),
 ]

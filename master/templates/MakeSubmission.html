@@ -24,8 +24,9 @@
 	  <input id="hours" type="number" min="0" max="15" name="sub__hours" onkeyup="enforceMinMax(this)">
 	  <label for="date-worked">Date worked:</label>
 	  <input id="date-worked" type="date"  name="sub__worked">
-	  <label for="date-submitted">Date submitted:</label>
-	  <input id="date-submitted" type="date"  name="sub__submitted">
+	  <!-- This is done automatically now -->
+	  <!--<label for="date-submitted">Date submitted:</label>
+	  <input id="date-submitted" type="date"  name="sub__submitted">-->
   </div>
 	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
 </div>
@@ -39,7 +40,7 @@
 	    	line_manager: formElement.querySelector("select[name=sub__manager]").value,
 		    hours: formElement.querySelector("input[name=sub__hours]").value,
 		    date_worked: formElement.querySelector("input[name=sub__worked]").value,
-		    date_submitted: formElement.querySelector("input[name=sub__submitted]").value,
+		    // date_submitted: formElement.querySelector("input[name=sub__submitted]").value,
 		    accepted: false
 	    };
 	    let response = await postJSON("{% url 'submissionListStudent' %}", data);
@@ -65,13 +66,14 @@
 				"Content-type": "application/json; charset=UTF-8"
 			},
 		});
+		let response = await fetch_response.json();
 		if (fetch_response.status == 201){
 			alert("Success")
 		}
 		else{
-			alert(fetch_response)
+			alert(response.message)
 		}
-		return fetch_response;
+		return response;
 	}
 </script>
 {% endblock %}

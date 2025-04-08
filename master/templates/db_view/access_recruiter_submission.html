@@ -6,23 +6,75 @@
 
 {% block content %}
 
-    <div id="submissions-table-container"></div>
+    <button onclick="showTable('submissions-table-container')">Submissions</button>
+    <button onclick="showTable('jobs-table-container', 'job-form-container')">Jobs</button>
+	<div class="DBView">
+	<div class="Column1">
+		<div id="submissions-table-container"></div>
+		<div id="jobs-table-container" style="display: none"></div>
+	</div>
+	<div id="job-form-container" class="Column2" style="display: none"></div>
+	</div>
 
     <script src="{% static 'table.js' %}"></script>
+    <script src="{% static 'form.js' %}"></script>
     <script>
 	"use strict";
-    let entries_per_page = 50;
-
-	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
-		json_url: "{% url 'submissionListRecruiter' %}"
-		,columns: {
-			"Hours": {name: "hours", type: "number"},
-			"student id": {name: "student", type: "number"},
-			"Accepted": {name: "accepted", type: "boolean", editable: false},
-			"recruiter id": {name: "recruiter", type: "number"},
+	// For changing visible table and sidebar using the buttons
+    const swappable_table_containers = [
+        document.getElementById("submissions-table-container"),
+        document.getElementById("jobs-table-container"),
+        document.getElementById("job-form-container"),
+    ];
+    function showTable(container_id, form_id = null) {
+        for (let table_container of swappable_table_containers) {
+            if (container_id === table_container.id) {
+                table_container.style["display"] = "flex";
+            }
+            else if (form_id === table_container.id){
+            	table_container.style["display"] = "block";
+            }
+            else {
+                table_container.style["display"] = "none";
+            }
         }
+    }
+	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
+		json_url: "{% url 'submissionList' %}"
+		,columns: {
+			"Student ID": {name: "student", type: "number"},
+			"Job ID": {name: "job", type: "number"},
+			"Line manager ID": {name: "line_manager", type: "number"},
+			"Hours": {name: "hours", type: "number"},
+			"Date worked": {name: "date_worked", type: "date"},
+			"Date submitted": {name: "date_submitted", type: "date"},
+			"Reviewed": {name: "reviewed", type: "boolean"},
+			"Accepted": {name: "accepted", type: "boolean"},
+			"Archived": {name: "archived", type: "boolean"}
+    	}
         ,editable: true
+		,row_click_event: (id) => { submission_form.selectEntry(id); }
 	});
-
+	const job_parameters = {
+		"ID": {name: "id", type: "number", editable: false},
+		"Job name": {name: "job_name", type: "string"},
+		// "Recruiter ID": {name: "recruiter", type: "number"},
+		"Cost code": {name: "cost_code", type: "string"},
+		"Pay rate": {name: "pay_rate", type: "number"},
+		"Students": {name: "student", type: "array"}
+	};
+	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
+		json_url: "{% url 'jobList' %}"
+		,columns: job_parameters
+		,editable: true
+		,row_click_event: (id) => { job_form.selectEntry(id); }
+	});
+	const job_form = new Form("job-form-container", {
+		parameters: job_parameters,
+		name: "job",
+		fetch_url: "{% url 'jobDetail' pk=0 %}",
+		post_url: "{% url 'jobList' %}",
+		create_update_event: () => { jobs_table.refresh() }
+	});
     </script>
 {% endblock %}

@@ -347,7 +347,7 @@ ul{
 		margin-left: 5px;
 		border-left: 5px solid #a58;
 		/* min-width: 300px; */
-		/* max-width: max-content */
+		max-width: max-content
 	}
 	.HelpDetails {
 		max-width: fit-content;

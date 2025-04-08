@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from master.models import Student, Submission, Job, LineManager, Recruiter, RecruiterSubmission, CampusUser
+from master.models import Student, Submission, Job, LineManager, Recruiter, CampusUser # , RecruiterSubmission
 
 class UserSerialiser(serializers.ModelSerializer):
     class Meta:
@@ -106,19 +106,21 @@ class DBAdminStudentSerialiser(serializers.ModelSerializer):
 class DBAdminJobSerialiser(serializers.ModelSerializer):
     # student = DBAdminStudentSerialiser(many=True, required=True)
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+    recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
-        fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
+        fields = ['id', 'job_name', 'recruiter', 'cost_code', 'pay_rate', 'student']
 
     def create(self, validated_data):
-        # job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=validated_data.pop("student"))
-        job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"))
+        recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
+        job = Job.objects.create(job_name=validated_data.pop("job_name"), recruiter=recruiter, cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"))
         for student_item in validated_data["student"]:
             job.student.add(student_item)
         return job
 
     def update(self, instance, validated_data):
+        instance.recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
         instance.job_name = validated_data["job_name"]
         instance.cost_code = validated_data["cost_code"]
         instance.pay_rate = validated_data["pay_rate"]
@@ -132,11 +134,12 @@ class DBAdminJobSerialiser(serializers.ModelSerializer):
 
 class DBAdminJobDetailSerialiser(serializers.ModelSerializer):
     student = DBAdminStudentSerialiser(many=True, required=True)
+    recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
     # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
     # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = Job
-        fields = ['id', 'job_name', 'cost_code', 'pay_rate', 'student']
+        fields = ['id', 'job_name', 'recruiter', 'cost_code', 'pay_rate', 'student']
 
     # def create(self, validated_data):
     #     job = Job.objects.create(job_name=validated_data.pop("job_name"), cost_code=validated_data.pop("cost_code"), pay_rate=validated_data.pop("pay_rate"), student=student)
@@ -196,13 +199,13 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
     # line_manager = DBAdminLineManagerSerialiser(required=True)
     class Meta:
         model = Submission
-        fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted']
+        fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted', 'reviewed', 'archived']
 
     def create(self, validated_data):
         student = Student.objects.get(id=validated_data["student"])
         job = Job.objects.get(id=validated_data["job"])
         line_manager = LineManager.objects.get(id=validated_data["line_manager"])
-        submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data["hours"], date_worked=validated_data["date_worked"], date_submitted=validated_data["date_submitted"], accepted=validated_data["accepted"])
+        submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data["hours"], date_worked=validated_data["date_worked"])
         return submission
 
     def update(self, instance, validated_data):
@@ -217,8 +220,10 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.line_manager = LineManager.objects.get(id=validated_data["line_manager"])
         instance.hours = validated_data["hours"]
         instance.date_worked = validated_data["date_worked"]
-        instance.date_submitted = validated_data["date_submitted"]
+        # instance.date_submitted = validated_data["date_submitted"]
         instance.accepted = validated_data["accepted"]
+        instance.archived = validated_data["archived"]
+        instance.reviewed = validated_data["reviewed"]
         instance.save()
         return instance
 
@@ -270,27 +275,27 @@ class DBAdminRecruiterDetailSerialiser(serializers.ModelSerializer):
         model = LineManager
         fields = ['id', 'user']
 
-class RecruiterSubmissionSerialiser(serializers.ModelSerializer):
-    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
-    recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
-
-    class Meta:
-        model = RecruiterSubmission
-        fields = ['id', 'hours', 'student', 'accepted', 'recruiter']
-
-    def create(self, validated_data):
-        student = Student.objects.get(id=validated_data["student"])
-        recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
-        submission = Submission.objects.create(student=student, hours=validated_data.pop("hours"), accepted=validated_data.pop("accepted"), recruiter=recruiter)
-        return submission
-
-    def update(self, instance, validated_data):
-        instance.recruiter_id = Recruiter.objects.get(id=validated_data["recruiter"])
-        instance.student = Student.objects.get(id=validated_data["student"])
-        instance.accepted = validated_data["accepted"]
-        instance.save()
-        return instance
-
-    def delete(self, instance):
-        instance.delete()
-        return instance
+# class RecruiterSubmissionSerialiser(serializers.ModelSerializer):
+#     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
+#     recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
+# 
+#     class Meta:
+#         model = RecruiterSubmission
+#         fields = ['id', 'hours', 'student', 'accepted', 'recruiter']
+# 
+#     def create(self, validated_data):
+#         student = Student.objects.get(id=validated_data["student"])
+#         recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
+#         submission = Submission.objects.create(student=student, hours=validated_data.pop("hours"), accepted=validated_data.pop("accepted"), recruiter=recruiter)
+#         return submission
+# 
+#     def update(self, instance, validated_data):
+#         instance.recruiter_id = Recruiter.objects.get(id=validated_data["recruiter"])
+#         instance.student = Student.objects.get(id=validated_data["student"])
+#         instance.accepted = validated_data["accepted"]
+#         instance.save()
+#         return instance
+# 
+#     def delete(self, instance):
+#         instance.delete()
+#         return instance

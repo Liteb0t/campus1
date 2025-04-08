@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
-from master.models import Job, LineManager, Submission, Student, Recruiter, RecruiterSubmission
-from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, RecruiterSubmissionSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser, CampusUser
+from master.models import Job, LineManager, Submission, Student, Recruiter # , RecruiterSubmission
+from master.serialisers import DBAdminStudentSerialiser, DBAdminSubmissionSerialiser, DBAdminJobSerialiser, DBAdminJobDetailSerialiser, DBAdminLineManagerSerialiser, DBAdminLineManagerDetailSerialiser, UserSerialiser, DBAdminRecruiterSerialiser, DBAdminRecruiterDetailSerialiser, CampusUser # , RecruiterSubmissionSerialiser
 from rest_framework.response import Response
 from master.forms import StudentCreationForm, StudentUpdateForm, UserCreationForm
 # from django.db.models import Q # for complex search lookups
@@ -13,6 +13,7 @@ from rest_framework.parsers import JSONParser
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 import json
+import datetime
 
 duplicate_username_message = "epic duplicate username fail"
 
@@ -138,6 +139,8 @@ def studentDetail(request, pk):
 def submissionList(request):
     if request.method == "GET":
         submissions = Submission.objects.select_related("student", "job", "line_manager")
+        if request.user.user_type == "Recruiter":
+            submissions = submissions.filter(job__recruiter__user=request.user)
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
 
@@ -238,20 +241,27 @@ def submissionListStudent(request):
         data = JSONParser().parse(request)
         if data["_action"] == "create":
             serialiser = DBAdminSubmissionSerialiser(data=data)
-            if Student.objects.filter(user__id=request.user.id).exists() and serialiser.is_valid():
-                student = Student.objects.get(user__id=request.user.id)
-                if student.hours_worked + int(data.get("hours")) <= 15:
-                    serialiser.create(validated_data=data)
-                    student.hours_worked += int(data.get("hours"))
-                    student.save()
-                    print(serialiser.data)
-                    return JsonResponse(serialiser.data, status=201)
+            # if Student.objects.filter(user__id=request.user.id).exists():
+            #     print("This student exists")
+            # else:
+            #     print("This student does not exist")
+            if Student.objects.filter(user__id=request.user.id).exists():
+                data["date_submitted"] = datetime.datetime.now().strftime("%Y-%m-%d")
+                if serialiser.is_valid():
+                    student = Student.objects.get(user__id=request.user.id)
+                    if student.hours_worked + int(data.get("hours")) <= 15:
+                        serialiser.create(validated_data=data)
+                        student.hours_worked += int(data.get("hours"))
+                        student.save()
+                        print(serialiser.data)
+                        return JsonResponse(serialiser.data, status=201)
+                    else:
+                        return JsonResponse({"message": "This goes over the hours allowed"}, status=403)
                 else:
                     print(serialiser.errors)
-                    return JsonResponse({"message": "Please select both dates"}, status=403)
+                    return JsonResponse({"message": "Invalid field(s) but idk which one(s), well there's only four so you figure it out", "errors": serialiser.errors}, status=400)
             else:
-                print(serialiser.errors)
-                return JsonResponse({"message": "Please enter the hours you will be working"}, status=403)
+                return JsonResponse({"message": "Authentication failed"}, status=403)
         elif data["_action"] == "update":
             instance = Submission.objects.get(id=data["_id"])
             data["accepted"] = instance.accepted
@@ -263,31 +273,34 @@ def submissionListStudent(request):
             else:
                 return JsonResponse(serialiser.errors, status=400)
 
-@csrf_exempt
-def submissionListRecruiter(request):
-    if request.method == "GET":
-        submissions = RecruiterSubmission.objects.filter(recruiter_id__user__id=request.user.id).select_related("recruiter")
-        print(submissions)
-        submissions_serialiser = RecruiterSubmissionSerialiser(submissions, many=True)
-        return JsonResponse(submissions_serialiser.data, safe=False)
-
-    elif request.method == "POST":
-        data = JSONParser().parse(request)
-        if data["_action"] == "update":
-            instance = RecruiterSubmission.objects.get(id=data["_id"])
-            data["accepted"] = instance.accepted
-            print(data)
-            serialiser = RecruiterSubmissionSerialiser(data=data)
-            if serialiser.is_valid(raise_exception=ValueError):
-                serialiser.update(instance=instance, validated_data=data)
-                return JsonResponse(serialiser.data, status=201)
-            else:
-                return JsonResponse(serialiser.errors, status=400)
+# @csrf_exempt
+# def submissionListRecruiter(request):
+#     if request.method == "GET":
+#         submissions = RecruiterSubmission.objects.filter(recruiter_id__user__id=request.user.id).select_related("recruiter")
+#         print(submissions)
+#         submissions_serialiser = RecruiterSubmissionSerialiser(submissions, many=True)
+#         return JsonResponse(submissions_serialiser.data, safe=False)
+# 
+#     elif request.method == "POST":
+#         data = JSONParser().parse(request)
+#         if data["_action"] == "update":
+#             instance = RecruiterSubmission.objects.get(id=data["_id"])
+#             data["accepted"] = instance.accepted
+#             print(data)
+#             serialiser = RecruiterSubmissionSerialiser(data=data)
+#             if serialiser.is_valid(raise_exception=ValueError):
+#                 serialiser.update(instance=instance, validated_data=data)
+#                 return JsonResponse(serialiser.data, status=201)
+#             else:
+#                 return JsonResponse(serialiser.errors, status=400)
 
 @csrf_exempt
 def jobList(request):
     if request.method == "GET":
-        jobs = Job.objects.all()
+        if request.user.user_type == "Recruiter":
+            jobs = Job.objects.filter(recruiter__user=request.user)
+        else:
+            jobs = Job.objects.all()
         jobs_serialiser = DBAdminJobSerialiser(jobs, many=True)
         return JsonResponse(jobs_serialiser.data, safe=False)
 
@@ -299,15 +312,18 @@ def jobList(request):
                 instance = Job.objects.get(id=entry_id)
                 instance.delete()
             return JsonResponse(data={"message": "Deleted stuff"}, status=200)
-        elif serialiser.is_valid():
-            if data["_action"] == "create":
-                serialiser.create(validated_data=data)
-            elif data["_action"] == "update":
-                instance = Job.objects.get(id=data["_id"])
-                serialiser.update(instance=instance, validated_data=data)
-            return JsonResponse(serialiser.data, status=201)
         else:
-            return JsonResponse(serialiser.errors, status=400)
+            if request.user.user_type == "Recruiter":
+                data["recruiter"] = Recruiter.objects.get(user=request.user).id
+            if serialiser.is_valid():
+                if data["_action"] == "create":
+                    serialiser.create(validated_data=data)
+                elif data["_action"] == "update":
+                    instance = Job.objects.get(id=data["_id"])
+                    serialiser.update(instance=instance, validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
 
 @api_view(["GET"])
 def jobDetail(request, pk):
@@ -347,6 +363,7 @@ def lineManagerList(request):
                 return JsonResponse(return_data, status=400)
             elif serialiser.is_valid():
                 serialiser.create(validated_data=data)
+                return JsonResponse(serialiser.data, status=201)
             else:
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":

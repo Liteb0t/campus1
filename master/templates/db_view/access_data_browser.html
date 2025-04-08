@@ -108,7 +108,9 @@
 		"Hours": {name: "hours", type: "number"},
 		"Date worked": {name: "date_worked", type: "date"},
 		"Date submitted": {name: "date_submitted", type: "date"},
-		"Accepted": {name: "accepted", type: "boolean"}
+		"Reviewed": {name: "reviewed", type: "boolean"},
+		"Accepted": {name: "accepted", type: "boolean"},
+		"Archived": {name: "archived", type: "boolean"}
     };
 	const submissions_table = new AdvancedSearchTable("submissions-table-container", {
 		json_url: "{% url 'submissionList' %}"
@@ -127,6 +129,7 @@
 	const job_parameters = {
 		"ID": {name: "id", type: "number", editable: false},
 		"Job name": {name: "job_name", type: "string"},
+		"Recruiter ID": {name: "recruiter", type: "number"},
 		"Cost code": {name: "cost_code", type: "string"},
 		"Pay rate": {name: "pay_rate", type: "number"},
 		"Students": {name: "student", type: "array"}
