@@ -57,7 +57,8 @@ def accessDataBrowser(request):
 
 @login_required
 def accessStudentSubmission(request):
-    return render(request, "db_view/access_student_submission.html")
+    student = Student.objects.get(user=request.user)
+    return render(request, "db_view/access_student_submission.html", {"student": student})
 
 @login_required
 def accessRecruiterSubmission(request):

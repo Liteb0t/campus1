@@ -337,7 +337,7 @@ ul{
 	flex-wrap: wrap;
 	.Column1 {
 		flex: 5 1 auto;
-		height: 85vh;
+		height: calc(90vh - 100px);
 		width: min-content;
 		max-width: fit-content;
 	}

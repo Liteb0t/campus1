@@ -6,7 +6,16 @@
 
 {% block content %}
 
-    <div id="submissions-table-container"></div>
+	<div class="DBView">
+		<div id="submissions-table-container" class="Column1"></div>
+		<div id="submissions-sidebar" class="Column2">
+			<h3>Weekly Work Hours</h3>
+			<p><strong>{{ student.hours_worked }} / 15 hours worked</strong></p>
+			<progress class="progress-bar" value="{{ student.hours_worked }}" max="15"></progress>
+			<p>Visa status: <b>{% if student.on_visa %} On a visa {% else %} Not on a visa {% endif %}</b></p>
+			<p>Students on a visa may not work more than 15 hours per week.</p>
+		</div>
+	</div>
 
     <script src="{% static 'table.js' %}"></script>
     <script>
@@ -30,7 +39,7 @@
 			"Date submitted": {name: "date_submitted", type: "date"},
 			"Accepted": {name: "accepted", type: "boolean", editable: false}
         }
-        ,editable: true
+        // ,editable: true
 	});
 
     </script>
