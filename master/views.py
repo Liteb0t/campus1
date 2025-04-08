@@ -15,11 +15,11 @@ from django.shortcuts import redirect
 import json
 import datetime
 
-duplicate_username_message = "epic duplicate username fail"
+duplicate_username_message = "Username may not be duplicate"
 
 @login_required
 def homepage(request):
-    return HttpResponse("By decree of the Department Of Campusjobs Efficiency (DOCE), the homepage has been axed.")
+    return HttpResponse("By decree of the Department Of Campusjobs Efficiency (DOCE), the homepage has been axed.<br><a href='/accounts/profile'>Profile page</a>")
 #     if request.user.user_type == "Student":
 #         student = Student.objects.get(user__id=request.user.id)
 #         return render(request, "homepage.html", {"student": student})
