@@ -375,7 +375,20 @@ class Table {
 		// console.log(fetch_response);
 		const json = await fetch_response.json();
 		console.log(json);
-		alert(`Status: ${fetch_response.status}\nMessage: ${json.message}`);
+		if (typeof json.message !== "undefined") {
+			alert(json.message);
+		}
+		else if (fetch_response.status === 200 || fetch_response.status === 201) {
+		}
+		else if (fetch_response.status === 400) { // The form was probably invalid.
+			alert("the thing failed. damn that sucks");
+		}
+		else if (fetch_response.status === 500) {
+			alert("server error. yikes that's rough");
+		}
+		else {
+			alert(`Status: ${fetch_response.status} (${fetch_response.statusText})\nsomething weird happened`);
+		}
 		// alert(`ok: ${fetch_response.ok}\nstatus: ${fetch_response.status}\nstatusText: ${fetch_response.statusText}`);
         return fetch_response;
     }
