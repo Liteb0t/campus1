@@ -412,18 +412,27 @@ def currentUser(request):
     elif request.method == "POST":
         data = JSONParser().parse(request)
         serialiser = UserSerialiser(data=data)
-        if serialiser.is_valid(raise_exception=ValueError):
-            if data["_action"] == "create":
+        if data["_action"] == "create":
+            if serialiser.is_valid():
                 serialiser.create(validated_data=data)
-            elif data["_action"] == "update":
-                # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
-                instance = CampusUser.objects.get(id=data["_id"])
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
+        elif data["_action"] == "update":
+            # instance = Student.objects.get(user=User.objects.get(id=data["_id"]))
+            instance = CampusUser.objects.get(id=data["_id"])
+            if "password" not in data or data["password"] == "":
+                data["password"] = instance.password
+            if serialiser.is_valid():
                 serialiser.update(instance=instance, validated_data=data)
-            elif data["_action"] == "delete":
-                    serialiser.delete(instance=CampusUser.objects.get(id=data["_id"]))
-            return JsonResponse(serialiser.data, status=201)
+                return JsonResponse(serialiser.data, status=201)
+            else:
+                return JsonResponse(serialiser.errors, status=400)
+        elif data["_action"] == "delete":
+            serialiser.delete(instance=CampusUser.objects.get(id=data["_id"]))
+            return JsonResponse(data={"message": "Deleted your profile"}, status=200)
         else:
-            return JsonResponse(serialiser.errors, status=400)
+            print("action not found")
 
 class HttpResponseInternalServerError(JsonResponse):
   def __init__(self, message):
