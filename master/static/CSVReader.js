@@ -1,5 +1,5 @@
 class CSVReader {
-    constructor(input_id) {
+    constructor(input_id, upload_url) {
         this.input_element = document.getElementById(input_id);
         this.raw_data = "test";
         this.parsed_data = [];
@@ -7,13 +7,10 @@ class CSVReader {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                this.parsed_data = [];
-                console.log(this.parsed_data);
+                // this.parsed_data = [];
                 let columns = [];
                 reader.onload = function(e) {
                     this.parsed_data = [];
-                    console.log(this.parsed_data);
-                    console.log(this.raw_data);
                     this.raw_data = e.target.result;
                     console.log(this.raw_data);
                     let content_s = this.raw_data.replace("\r\n", "\n").split("\n");
@@ -21,27 +18,71 @@ class CSVReader {
                         content_s.pop();
                     }
                     console.log(content_s);
-                    console.log(this.parsed_data);
                     for (let header of content_s[0].split(",")) {
                         columns.push(header.trim());
                     }
                     console.log(columns)
                     for (let i = 1; i < content_s.length; ++i) {
-                    console.log(this.parsed_data);
                         let data_s = content_s[i].split(",");
                         let new_row = {};
                         for (let column_i = 0; column_i < columns.length; ++column_i) {
                             new_row[columns[column_i]] = data_s[column_i].trim();
                         }
                         console.log(new_row)
-                        console.log(this.parsed_data);
                         this.parsed_data.push(new_row);
                     }
                     // document.getElementById('output').innerText = content;
                     console.log(this.parsed_data);
+					// this.uploadData(this.parsed_data);
+					for (let csv_row of this.parsed_data) {
+						// let first_name = csv_row
+						let data = {};
+						let first_name = csv_row["Attached To"].substring(0, csv_row["Attached To"].indexOf(" "));
+						let last_name = csv_row["Attached To"].substring(csv_row["Attached To"].indexOf(" ")+1, csv_row["Attached To"].length);
+						console.log(first_name);
+						console.log(last_name);
+						data = {
+							"_action": "create",
+							"user": {
+								"first_name": first_name,
+								"last_name": last_name,
+								"username": csv_row["Student Number"],
+								"email": csv_row["Student Number"] + "@hallam.shu.ac.uk",
+								"password": "str0ngpassword"
+							},
+							"on_visa": csv_row["Attatched To Tier 4"] === "TRUE",
+							"eligible_to_work": csv_row["Eligible to work"] === "TRUE",
+							"hours_worked": 0
+							// "hours_worked": 0
+						};
+						let response = Form.postJSON(upload_url, data);
+					}
                 };
                 reader.readAsText(file);
             }
         });
     }
+	uploadData(parsed_csv) {
+		for (let csv_row of parsed_csv) {
+			// let first_name = csv_row
+			let data = {};
+			let first_name = csv_row["Attatched To"].substring(0, csv_row["Attatched To"].indexOf(" "));
+			let last_name = csv_row["Attatched To"].substring(csv_row["Attatched To"].indexOf(" ")+1, csv_row["Attatched To"].length-1);
+			console.log(last_name);
+		}
+	}
+
+	static async postJSON(url, data) {
+	    const fetch_response = await fetch(url, {
+	        method: "POST",
+	        body: JSON.stringify(data),
+	        headers: {
+	            "Content-type": "application/json; charset=UTF-8"
+	        }
+	    });
+		console.log(fetch_response);
+		// const json = await fetch_response.json();
+	    // return json;
+		return fetch_response;
+	}
 }

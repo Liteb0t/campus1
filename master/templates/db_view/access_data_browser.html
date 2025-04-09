@@ -19,17 +19,20 @@
     		<div id="linemanagers-table-container" style="display: none"></div>
 			<div id="recruiter-table-container" style="display: none"></div>
 		</div>
-		<div id="student-form-container" class="Column2"></div>
+		<div id="student-form-container" class="Column2">
+			<fieldset><legend>Upload students CSV</legend>
+			<input class="FileInput" type="file" id="fileInput" accept=".csv" />
+			</fieldset>
+		</div>
 		<div id="job-form-container" class="Column2" style="display: none"></div>
 		<div id="submission-form-container" class="Column2" style="display: none"></div>
 		<div id="linemanager-form-container" class="Column2" style="display: none"></div>
 		<div id="recruiter-form-container" class="Column2" style="display: none"></div>
 	</div>
 
-	<input class="FileInput" type="file" id="fileInput" accept=".csv" />
-	<script src="{% static 'CSVReader.js' %}"></script>
     <script src="{% static 'table.js' %}"></script>
 	<script src="{% static 'form.js' %}"></script>
+	<script src="{% static 'CSVReader.js' %}"></script>
     <script>
 	"use strict";
 
@@ -59,7 +62,7 @@
             }
         }
     }
-    let students_import = new CSVReader("fileInput");
+    let students_import = new CSVReader("fileInput", "{% url 'studentList' %}");
 
 	// Student
 	const student_parameters = {

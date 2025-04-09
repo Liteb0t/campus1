@@ -105,6 +105,7 @@ def studentList(request):
                 serialiser.create(validated_data=data)
                 return JsonResponse(serialiser.data, status=201)
             else:
+                print(serialiser.errors)
                 return JsonResponse(serialiser.errors, status=400)
         elif data["_action"] == "update":
             instance = Student.objects.get(id=data["_id"])
