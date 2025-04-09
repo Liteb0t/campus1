@@ -1,15 +1,21 @@
 class CSVReader {
-    constructor(input_id, upload_url) {
-        this.input_element = document.getElementById(input_id);
+    constructor(container_id, upload_url) {
+		this.container_element = document.getElementById(container_id);
+        this.input_element = this.container_element.querySelector("input");
         this.raw_data = "test";
         this.parsed_data = [];
+		let success_indicator_element = document.createElement("div");
+		this.container_element.appendChild(success_indicator_element);
+
         this.input_element.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 // this.parsed_data = [];
                 let columns = [];
-                reader.onload = function(e) {
+                reader.onload = async function(e) {
+					let successful_uploads = 0;
+					let failed_uploads = 0;
                     this.parsed_data = [];
                     this.raw_data = e.target.result;
                     console.log(this.raw_data);
@@ -56,6 +62,20 @@ class CSVReader {
 							// "hours_worked": 0
 						};
 						let response = Form.postJSON(upload_url, data);
+						response.then(value => {
+							console.log(value.status);
+							if (value.status === 200 || value.status === 201) {
+								++successful_uploads;
+							}
+							else {
+								++failed_uploads;
+							}
+							success_indicator_element.textContent = `Succeeded: ${successful_uploads}, Failed: ${failed_uploads}`;
+							if (successful_uploads + failed_uploads === this.parsed_data.length) {
+								success_indicator_element.textContent = success_indicator_element.textContent + "\nFinished.";
+							}
+						});
+						// let response_json = await response.json();
 					}
                 };
                 reader.readAsText(file);
