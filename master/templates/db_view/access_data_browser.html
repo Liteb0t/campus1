@@ -26,9 +26,8 @@
 		<div id="recruiter-form-container" class="Column2" style="display: none"></div>
 	</div>
 
-	<!-- How tragic... -->
-	<!--<input class="FileInput" type="file" id="fileInput" accept=".csv" />-->
-	<!--<script src="{% static 'CSVReader.js' %}"></script>-->
+	<input class="FileInput" type="file" id="fileInput" accept=".csv" />
+	<script src="{% static 'CSVReader.js' %}"></script>
     <script src="{% static 'table.js' %}"></script>
 	<script src="{% static 'form.js' %}"></script>
     <script>
@@ -60,6 +59,7 @@
             }
         }
     }
+    let students_import = new CSVReader("fileInput");
 
 	// Student
 	const student_parameters = {
