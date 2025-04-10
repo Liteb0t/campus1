@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+CRONJOBS = [
+    # Set all students' hours_worked to 0 every sunday
+    ('0 0 * * 0', 'master.tasts.resetStudentHours')
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
