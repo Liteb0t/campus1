@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,7 +86,7 @@ from sshtunnel import SSHTunnelForwarder
 # Connect to a server using the ssh keys. See the sshtunnel documentation for using password authentication
 ssh_tunnel = SSHTunnelForwarder(
     '195.201.102.136',
-    ssh_private_key='dbooserkey',
+    ssh_private_key=os.environ['NUDBOOSERKEYPATH'],
     ssh_private_key_password='',
     ssh_username='dbooser',
     remote_bind_address=('localhost', 3306),
@@ -99,7 +100,7 @@ DATABASES = {
         'PORT': ssh_tunnel.local_bind_port,
         'NAME': 'campoos',
         'USER': 'root',
-        'PASSWORD': 'str0ngpassword',
+        'PASSWORD': os.environ['MYSQUEALROOTPASSWORD'],
     },
     'shhtunnel_db': {
         'ENGINE': 'django.db.backends.mysql',
@@ -107,7 +108,7 @@ DATABASES = {
         'PORT': ssh_tunnel.local_bind_port, # For Fuze.page deployment, comment out this line
         'NAME': 'campoos',
         'USER': 'root',
-        'PASSWORD': 'str0ngpassword',
+        'PASSWORD': os.environ['MYSQUEALROOTPASSWORD'],
     },
 }
 

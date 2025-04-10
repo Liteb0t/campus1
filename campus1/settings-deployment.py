@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@&3-esy=@e$##iyd@3kif5qb@^wjwdrg@g4s_el@i%w5$vw%-z'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -99,7 +100,7 @@ DATABASES = {
 #         'PORT': ssh_tunnel.local_bind_port,
         'NAME': 'campoos',
         'USER': 'root',
-        'PASSWORD': 'str0ngpassword',
+        'PASSWORD': os.environ['MYSQUEALROOTPASSWORD'],
     },
     'shhtunnel_db': {
         'ENGINE': 'django.db.backends.mysql',
@@ -107,7 +108,7 @@ DATABASES = {
 #         'PORT': ssh_tunnel.local_bind_port, # For Fuze.page deployment, comment out this line
         'NAME': 'campoos',
         'USER': 'root',
-        'PASSWORD': 'str0ngpassword',
+        'PASSWORD': os.environ['MYSQUEALROOTPASSWORD'],
     },
 }
 
