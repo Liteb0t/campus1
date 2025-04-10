@@ -131,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CRONJOBS = [
     # Set all students' hours_worked to 0 every sunday
-    ('0 0 * * 0', 'master.tasts.resetStudentHours')
+    ('0 0 * * 0', 'master.tasks.resetStudentHours')
 ]
 
 # Internationalization
