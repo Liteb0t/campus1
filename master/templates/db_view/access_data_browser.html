@@ -146,7 +146,7 @@
         "First name": {name: "first_name", type: "string", "parent_object": ["user"]},
         "Last name": {name: "last_name", type: "string", "parent_object": ["user"]},
        	"Email": {name: "email", type: "string", "parent_object": ["user"]},
-        "Students": {name: "student", type: "array"}
+        "Recruiter ID": {name: "recruiter", type: "number"}
     };
     const linemanagers_table = new AdvancedSearchTable("linemanagers-table-container", {
         json_url: "{% url 'lineManagerList' %}"

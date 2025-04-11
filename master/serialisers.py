@@ -148,19 +148,16 @@ class DBAdminJobDetailSerialiser(serializers.ModelSerializer):
 
 class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
     user = UserSerialiser(required=True)
-    # student = DBAdminLineManagerSerialiser(many=True, required=True)
-    student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
+    recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
     class Meta:
         model = LineManager
-        fields = ['id', 'user', 'student']
+        fields = ['id', 'user', 'recruiter']
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
         user_data["user_type"] = "LineManager"
         user = UserSerialiser.create(UserSerialiser(), validated_data=user_data)
-        # student = LineManager.objects.create(user=user)
-        line_manager = LineManager.objects.create(user=user)
-        line_manager.student.set(validated_data["student"])
+        line_manager = LineManager.objects.create(user=user, recruiter=validated_data["recruiter"])
         return line_manager
 
     def update(self, instance, validated_data):
@@ -172,8 +169,8 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         if user_data["password"] != instance.user.password:
             instance.user.set_password(user_data["password"])
         instance.user.save()
+        instance.recruiter = validated_data["recruiter"]
         instance.save()
-        instance.student.set(validated_data["student"])
         return instance
 
     def delete(self, instance):
@@ -182,19 +179,17 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         return instance
 
 class DBAdminLineManagerDetailSerialiser(serializers.ModelSerializer):
-    student = DBAdminStudentSerialiser(many=True, required=True)
+    recruiter = serializers.PrimaryKeyRelatedField(queryset=Recruiter.objects.all(), many=False)
+    # recruiter = DBAdminRecruiterDetailSerialiser(required=True)
     user = UserSerialiser(required=True)
-    # student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=True)
-    # student_username = serializers.CharField(source='student.user.username', read_only=True)
     class Meta:
         model = LineManager
-        fields = ['id', 'user', 'student']
-
+        fields = ['id', 'user', 'recruiter']
 
 class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
     job = serializers.PrimaryKeyRelatedField(queryset=Job.objects.all(), many=False)
-    line_manager = serializers.PrimaryKeyRelatedField(queryset=LineManager.objects.all(), many=False)
+    line_manager = serializers.PrimaryKeyRelatedField(queryset=LineManager.objects.all(), many=False, required=False, allow_null=True)
     # student = DBAdminStudentSerialiser(required=True)
     # job = DBAdminJobSerialiser(required=True)
     # line_manager = DBAdminLineManagerSerialiser(required=True)
@@ -205,7 +200,10 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
     def create(self, validated_data):
         student = Student.objects.get(id=validated_data["student"])
         job = Job.objects.get(id=validated_data["job"])
-        line_manager = LineManager.objects.get(id=validated_data["line_manager"])
+        if validated_data["line_manager"]:
+            line_manager = LineManager.objects.get(id=validated_data["line_manager"])
+        else:
+            line_manager = None
         submission = Submission.objects.create(student=student, job=job, line_manager=line_manager, hours=validated_data["hours"], date_worked=validated_data["date_worked"])
         return submission
 
@@ -218,7 +216,10 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
 
         instance.student = Student.objects.get(id=validated_data["student"])
         instance.job = Job.objects.get(id=validated_data["job"])
-        instance.line_manager = LineManager.objects.get(id=validated_data["line_manager"])
+        if validated_data["line_manager"]:
+            instance.line_manager = LineManager.objects.get(id=validated_data["line_manager"])
+        else:
+            instance.line_manager = None
         instance.hours = validated_data["hours"]
         instance.date_worked = validated_data["date_worked"]
         # instance.date_submitted = validated_data["date_submitted"]
@@ -236,7 +237,7 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
 class DBAdminSubmissionStudentSerialiser(serializers.ModelSerializer):
     student = serializers.PrimaryKeyRelatedField(queryset=Student.objects.all(), many=False)
     job = DBAdminJobSerialiser(required=True)
-    line_manager = DBAdminLineManagerSerialiser(required=True)
+    line_manager = DBAdminLineManagerSerialiser(required=False)
     class Meta:
         model = Submission
         fields = ['id', 'student', 'job', 'line_manager', 'hours', 'date_worked', 'date_submitted', 'accepted', 'reviewed', 'archived']

@@ -399,6 +399,14 @@ def lineManagerDetail(request, pk):
         return Response(linemanager_serialiser.data)
 
 @api_view(["GET"])
+def getLineManagersFromJob(request, pk):
+    job = Job.objects.get(id=pk)
+    if request.method == "GET":
+        linemanagers = LineManager.objects.filter(recruiter=job.recruiter)
+        linemanagers_json = DBAdminLineManagerSerialiser(linemanagers, many=True)
+        return JsonResponse(linemanagers_json.data, safe=False)
+
+@api_view(["GET"])
 def recruiterDetail(request, pk):
     recruiter = Recruiter.objects.get(id=pk)
     if request.method == "GET":

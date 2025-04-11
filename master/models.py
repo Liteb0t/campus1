@@ -61,12 +61,12 @@ class Student(models.Model):
     visa_expiry = models.DateField(null=True)
     hours_worked = models.IntegerField(default=0)
 
-class LineManager(models.Model):
-    user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
-    student = models.ManyToManyField(Student)
-
 class Recruiter(models.Model):
     user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
+
+class LineManager(models.Model):
+    user = models.OneToOneField(CampusUser, on_delete=models.CASCADE)
+    recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)
 
 class Job(models.Model):
     job_name = models.CharField(max_length=255)
@@ -78,7 +78,7 @@ class Job(models.Model):
 class Submission(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
-    line_manager = models.ForeignKey(LineManager, on_delete=models.CASCADE)
+    line_manager = models.ForeignKey(LineManager, on_delete=models.CASCADE, null=True, blank=True)
     hours = models.IntegerField()
     date_worked = models.DateField()
     date_submitted = models.DateField(default=datetime.datetime.now().strftime("%Y-%m-%d"))

@@ -332,7 +332,14 @@ class Table {
 		else if (typeof this.columns[column_id].parent_object !== "undefined") {
 			temp_json_value = json_row;
 			for (let parent_key of this.columns[column_id].parent_object ) {
-				temp_json_value = temp_json_value[parent_key];	
+				// if (typeof temp_json_value[parent_key] !== "undefined") {
+				if (parent_key in temp_json_value && temp_json_value[parent_key] !== null) {
+					temp_json_value = temp_json_value[parent_key];
+				}
+				else {
+					temp_json_value = "";
+					break;
+				}
 			}
 			temp_json_value = temp_json_value[this.columns[column_id].name];
 		}

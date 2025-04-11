@@ -154,7 +154,7 @@ class Form {
 	}
 	async selectEntry(entry_id) {
 		this.selected_id = entry_id;
-		let url = this.fetch_url.replace('0', this.selected_id).replace("placeholdername", this.name);
+		let url = this.fetch_url.replace('0', this.selected_id) // .replace("placeholdername", this.name);
 		this.update_button.disabled = true;
 		this.deselect_button.disabled = true;
 		this.selected_indicator_element.textContent = `Loading ${this.name}...`;

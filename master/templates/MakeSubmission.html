@@ -10,15 +10,13 @@
   <div id="submission-form" class="EditGrid">
 	  <label for="hours">Job:</label>
 	  <select id="job-select" name="sub__job">
+		  <option value="">Select a job</option>
 		  {% for job in Jobs %}
 		  	<option value="{{ job.id }}">{{ job.job_name }}</option>
 		  {% endfor %}
 	  </select>
 	  <label for="hours">Line manager:</label>
-	  <select id="linemanager-select" name="sub__manager">
-		  {% for man in Managers %}
-		  	<option value="{{ man.id }}">{{ man.user.get_full_name }}</option>
-		  {% endfor %}
+	  <select id="linemanager-select" name="sub__manager" disabled>
 	  </select>
 	  <label for="hours">Hours:</label>
 	  <input id="hours" type="number" min="0" max="15" name="sub__hours" onkeyup="enforceMinMax(this)">
@@ -28,9 +26,38 @@
 	  <!--<label for="date-submitted">Date submitted:</label>
 	  <input id="date-submitted" type="date"  name="sub__submitted">-->
   </div>
-	  <button onclick="processSubmissionForm('create', 'submission-form')">Submit Timesheet</button>
+	  <button id="submit-timesheet" onclick="processSubmissionForm('create', 'submission-form')" disabled>Submit Timesheet</button>
 </div>
 <script>
+	"use strict";
+	const job_select = document.getElementById("job-select");
+	const linemanager_select = document.getElementById("linemanager-select");
+	const submit_button = document.getElementById("submit-timesheet");
+	job_select.onchange = async (e) => {
+		linemanager_select.disabled = true;
+		while (linemanager_select.children.length > 0) {
+			linemanager_select.removeChild(linemanager_select.lastChild);
+		}
+		if (job_select.value !== "") {
+			submit_button.disabled = false;
+			let url = "{% url 'getLineManagersFromJob' pk=0 %}".replace('0', job_select.value);
+			const response = await fetch(url);
+			response.json().then(response_obj => {
+				console.log(response_obj);
+				for (let linemanager of response_obj) {
+					let line_option_element = document.createElement("option");
+					line_option_element.value = linemanager.id;
+					line_option_element.textContent = `${linemanager.id} | ${linemanager.user.username} | ${linemanager.user.first_name} ${linemanager.user.last_name}`;
+					linemanager_select.appendChild(line_option_element);
+				}
+			});
+			linemanager_select.disabled = false;
+		}
+		else {
+			submit_button.disabled = true;
+		}
+	};
+
     async function processSubmissionForm(action, element_id) {
 	    const formElement = document.getElementById(element_id);
 	    let data = {
