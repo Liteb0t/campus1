@@ -6,7 +6,8 @@ class Form {
 			selected_id: null,
 			fetch_url: "",
 			post_url: "",
-			create_update_event: null
+			create_update_event: null,
+			read_only: false
 		}, options);
 		this.container_element = document.getElementById(container_id);
 		this.container_element.classList.add("FormContainer");
@@ -22,7 +23,7 @@ class Form {
 		this.container_element.appendChild(this.topbar_element);
 		this.first_input_element = null;
 		this.reverse_accessor = {};
-		console.log(this.parameters);
+		// console.log(this.parameters);
 		for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {
 			if (typeof parameter_properties.editable !== "undefined" && !parameter_properties.editable && parameter_properties.type !== "array") {
 				continue;
@@ -42,14 +43,16 @@ class Form {
 				let legend_element = document.createElement("legend");
 				legend_element.textContent = parameter_name;
 				fieldset_element.appendChild(legend_element);
-				let add_button = document.createElement("button");
-				add_button.textContent = "Add";
-				add_button.onclick = () => {
-					this.addArrayEntry(parameter_name);
+				if (!this.read_only) {
+					let add_button = document.createElement("button");
+					add_button.textContent = "Add";
+					add_button.onclick = () => {
+						this.addArrayEntry(parameter_name);
+					}
+					fieldset_element.appendChild(add_button);
+					this.parameters[parameter_name]["add_button"] = add_button;
 				}
-				fieldset_element.appendChild(add_button);
 				this.parameters[parameter_name]["fieldset_element"] = fieldset_element;
-				this.parameters[parameter_name]["add_button"] = add_button;
 				this.form_element.appendChild(fieldset_element);
 			}
 			else {
@@ -90,22 +93,24 @@ class Form {
 			}
 			base_for_entry[parameter_properties.name] = parameter_name;
 		}
-		this.create_button = document.createElement("button");
-		this.create_button.onclick = () => { this.submitForm("create") };
-		this.create_button.textContent = "Create";
-		this.update_button = document.createElement("button");
-		this.update_button.onclick = () => { this.submitForm("update") };
-		this.update_button.textContent = "Update";
-		this.update_button.disabled = true;
-		this.deselect_button = document.createElement("button");
-		this.deselect_button.onclick = () => { this.deselect() };
-		this.deselect_button.textContent = "Deselect";
-		this.deselect_button.classList.add("DeselectButton");
-		this.deselect_button.disabled = true;
-		this.topbar_element.appendChild(this.deselect_button);
 		this.container_element.appendChild(this.form_element);
-		this.container_element.appendChild(this.create_button);
-		this.container_element.appendChild(this.update_button);
+		if (!this.read_only) {
+			this.create_button = document.createElement("button");
+			this.create_button.onclick = () => { this.submitForm("create") };
+			this.create_button.textContent = "Create";
+			this.update_button = document.createElement("button");
+			this.update_button.onclick = () => { this.submitForm("update") };
+			this.update_button.textContent = "Update";
+			this.update_button.disabled = true;
+			this.deselect_button = document.createElement("button");
+			this.deselect_button.onclick = () => { this.deselect() };
+			this.deselect_button.textContent = "Deselect";
+			this.deselect_button.classList.add("DeselectButton");
+			this.deselect_button.disabled = true;
+			this.topbar_element.appendChild(this.deselect_button);
+			this.container_element.appendChild(this.create_button);
+			this.container_element.appendChild(this.update_button);
+		}
 		this.last_fetch_response = "test";
 	}
 	deselect() {
@@ -143,20 +148,29 @@ class Form {
 		if (array_item) {
 			array_item_input_element.value = array_item.id;
 		}
-		let array_item_delete_button = document.createElement("button");
-		array_item_delete_button.textContent = "delete";
-		array_item_delete_button.onclick = () => {
-			this.parameters[parameter_name].fieldset_element.removeChild(array_item_container_element);
+		if (!this.read_only) {
+			let array_item_delete_button = document.createElement("button");
+			array_item_delete_button.textContent = "delete";
+			array_item_delete_button.onclick = () => {
+				this.parameters[parameter_name].fieldset_element.removeChild(array_item_container_element);
+			}
 		}
 		array_item_container_element.appendChild(array_item_input_element);
-		array_item_container_element.appendChild(array_item_delete_button);
-		this.parameters[parameter_name].add_button.insertAdjacentElement("beforebegin", array_item_container_element);
+		if (!this.read_only) {
+			array_item_container_element.appendChild(array_item_delete_button);
+			this.parameters[parameter_name].add_button.insertAdjacentElement("beforebegin", array_item_container_element);
+		}
+		else {
+			this.parameters[parameter_name]["fieldset_element"].appendChild(array_item_container_element);
+		}
 	}
 	async selectEntry(entry_id) {
 		this.selected_id = entry_id;
 		let url = this.fetch_url.replace('0', this.selected_id) // .replace("placeholdername", this.name);
-		this.update_button.disabled = true;
-		this.deselect_button.disabled = true;
+		if (!this.read_only) {
+			this.update_button.disabled = true;
+			this.deselect_button.disabled = true;
+		}
 		this.selected_indicator_element.textContent = `Loading ${this.name}...`;
 		let response = await fetch(url);
 		await response.json().then(response_obj => {
@@ -164,8 +178,10 @@ class Form {
 			// this.selected_id = response_obj.id;
 			// this.selected_indicator_element.removeChild(this.selected_indicator_element.lastChild);
 			this.selected_indicator_element.textContent = `Selected ${this.name}: ${this.selected_id}`;
-			this.update_button.disabled = false;
-			this.deselect_button.disabled = false;
+			if (!this.read_only) {
+				this.update_button.disabled = false;
+				this.deselect_button.disabled = false;
+			}
 
 			// Fill out the form
 			for (const [parameter_name, parameter_properties] of Object.entries(this.parameters)) {

@@ -77,9 +77,6 @@ body {
 			}
 		}
 	}
-	tr:nth-child(even) {
-		background-color: #eee;
-	}
 	.TableActionColumn {
 		background-color: #fce;
 	}
@@ -122,6 +119,15 @@ body {
 	}
 	td {
 		font-family: serif;
+		input[type="text"], input[type="number"], input[type="string"] {
+			/*width: calc(100% - 8px);*/
+			min-width: 73px;
+			field-sizing: content;
+			max-width: 250px;
+		}
+	}
+	tr:nth-child(even) {
+		background-color: #eee;
 	}
 	.ClickableRows tr:hover:not(:has(.TableActionColumn:hover)) {
 		cursor: pointer;
@@ -379,6 +385,11 @@ ul{
 	grid-gap: 3px;
 	fieldset, .FormError {
 		grid-column: 1 / span 2;
+	}
+	.FormError {
+		color: #F00;
+		background: rgba(255, 255, 255, 0.75);
+		margin-bottom: 4px;
 	}
 	input {
 		height: fit-content;

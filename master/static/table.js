@@ -1,5 +1,6 @@
 class Table {
 	static entries_per_page = 50;
+	static table_id = 1;
     constructor(container_id, options = {}) {
         Object.assign(this, {
             page: 1
@@ -8,6 +9,7 @@ class Table {
             ,columns: {} // name, type, parent_object[]
 			,editable: false
 			,row_click_event: null
+			,table_id: null
         }, options);
 		// Generating HTML
         this.container_element = document.getElementById(container_id);
@@ -20,6 +22,10 @@ class Table {
         this.table_element = document.createElement("table");
         this.thead_element = document.createElement("thead");
         this.tbody_element = document.createElement("tbody");
+		if (this.table_id === null) {
+			this.table_id = `t${Table.table_id}`;
+			Table.table_id++;
+		}
 
 		// Shows current page and what rows are being displayed
 		this.showing_indexes_element = document.createElement("div");
@@ -364,9 +370,12 @@ class Table {
 				this.entries_to_delete = [];
 				this.delete_button.disabled = true;
 			}
-            this.populate();
 			if (this.constructor.name === "AdvancedSearchTable") {
 				this.initial_json = this.json;
+				this.doSearch();
+			}
+			else {
+				this.populate();
 			}
         }
     }
@@ -402,13 +411,18 @@ class Table {
 }
 
 class AdvancedSearchTable extends Table {
+	static url_search_params;
+	static {
+		AdvancedSearchTable.url_search_params = new URLSearchParams(window.location.search);
+	}
     constructor(tbody_id, options = {}) {
         super(tbody_id, options);
         // this.advanced_search_container_id = advanced_search_container_id;
         this.linkToHTML();
-        this.url_search_params = new URLSearchParams(window.location.search);
+        // this.url_search_params = new URLSearchParams(window.location.search);
+		// console.log(this.url_search_params);
         // this.number_of_parameters = 0;
-        // this.date_delimiters = {};
+        this.search_delimiters = {};
         this.active_parameters = {};
         // for (const [parameter_option, properties] of Object.entries(this.columns)) {
         //     if (properties.type === "number") {
@@ -419,15 +433,26 @@ class AdvancedSearchTable extends Table {
         //     }
         // }
         this.initial_json = this.json;
-        // for (const [search_param_option, search_param_value] of this.url_search_params) {
-        //     if (search_param_option.endsWith("delimiter")) {
-        //         let search_param_option_truncated = search_param_option.substring(0, search_param_option.indexOf("delimiter") - 1);
-        //         // this.date_delimiters[search_param_option_truncated] = search_param_value;
-        //     }
-        //     else if (search_param_option !== "page") {
-        //         this.addSearchParameter(search_param_option, search_param_value);
-        //     }
-        // }
+        for (const [search_param_option, search_param_value] of AdvancedSearchTable.url_search_params) {
+            if (search_param_option.endsWith("delimiter")) {
+				let table_identifier = search_param_option.substring(0, search_param_option.indexOf("_"));
+				if (this.table_id === table_identifier) {
+					let search_param_option_truncated = search_param_option.substring(search_param_option.indexOf("_")+1);
+					search_param_option_truncated = search_param_option_truncated.substring(0, search_param_option_truncated.indexOf("delimiter") - 1);
+					this.search_delimiters[search_param_option_truncated.replaceAll("_", " ")] = search_param_value;
+					console.log(search_param_option);
+					AdvancedSearchTable.url_search_params.delete(search_param_option);
+				}
+            }
+		}
+        for (const [search_param_option, search_param_value] of AdvancedSearchTable.url_search_params) {
+			let table_identifier = search_param_option.substring(0, search_param_option.indexOf("_"));
+			console.log(table_identifier);
+			if (this.table_id === table_identifier) {
+				this.addSearchParameter(search_param_option.substring(search_param_option.indexOf("_")+1), search_param_value);
+				AdvancedSearchTable.url_search_params.delete(search_param_option);
+			}
+        }
     }
     linkToHTML() {
         this.advanced_search_container_element = document.createElement("fieldset");
@@ -467,6 +492,10 @@ class AdvancedSearchTable extends Table {
         if (option === null) {
             option = Object.keys(this.columns)[0];
         }
+		else {
+			option = option.replaceAll("_", " ");
+		}
+		console.log(option);
 
         let parameter_container = document.createElement("div");
         parameter_container.classList.add("SearchParameter");
@@ -525,6 +554,11 @@ class AdvancedSearchTable extends Table {
             else {
                 parameter_select_2.name = option + "-delimiter";
             }
+			if (option in this.search_delimiters) {
+				console.log(option);
+				console.log(this.search_delimiters);
+				parameter_select_2.value = this.search_delimiters[option];
+			}
             // parameter_select_2.value = this.date_delimiters[option];
             // parameter_select_2.onchange = () => {this.active_parameters[input_element.name].delimiter = parameter_select_2.value}
 			// console.log(this.active_parameters);

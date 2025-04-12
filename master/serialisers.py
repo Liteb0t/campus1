@@ -169,7 +169,7 @@ class DBAdminLineManagerSerialiser(serializers.ModelSerializer):
         if user_data["password"] != instance.user.password:
             instance.user.set_password(user_data["password"])
         instance.user.save()
-        instance.recruiter = validated_data["recruiter"]
+        instance.recruiter = Recruiter.objects.get(id=validated_data["recruiter"])
         instance.save()
         return instance
 
@@ -224,7 +224,8 @@ class DBAdminSubmissionSerialiser(serializers.ModelSerializer):
         instance.date_worked = validated_data["date_worked"]
         # instance.date_submitted = validated_data["date_submitted"]
         instance.accepted = validated_data["accepted"]
-        instance.archived = validated_data["archived"]
+        if "archived" in validated_data:
+            instance.archived = validated_data["archived"]
         instance.reviewed = validated_data["reviewed"]
         instance.save()
         return instance

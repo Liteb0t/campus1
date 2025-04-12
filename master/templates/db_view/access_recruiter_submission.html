@@ -46,14 +46,14 @@
 			"Job ID": {name: "job", type: "number"},
 			"Line manager ID": {name: "line_manager", type: "number"},
 			"Hours": {name: "hours", type: "number"},
-			"Date worked": {name: "date_worked", type: "date"},
-			"Date submitted": {name: "date_submitted", type: "date"},
-			"Reviewed": {name: "reviewed", type: "boolean"},
-			"Accepted": {name: "accepted", type: "boolean"},
-			"Archived": {name: "archived", type: "boolean"}
+			"Date worked": {name: "date_worked", type: "date"}
+			,"Date submitted": {name: "date_submitted", type: "date"}
+			,"Reviewed": {name: "reviewed", type: "boolean"}
+			,"Accepted": {name: "accepted", type: "boolean"}
+			// ,"Archived": {name: "archived", type: "boolean"}
     	}
         ,editable: true
-		,row_click_event: (id) => { submission_form.selectEntry(id); }
+		,table_id: "tsub"
 	});
 	const job_parameters = {
 		"ID": {name: "id", type: "number", editable: false},
@@ -66,7 +66,9 @@
 	const jobs_table = new AdvancedSearchTable("jobs-table-container", {
 		json_url: "{% url 'jobList' %}"
 		,columns: job_parameters
+		{% if not job_read_only %}
 		,editable: true
+		{% endif %}
 		,row_click_event: (id) => { job_form.selectEntry(id); }
 	});
 	const job_form = new Form("job-form-container", {
@@ -75,6 +77,9 @@
 		fetch_url: "{% url 'jobDetail' pk=0 %}",
 		post_url: "{% url 'jobList' %}",
 		create_update_event: () => { jobs_table.refresh() }
+		{% if job_read_only %} 
+		,read_only: true
+		{% endif %}
 	});
     </script>
 {% endblock %}

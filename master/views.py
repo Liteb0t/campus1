@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view
 from master.models import Job, LineManager, Submission, Student, Recruiter # , RecruiterSubmission
@@ -63,10 +63,15 @@ def accessStudentSubmission(request):
 
 @login_required
 def accessRecruiterSubmission(request):
-    return render(request, "db_view/access_recruiter_submission.html")
+    return render(request, "db_view/access_recruiter_submission.html", {"job_read_only": request.user.user_type=="LineManager"})
 
+@login_required
 def accessManagerApproval(request):
-    return render(request, "db_view/access_recruiter_submission.html")
+    if request.user.user_type == "LineManager":
+        line_manager_id = LineManager.objects.get(user=request.user).id
+        return HttpResponseRedirect("/access_recruiter_submission?tsub_Line_manager_ID="+str(line_manager_id))
+    else:
+        return render(request, "db_view/access_recruiter_submission.html")
 
 # JSON API: does not return html but JSON instead. used by the data browser.
 @csrf_exempt
@@ -143,6 +148,9 @@ def submissionList(request):
         submissions = Submission.objects.select_related("student", "job", "line_manager")
         if request.user.user_type == "Recruiter":
             submissions = submissions.filter(job__recruiter__user=request.user)
+        elif request.user.user_type == "LineManager":
+            line_manager = LineManager.objects.get(user=request.user)
+            submissions = submissions.filter(job__recruiter=line_manager.recruiter)
         submissions_serialiser = DBAdminSubmissionSerialiser(submissions, many=True)
         return JsonResponse(submissions_serialiser.data, safe=False)
 
