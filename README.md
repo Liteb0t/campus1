@@ -2,9 +2,9 @@
 Tracking hours that students work per week.
 ### Installation
 Versions specified below are not required, but the closer they are the more likely it is to work. 
-- Python 3.11 with pip 23.2
+- Python 3.11 with pip 23.2 \
 Creating a virtual environment, or "venv", is recommended. \
-Within `pip` you should `pip install ...`: \
+Within `pip` you should `pip install ...`:
 - Django (5.1.6)
 - mysqlclient (2.2.7)
 - sshtunnel (0.4.0)
