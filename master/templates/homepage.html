@@ -1,50 +1,82 @@
 {% extends "_base.html" %}
 {% block title %}
- Home
+Home
 {% endblock %}
 {% block content %}
 <div class="DashboardGrid">
-        <!-- Welcome box to show key details of student -->
-        <div class="HomeBox center-text">
-            <h2>Welcome, {{ request.user.get_full_name }}</h2>
-            <p>Status: <strong>On a Visa</strong></p>
-            <p>Week: <strong>Term 2 - Week 12</strong></p>
+        <!-- Profile box -->
+        <div class="HomeBox">
+            <h3>Profile</h3>
+			<div class="ProfileGrid">
+				<span>Username:</span><b>{{ request.user.username }}</b>
+				<span>Full name:</span><b>{{ request.user.first_name }} {{ request.user.last_name }}</b>
+				<span>User type:</span><b>{{ request.user.user_type }}</b>
+			</div>
+			<a href="{% url 'user_profile' %}">Edit profile</a>
+			{% if request.user.user_type == "Student" %}
+			{% if user.on_visa %}
+			<h4>On a visa</h4>
+			{% else %}
+			<h4>Not on a visa</h4>
+			{% endif %}
+			{% endif %}
         </div>
 
         <!-- Weekly Hours Tracker. Falls in line with UKVI laws -->
         {% if request.user.user_type == "Student" %}
             <div class="HomeBox">
                 <h3>Weekly Work Hours</h3>
-                <p><strong>{{ student.hours_worked }} / 15 hours worked</strong></p>
-                <progress class="progress-bar" value="{{ student.hours_worked }}" max="15"></progress>
+				{% if user.on_visa %}
+				<p><b>{{ user.hours_worked }}</b> / 15 hours worked this week.</p>
+                <progress value="{{ user.hours_worked }}" max="15"></progress>
+				{% else %}
+				<p><b>{{ user.hours_worked }}</b> hours worked this week.<p>
+				{% endif %}
             </div>
         <!-- Timesheet Summary. space to put excel import -->
+			<!--
             <div class="HomeBox">
                 <h3>Timesheet Summary</h3>
                 <p>Last Submitted: <strong>March 22, 2025</strong></p>
                 <p>Status: <strong>Approved</strong></p>
                 <button class="SearchButton">View Timesheet History</button>
             </div>
+			-->
         {% endif %}
         <!-- Notifications. Act as a reminder for example if the student forgets to submit their hours -->
+		<!--
         <div class="HomeBox">
             <h3>Notifications</h3>
             <ul style="text-align: left;">
 
             </ul>
         </div>
+		-->
 
         <!--Quick actions that client can implement external applications into the we eg excel, handshake, core? j'suis pas sur -->
+		<!--
         <div class="HomeBox">
             <h3>Quick Actions</h3>
             <button>Submit Timesheet</button>
             <button>View Jobs</button>
             <button>My Schedule</button>
         </div>
+		-->
 
-        <!-- GDPR Notice for student reminder to not work over 15h -->
-        <div class="HomeBox center-text" style="grid-column: span 2; font-size: 0.9em;">
-            <p><em>Your working hours are monitored to ensure compliance with UKVI regulations. Data is protected under GDPR.</em></p>
-        </div>
+		<div class="HomeBox">
+			<h3>Shortcuts</h3>
+			<a href="https://www.shu.ac.uk/jobs">SHU jobs</a><br>
+			<a href="https://shu.joinhandshake.co.uk/">SHU Handshake</a><br>
+			<a href="https://www.abintegro.com/welcome/Sheffield-Hallam-University">Careers & employability</a>
+		</div>
+        {% if request.user.user_type == "Student" and user.on_visa %}
+			<!-- GDPR Notice for student reminder to not work over 15h -->
+			<div class="HomeBox center-text" style="grid-column: span 2; font-size: 0.9em;">
+				<p>Students on a visa may work a maximum of 15 hours per week.<br>
+				Your working hours are monitored to ensure compliance with UKVI regulations. Data is protected under GDPR.<br>
+				<a href="https://www.gov.uk/guidance/immigration-rules">Gov.uk - Immigration Rules</a></p>
+			</div>
+		{% endif %}
     </div>
+
 {% endblock %}

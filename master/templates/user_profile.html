@@ -8,44 +8,74 @@
 	<div class = "Box">
     	<div id="edit-user-form" class="Column2 EditGrid">
 			<label for="edit-username">Username:</label>
-			<input id="edit-username" type="text" name="user__username" placeholder="Username" value={{ request.user.username }} >
+			<input id="edit-username" type="text" name="user__username" placeholder="Username" value={{ request.user.username }} {% if request.user.user_type == "Student" %}disabled style="cursor: not-allowed"{% endif %}>
 			<label for="edit-first_name">First name:</label>
 			<input id="edit-first_name" type="text" name="user__first_name" placeholder="First name" value={{ request.user.first_name }} >
 			<label for="edit-last_name">Last name:</label>
 			<input id="edit-last_name" type="text" name="user__last_name" placeholder="Last name" value={{ request.user.last_name }} >
 			<label for="edit-email">Email address:</label>
 			<input id="edit-email" type="text" name="user__email" placeholder="Email address" value={{ request.user.email }} >
+			<label for="edit-password">Password:</label>
+			<input id="edit-password" type="password" name="user__password" placeholder="Blank = keep current password">
 		</div>
-	<button onclick="processUserForm('update', 'edit-user-form')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
+	<button onclick="processUserForm('update')">Edit profile</button> <button onclick="processUserForm('delete', 'edit-user-form')">Delete</button>
 	</div>
-<script src="{% static 'table.js' %}"></script>
-    <script>
+<script src="{% static 'form_errors.js' %}"></script>
+<script>
 	"use strict";
-    let entries_per_page = 1;
+
+	const reverse_accessor = {
+		// user: {
+			username: "Username",
+			first_name: "First name",
+			last_name: "Last name",
+			email: "Email",
+			password: "Password"
+		// }
+	}
+	const parameters = {
+		"Username": document.getElementById("edit-username"),
+		"First name": document.getElementById("edit-first_name"),
+		"Last name": document.getElementById("edit-last_name"),
+		"Email": document.getElementById("edit-email"),
+		"Password": document.getElementById("edit-password")
+	}
+	const form_element = document.getElementById("edit-user-form");
 
 	async function processUserForm(action, element_id) {
-		const formElement = document.getElementById(element_id);
 		let data = {
 			_action: action,
-			_id: {{ request.user.id}},
-			username: formElement.querySelector("input[name=user__username]").value,
-			first_name: formElement.querySelector("input[name=user__first_name]").value,
-			last_name: formElement.querySelector("input[name=user__last_name]").value,
-			email: formElement.querySelector("input[name=user__email]").value
+			_id: {{ request.user.id }},
+			username: parameters["Username"].value,
+			first_name: parameters["First name"].value,
+			last_name: parameters["Last name"].value,
+			email: parameters["Email"].value,
+			password: parameters["Password"].value
 		};
 		let response = await postJSON("{% url 'userList' %}", data);
 		
 		if (action === 'delete') {
-			// to do: Make it redirect to an "Account deleted successfully" page
 			window.location.href = "registration/deleted_account"
 		}
+		else if (response.status === 400) { // The form was probably invalid.
+			let out = [];
+			let response_json = await response.json();
+			getErrors(response_json, out, reverse_accessor);
+			console.log(out);
+			showErrors(out, parameters);
+		}
+		else if (response.status === 200 || response.status === 201) {
+			// alert(`ok: ${response.ok}\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
+			alert("Profile successfully updated");
+		}
 		else {
-			alert(`ok: ${response.ok}\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
+			alert(`Something weird happened.\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
 		}
 		console.log(response);
 	}
 
     async function postJSON(url, data) {
+		clearErrors(form_element);
 		const fetch_response = await fetch(url, {
 			method: "POST",
 			body: JSON.stringify(data),

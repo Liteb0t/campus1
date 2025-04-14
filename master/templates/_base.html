@@ -14,6 +14,7 @@
         <a href="https://www.shu.ac.uk/">
            	<img id="imgLogo" class="SHULogo" class="img-fluid" src="/static/logo-shu-white.svg">
         </a>
+        <a class="Navlink" href="{% url 'homepage' %}">Home</a>
         <a class="Navlink" href="{% url 'user_profile' %}">Profile</a>
         {% if request.user.user_type == 'Admin' %}
             <a class="Navlink" href="{% url 'access_data_browser' %}">Data Browser</a>
@@ -39,7 +40,7 @@
 </main>
 <div class="Separator"></div>
 <footer>
-  <span>© Copyright 2025 Sheffield Hallam University</span>
+	<span>© Copyright 2025 Sheffield Hallam University</span>
 </footer>
 </body>
 </html>

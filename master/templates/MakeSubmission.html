@@ -28,19 +28,32 @@
   </div>
 	  <button id="submit-timesheet" onclick="processSubmissionForm('create', 'submission-form')" disabled>Submit Timesheet</button>
 </div>
+<script src="{% static 'form_errors.js' %}"></script>
 <script>
 	"use strict";
-	const job_select = document.getElementById("job-select");
-	const linemanager_select = document.getElementById("linemanager-select");
+	const reverse_accessor = {
+		job: "Job",
+		line_manager: "Line manager",
+		hours: "Hours",
+		date_worked: "Date worked"
+	}
+	const parameters = {
+		"Job": document.getElementById("job-select"),
+		"Line manager": document.getElementById("linemanager-select"),
+		"Hours": document.getElementById("hours"),
+		"Date worked": document.getElementById("date-worked")
+	}
+	const form_element = document.getElementById("edit-user-form");
 	const submit_button = document.getElementById("submit-timesheet");
-	job_select.onchange = async (e) => {
-		linemanager_select.disabled = true;
-		while (linemanager_select.children.length > 0) {
-			linemanager_select.removeChild(linemanager_select.lastChild);
+
+	parameters["Job"].onchange = async (e) => {
+		parameters["Line manager"].disabled = true;
+		while (parameters["Line manager"].children.length > 0) {
+			parameters["Line manager"].removeChild(parameters["Line manager"].lastChild);
 		}
-		if (job_select.value !== "") {
+		if (parameters["Job"].value !== "") {
 			submit_button.disabled = false;
-			let url = "{% url 'getLineManagersFromJob' pk=0 %}".replace('0', job_select.value);
+			let url = "{% url 'getLineManagersFromJob' pk=0 %}".replace('0', parameters["Job"].value);
 			const response = await fetch(url);
 			response.json().then(response_obj => {
 				console.log(response_obj);
@@ -48,10 +61,10 @@
 					let line_option_element = document.createElement("option");
 					line_option_element.value = linemanager.id;
 					line_option_element.textContent = `${linemanager.id} | ${linemanager.user.username} | ${linemanager.user.first_name} ${linemanager.user.last_name}`;
-					linemanager_select.appendChild(line_option_element);
+					parameters["Line manager"].appendChild(line_option_element);
 				}
 			});
-			linemanager_select.disabled = false;
+			parameters["Line manager"].disabled = false;
 		}
 		else {
 			submit_button.disabled = true;
@@ -63,15 +76,29 @@
 	    let data = {
 	    	_action: action,
 	    	student: {{ StudentID }},
-	    	job: formElement.querySelector("select[name=sub__job]").value,
-	    	line_manager: formElement.querySelector("select[name=sub__manager]").value,
-		    hours: formElement.querySelector("input[name=sub__hours]").value,
-		    date_worked: formElement.querySelector("input[name=sub__worked]").value,
+	    	job: parameters["Job"].value,
+	    	line_manager: parameters["Line manager"].value,
+		    hours: parameters["Hours"].value,
+		    date_worked: parameters["Date worked"].value,
 		    // date_submitted: formElement.querySelector("input[name=sub__submitted]").value,
 		    accepted: false
 	    };
 	    let response = await postJSON("{% url 'submissionListStudent' %}", data);
 	    console.log(response);
+		if (response.status === 400) { // The form was probably invalid.
+			let out = [];
+			let response_json = await response.json();
+			getErrors(response_json, out, reverse_accessor);
+			console.log(out);
+			showErrors(out, parameters);
+		}
+		else if (response.status === 200 || response.status === 201) {
+			// alert(`ok: ${response.ok}\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
+			alert("Successfully made submission.");
+		}
+		else {
+			alert(`Something weird happened.\nstatus: ${response.status}\nstatusText: ${response.statusText}`);
+		}
 	}
 
 	function enforceMinMax(hours) {
@@ -93,14 +120,7 @@
 				"Content-type": "application/json; charset=UTF-8"
 			},
 		});
-		let response = await fetch_response.json();
-		if (fetch_response.status == 201){
-			alert("Success")
-		}
-		else{
-			alert(response.message)
-		}
-		return response;
+		return fetch_response;
 	}
 </script>
 {% endblock %}

@@ -112,7 +112,7 @@ class Table {
             this.populate();
         }
     }
-	async processRowForm(row_element, action, json_row) {
+	async processRowForm(row_element, action, json_row, do_refresh=true) {
 		console.log(json_row);
 		console.log(row_element);
 		let form_data = {
@@ -154,8 +154,10 @@ class Table {
 			++column_i;
 		}
 		console.log(form_data);
-		await this.postJSON(this.json_url, form_data);
-		this.refresh();
+		let response = await this.postJSON(this.json_url, form_data);
+		if (do_refresh === true && (response.status === 200 || response.status === 201)) {
+			this.refresh();
+		}
 	}
 	async deleteRows() {
 		let form_data = {
@@ -259,7 +261,7 @@ class Table {
 						event.stopPropagation(); // stops the row click event from firing
 					}
 					confirm_edit_entry_button.onclick = () => {
-						this.processRowForm(table_row_element, "update", json_row);
+						this.processRowForm(table_row_element, "update", json_row, false);
 						event.stopPropagation();
 					};
 					cancel_edit_entry_button.onclick = () => {
@@ -397,7 +399,7 @@ class Table {
 		else if (fetch_response.status === 200 || fetch_response.status === 201) {
 		}
 		else if (fetch_response.status === 400) { // The form was probably invalid.
-			alert("the thing failed. damn that sucks");
+			alert("Status 400. Did not update.");
 		}
 		else if (fetch_response.status === 500) {
 			alert("server error. yikes that's rough");

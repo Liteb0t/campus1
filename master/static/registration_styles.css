@@ -1,8 +1,4 @@
-*{
-    font-family: sans-serif;
-}
-
-.Box{
+.Box {
     max-width: 425px;
     position: relative;
     padding-bottom: 2rem;
@@ -13,15 +9,16 @@
     margin: 30vh auto auto auto;
 }
 
-body{
+body {
     background-color: #621b40;
+    font-family: sans-serif;
 }
 
-.width100{
+.width100 {
     width: 100%;
 }
 
-.LoginHeader{
+.LoginHeader {
     padding-bottom: 1rem;
     padding-top: 1rem;
     padding-left: 1rem;

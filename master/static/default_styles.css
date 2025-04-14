@@ -1,3 +1,4 @@
+/***************** LAYOUT ******************/
 html {
 	height: 100vh;
 }
@@ -12,16 +13,91 @@ body {
 	color: #fff;
 }
 
-.DashboardGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5em;
-    padding: 2em;
-    align-items: stretch;
-    max-width: 1200px;
-    margin: 80px auto 0 auto;
+main {
+	flex: 0 0 auto;
+	padding: 0px 5px;
 }
 
+.Separator {
+	flex: 1 1 auto;
+}
+
+footer {
+    /*TEXT*/
+	color: #fff;
+	padding: 7px 7px;
+    text-decoration: none;
+    font-size: 14px;
+
+    /*POSITION AND BG*/
+	flex: 0 0 auto;
+    text-align: center;
+    /*background: #eee;*/
+    /*font-family: Sans-serif;*/
+    background-color: #BF0167;
+}
+
+/************** NAVIGATION BAR ****************/
+header {
+	flex: 0 0 auto;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+}
+
+.Navbar {
+	display: flow-root;
+    background-color: #BF0167;
+	.SHULogo {
+	    float:left;
+		padding: 3px 0;
+	}
+}
+
+.Navlink {
+    color: #f2f2f2;
+    text-align: center;
+    padding: 24px 24px;
+    text-decoration: none;
+    font-size: 24px;
+    float: left;
+}
+
+.Navlink:hover, .Navlink.OverrideButton:hover{
+    background-color: #ddd;
+    border: none;
+    color: black;
+    cursor: pointer;
+}
+
+/**************** HOMEPAGE ****************/
+.DashboardGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5em;
+    padding: 2em;
+    max-width: 1200px;
+    margin: 15vh auto 0;
+	justify-items: center;
+}
+
+.HomeBox {
+    min-height: 240px;
+    min-width: 240px;
+	max-width: max-content;
+    background-color: #ECD;
+    color: black;
+    padding: 1em;
+    box-shadow: -8px 8px 2px rgba(0, 0, 0, 0.5);
+    /*margin: 0 auto;*/
+}
+.ProfileGrid {
+	display: grid;
+	grid-template-columns: max-content auto;
+	gap: 5px 5px;
+}
+
+/**************** ADVANCED TABLES JS ****************/
 .AwesomeTableContainer {
 	display: flex;
 	flex-direction: column;
@@ -136,107 +212,11 @@ body {
 	}
 }
 
-.SideBox{
-    height: 50em;
-    min-width: 25em;
-    max-width: 25em;
-    background-color: #ddd;
-    opacity: 0.75;
-	color: #000;
+/********************* MISCELLANEOUS **********************/
+.FileInput {
+	font-size: inherit;
 }
 
-.Row{
-  display: flex;
-}
-
-.Col{
-  float: left;
-  padding: 10px;
-}
-
-.left{
-  width: 15%;
-}
-
-.right{
-  width: 85%;
-}
-
-/*navbar*/
-
-header {
-	flex: 0 0 auto;
-	position: sticky;
-	top: 0;
-	z-index: 1;
-}
-
-.Navbar{
-	display: flow-root;
-    /*font-family: Sans-serif;*/
-    background-color: #BF0167;
-}
-
-.Navlink{
-    color: #f2f2f2;
-    text-align: center;
-    padding: 24px 24px;
-    text-decoration: none;
-    font-size: 24px;
-    float: left;
-}
-
-.Navlink:hover, .Navlink.OverrideButton:hover{
-    background-color: #ddd;
-    border: none;
-    color: black;
-    cursor: pointer;
-}
-.CRUDBox{
-    height: 600px;
-    width: 600px;
-    border: 3px solid #797979;
-    background-image: linear-gradient(#ba0046 0%, #621b40 75%);
-    display: block;
-    text-align: center;
-    flex-flow: column;
-
-}
-
-.SHULogo{
-    float:left;
-	padding: 3px 0;
-}
-
-#AddStudent{
-    z-index: 9;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-}
-
-.Grow{
-    flex: 1 1 100%;
-}
-
-.Bottom{
-    flex: 0 0 200px;
-}
-/*
-.AddParameterButton, .SearchButton, .DeleteParameterButton{
-    font: inherit;
-    background-color: #f2f2f2;
-}
-
-.AddParameterButton:hover, .SearchButton:hover, .DeleteParameterButton:hover{
-    background-color: #ddd;
-    color: black;
-    cursor: pointer;
-} */
-	
 button {
     font: inherit;
     background-color: #f2f2f2;
@@ -256,7 +236,15 @@ button:active:not([disabled]) {
 	border: 2px inset #ddd;
 }
 
-.OverrideButton{
+progress {
+    width: 220px;
+    color: #f2f2f2;
+    border-radius: 0px;
+    text-align: center;
+    line-height: 20px;
+}
+
+.OverrideButton {
     border: none;
     outline: none;
     font: inherit;
@@ -266,76 +254,16 @@ button:active:not([disabled]) {
     float: right;
 }
 
-.PaginationLinks{
-    text-align: center;
-    text-decoration: none;
-    font-size: 15px;
-    color: #0000EE;
-}
-
-.UDLinks{
-    font-family: sans-serif;
-    text-align: center;
-    text-decoration: none;
-    font-size: 20px;
-    color: #0000EE;
-}
-
-.PaginationLinks:hover, .UDLinks:hover{
-    color: #551A8B;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.Box{
+.Box {
 	color: #000;
     width: 360px;
     /*position: relative;*/
-    padding: 2rem;
+    padding: 1rem 2rem;
     text-align: center;
     opacity: 0.70;
     background: #F2F2F2;
     word-wrap: break-word;
     margin: 30vh auto auto auto;
-}
-.HomeBox{
-    min-height: 220px;
-    min-width: 220px;
-    background-color: #ECD;
-    color: black;
-    padding: 1em;
-    border-radius: 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin: 0 auto;
-}
-
-.progress-bar{
-    width: 220px;
-    color: #f2f2f2;
-    border-radius: 5px;
-    text-align: center;
-    line-height: 20px;
-}
-
-.center-text{
-    text-align: center;
-}
-
-.HomeButton{
-    margin-top: 0.5em;
-    padding: 0.6em 1em;
-    font-size: 1em;
-    border: 1px solid #333;
-    border-radius: 5px;
-    background-color: white;
-    cursor: pointer;
-
-}
-ul{
-    padding-left: 1.2em;
 }
 
 .DBView {
@@ -359,12 +287,16 @@ ul{
 
 .EditGrid {
 	display: grid;
-	gap: 15px 10px;
+	gap: 0 10px;
 	margin: 0 0 20px 0;
-	grid-template-columns: max-content auto;
+	grid-template-columns: max-content minmax(0, 1fr);
 	text-align: end;
+	label, input, select {
+		margin-top: 15px;
+	}
 }
 
+/******************** ADVANCED FORM JS *******************/
 .FormContainer {
 	width: fit-content;
 	.Topbar {
@@ -378,47 +310,25 @@ ul{
 		float: right;
 	}
 }
+
 .Form {
 	margin: 3px 0;
 	display: grid;
 	grid-template-columns: auto auto;
 	grid-gap: 3px;
-	fieldset, .FormError {
+	fieldset {
 		grid-column: 1 / span 2;
-	}
-	.FormError {
-		color: #F00;
-		background: rgba(255, 255, 255, 0.75);
-		margin-bottom: 4px;
 	}
 	input {
 		height: fit-content;
 	}
 }
 
-main {
-	flex: 0 0 auto;
-	padding: 0px 5px;
+.FormError {
+	grid-column: 1 / span 2;
+	color: #F00;
+	background: rgba(255, 255, 255, 0.75);
+	margin-bottom: 4px;
+	text-align: center;
 }
 
-.Separator {
-	flex: 1 1 auto;
-}
-
-footer {
-    /*TEXT*/
-	color: #fff;
-	padding: 7px 7px;
-    text-decoration: none;
-    font-size: 14px;
-
-    /*POSITION AND BG*/
-	flex: 0 0 auto;
-    text-align: center;
-    /*background: #eee;*/
-    /*font-family: Sans-serif;*/
-    background-color: #BF0167;
-}
-.FileInput {
-	font-size: inherit;
-}

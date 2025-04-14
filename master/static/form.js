@@ -277,8 +277,7 @@ class Form {
 			let out = [];
 			this.getErrors(response_json, out);
 			this.showErrors(out);
-			console.log(out);
-			alert("the thing failed. damn that sucks");
+			// alert("the thing failed. damn that sucks");
 		}
 		else if (response.status === 500) {
 			alert("server error. yikes that's rough");

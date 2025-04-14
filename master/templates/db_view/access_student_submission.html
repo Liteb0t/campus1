@@ -11,7 +11,7 @@
 		<div id="submissions-sidebar" class="Column2">
 			<h3>Weekly Work Hours</h3>
 			<p><strong>{{ student.hours_worked }} / 15 hours worked</strong></p>
-			<progress class="progress-bar" value="{{ student.hours_worked }}" max="15"></progress>
+			<progress value="{{ student.hours_worked }}" max="15"></progress>
 			<p>Visa status: <b>{% if student.on_visa %} On a visa {% else %} Not on a visa {% endif %}</b></p>
 			<p>Students on a visa may not work more than 15 hours per week.</p>
 		</div>

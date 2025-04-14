@@ -15,27 +15,25 @@ from django.shortcuts import redirect
 import json
 import datetime
 
-duplicate_username_message = "Username may not be duplicate"
+duplicate_username_message = "Username may not be a duplicate"
 
 @login_required
 def homepage(request):
-    return HttpResponse("By decree of the Department Of Campusjobs Efficiency (DOCE), the homepage has been axed.<br><a href='/accounts/profile'>Profile page</a>")
-#     if request.user.user_type == "Student":
-#         student = Student.objects.get(user__id=request.user.id)
-#         return render(request, "homepage.html", {"student": student})
-#     else:
-#         return render(request, "homepage.html")
+    if request.user.user_type == "Student":
+        user = Student.objects.get(user__id=request.user.id)
+    elif request.user.user_type == "Recruiter":
+        user = Recruiter.objects.get(user__id=request.user.id)
+    elif request.user.user_type == "LineManager":
+        user = LineManager.objects.get(user__id=request.user.id)
+    elif request.user.user_type == "Admin":
+        user = request.user
+    return render(request, "homepage.html", {"user": user})
 
 def logged_out(request):
     return render(request, "registration/logged_out.html")
 
 def deletedAccount(request):
     return render(request, "registration/deleted_account.html")
-
-
-@login_required
-def recruiterProfile(request):
-    return render(request, "recruiter_profile.html")
 
 @login_required
 def userProfile(request):
