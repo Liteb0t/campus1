@@ -54,7 +54,7 @@ class CSVReader {
 								"last_name": last_name,
 								"username": csv_row["Student Number"],
 								"email": csv_row["Student Number"] + "@hallam.shu.ac.uk",
-								"password": makeRandomPassword(32)  // Students will set their passwords thru their emails
+								"password": CSVReader.makeRandomPassword(32)  // Students will set their passwords thru their emails
 							},
 							"on_visa": csv_row["Attatched To Tier 4"] === "TRUE",
 							"eligible_to_work": csv_row["Eligible to work"] === "TRUE",
@@ -108,7 +108,7 @@ class CSVReader {
 
 	// Students will set their passwords thru their emails
 	// https://stackoverflow.com/a/1349426
-	makeRandomPassword(length) {
+	static makeRandomPassword(length) {
 		let result = '';
 		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$%^&*';
 		const charactersLength = characters.length;

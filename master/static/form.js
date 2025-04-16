@@ -148,8 +148,9 @@ class Form {
 		if (array_item) {
 			array_item_input_element.value = array_item.id;
 		}
+		let array_item_delete_button;
 		if (!this.read_only) {
-			let array_item_delete_button = document.createElement("button");
+			array_item_delete_button = document.createElement("button");
 			array_item_delete_button.textContent = "delete";
 			array_item_delete_button.onclick = () => {
 				this.parameters[parameter_name].fieldset_element.removeChild(array_item_container_element);
