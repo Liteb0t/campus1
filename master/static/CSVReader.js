@@ -108,7 +108,7 @@ class CSVReader {
 
 	// Students will set their passwords thru their emails
 	// https://stackoverflow.com/a/1349426
-	function makeRandomPassword(length) {
+	makeRandomPassword(length) {
 		let result = '';
 		const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@$%^&*';
 		const charactersLength = characters.length;
